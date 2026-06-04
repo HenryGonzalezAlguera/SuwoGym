@@ -1,8 +1,33 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutExterno";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1 class="auth-title">INICIAR <span class="naranja">SESIÓN</span></h1>
+<p class="auth-subtitle mb-5">Bienvenido de nuevo a <span class="naranja">SUWÓ</span></p>
+
+<form action="index.html">
+    <div class="form-group position-relative has-icon-left mb-4">
+        <input type="text" class="form-control form-control-xl" placeholder="Correo Electrónico">
+        <div class="form-control-icon">
+            <i class="bi bi-envelope"></i>
+        </div>
+    </div>
+    <div class="form-group position-relative has-icon-left mb-4">
+        <input type="password" class="form-control form-control-xl" placeholder="Contraseña">
+        <div class="form-control-icon">
+            <i class="bi bi-shield-lock"></i>
+        </div>
+    </div>
+    <div class="text-end mt-2 fs-5">
+        <p><a class="font-semibold align-self-end" href="auth-forgot-password.html">¿Olvidó su contraseña?</a></p>
+    </div>
+
+    <button class="btn btn-primary btn-block btn-lg shadow-lg mt-3">Procesar</button>
+</form>
+<div class="text-center mt-5 text-lg fs-5">
+    <p class="text-gray-600">
+        ¿Aún no tiene una cuenta? <a href="auth-register.html" class="font-semibold">
+        Registrarse
+        </a>
+    </p>
 </div>

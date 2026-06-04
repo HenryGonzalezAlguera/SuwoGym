@@ -1,0 +1,50 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suwo Gym</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400" rel="stylesheet">
+    <!--<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">-->
+    <link rel="stylesheet" href="~/css/bootstrap.css">
+    <link rel="stylesheet" href="~/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/app.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div id="auth">
+
+        <div class="row h-100">
+
+            <!--Imagen a la izquierda-->
+            <div class="col-lg-7 d-none d-lg-block">
+                <div id="auth-right" class="align-content-center text-center">
+                    <!--
+                    <p class="text-center mb-1" style="font-size:180px; color:blueviolet; padding-top:260px;">SUWÓ</p>
+                    <p class="text-center mb-2" style="font-size:30px; color:#fff;">FUERZA &#8226; ENFOQUE &#8226; BALANCE</p>
+                    -->
+                    <img src="~/images/logoSuwo.png" alt="Logo" >
+                    <p class="mt-2" style="font-size:30px; color:#fff;">FUERZA &#8226; ENFOQUE &#8226; BALANCE</p>
+                </div>
+            </div>
+
+            <!--Espacio a la Derecha-->
+            <div class="col-lg-5 col-12">
+                <div id="auth-left" class="mt-5">
+     
+                    @RenderBody()
+
+                </div>
+
+            </div>
+     
+        </div>
+
+    </div>
+</body>
+
+</html>
