@@ -22,12 +22,13 @@ body {
 
         #auth #auth-left .auth-title {
             font-size: 4rem;
-            margin-bottom: 1rem
+            margin-bottom: 1rem;
+            margin-top: 2rem
         }
 
         #auth #auth-left .auth-subtitle {
-            font-size: 1.7rem;
-            line-height: 2.5rem;
+            font-size: 1.5rem;
+            line-height: 2rem;
             color: #a8aebb
         }
 

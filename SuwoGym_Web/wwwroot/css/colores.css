@@ -1,0 +1,33 @@
+﻿
+/*Colores según el libro de marca */
+
+.naranja {
+    color: #ff5500;
+}
+
+
+.azulFlama{
+    color: #007bff;
+}
+
+.azulOscuro{
+    color:#293039;
+}
+
+.negro {
+    color: #0f0f0f;
+}
+
+.blanco{
+    color:#ffffff;
+}
+
+/* Colores según el logotipo */
+
+.naranjaClaro {
+    color: #FB6D25;
+}
+
+.azulClaro {
+    color: #2277B8;
+}
