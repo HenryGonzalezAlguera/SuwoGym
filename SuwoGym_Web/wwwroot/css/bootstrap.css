@@ -44,11 +44,11 @@
 body {
     margin: 0;
     font-family: Roboto;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #607080;
-    background-color: #f2f7ff;
+    color: #ccc;
+    background-color: #1e2227;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0,0,0,0)
 }
@@ -200,7 +200,7 @@ sup {
 }
 
 a {
-    color: #007bff;
+    color: #2277B8;
     text-decoration: underline
 }
 
@@ -2065,7 +2065,7 @@ progress {
     font-weight: 400;
     line-height: 1.5;
     color: #607080;
-    background-color: #1f1f1f;
+    background-color: #131519;
     background-clip: padding-box;
     border: 1px solid #293039;
     -webkit-appearance: none;
@@ -3485,7 +3485,7 @@ textarea.form-control-lg {
     color: #607080;
     text-align: left;
     list-style: none;
-    background-color: #fff;
+    background-color: #293039;
     background-clip: padding-box;
     border: 0 solid rgba(0,0,0,.15);
     border-radius: .25rem
@@ -3673,7 +3673,7 @@ textarea.form-control-lg {
     padding: .45rem 1.5rem;
     clear: both;
     font-weight: 400;
-    color: #212529;
+    color: #ccc;
     text-align: inherit;
     text-decoration: none;
     white-space: nowrap;
@@ -4262,7 +4262,7 @@ textarea.form-control-lg {
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    background-color: #fff;
+    background-color: #293039;
     background-clip: border-box;
     border: 1px solid rgba(0,0,0,.125);
     border-radius: .7rem
@@ -4300,7 +4300,7 @@ textarea.form-control-lg {
 }
 
 .card-title {
-    margin-bottom: .5rem
+    margin-bottom: .1rem
 }
 
 .card-subtitle {
@@ -4322,7 +4322,7 @@ textarea.form-control-lg {
 .card-header {
     padding: 1.5rem;
     margin-bottom: 0;
-    background-color: #fff;
+    background-color: #293039;
     border-bottom: 1px solid rgba(0,0,0,.125)
 }
 

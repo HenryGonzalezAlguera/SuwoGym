@@ -357,7 +357,7 @@
     }
 
     .card .card-title {
-        font-size: 1.2rem
+        font-size: 1.3rem
     }
 
     .card .card-body {
@@ -908,7 +908,7 @@
     top: 0;
     z-index: 10;
     overflow-y: auto;
-    background-color: #fff;
+    background-color: #293039;
     bottom: 0;
     transition: left .5s ease-out
 }
@@ -920,7 +920,9 @@
     }
 
         .sidebar-wrapper .sidebar-header img {
-            height: 1.2rem
+            height: 8rem;
+            margin-top:2rem;
+            margin-bottom:1rem;
         }
 
     .sidebar-wrapper .sidebar-toggler.x {
@@ -939,26 +941,26 @@
         .sidebar-wrapper .menu .sidebar-title {
             padding: 0 1rem;
             margin: 1.5rem 0 1rem;
-            font-size: 1rem;
+            font-size: 1.4rem;
             list-style: none;
             font-weight: 600;
-            color: #25396f
+            color: #fff
         }
 
         .sidebar-wrapper .menu .sidebar-link {
             display: block;
             padding: .7rem 1rem;
-            font-size: 1rem;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             border-radius: .5rem;
             transition: all .5s;
             text-decoration: none;
-            color: #25396f
+            color: #ccc
         }
 
             .sidebar-wrapper .menu .sidebar-link i, .sidebar-wrapper .menu .sidebar-link svg {
-                color: #7c8db5
+                color: #ccc
             }
 
             .sidebar-wrapper .menu .sidebar-link span {
@@ -966,7 +968,9 @@
             }
 
             .sidebar-wrapper .menu .sidebar-link:hover {
-                background-color: #f0f1f5
+                background-color: #2277B8;
+                color: #ccc;
+                fill: #ccc;
             }
 
         .sidebar-wrapper .menu .sidebar-item {
@@ -985,7 +989,7 @@
             }
 
             .sidebar-wrapper .menu .sidebar-item.active .sidebar-link {
-                background-color: #435ebe
+                background-color: #FB6D25;
             }
 
                 .sidebar-wrapper .menu .sidebar-item.active .sidebar-link span {
@@ -1025,10 +1029,10 @@
             .sidebar-wrapper .menu .submenu .submenu-item a {
                 padding: .7rem 2rem;
                 display: block;
-                color: #25396f;
-                font-size: .85rem;
+                color: #aaa;
+                font-size: 1rem;
                 font-weight: 600;
-                letter-spacing: .5px;
+                letter-spacing: .7px;
                 transition: all .3s
             }
 
