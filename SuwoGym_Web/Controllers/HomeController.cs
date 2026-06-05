@@ -5,12 +5,22 @@ namespace SuwoGym_Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index() // Inicio de sesión
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Registro() 
+        {
+            return View();
+        }
+       
+        public IActionResult RecuperarAcceso()
+        {
+            return View();
+        }
+       
+        public IActionResult Principal()
         {
             return View();
         }
