@@ -5,7 +5,7 @@
 <h1 class="auth-title">INICIAR <span class="naranjaClaro">SESIÓN</span></h1>
 <p class="auth-subtitle mb-5">Bienvenido de nuevo a <span class="naranjaClaro">SUWÓ</span></p>
 
-<form action="index.html">
+<form> <!-- asp-action="Index" asp-controller="Home" method="post"> -->
     <div class="form-group position-relative has-icon-left mb-4">
         <input type="text" class="form-control form-control-xl text-gray-400" placeholder="Correo Electrónico">
         <div class="form-control-icon">
@@ -19,14 +19,16 @@
         </div>
     </div>
     <div class="text-end fs-5">
-        <p><a class="align-self-end" href="auth-forgot-password.html"><i>¿Olvidó su contraseña?</i></a></p>
+        <p><a class="align-self-end" asp-action="RecuperarAcceso" asp-controller="Home"><i>¿Olvidó su contraseña?</i></a></p>
     </div>
 
-    <button class="btn btn-primary btn-block btn-lg shadow-lg mt-3 fs-4 p-3">INICIAR SESIÓN</button>
+    <button class="btn btn-primary btn-block btn-lg shadow-lg mt-3 fs-4 p-3"
+    asp-action="Principal" asp-controller="Home"
+    >INICIAR SESIÓN</button> <!-- type="submit" -->
 </form>
 <div class="text-center mt-5 text-lg fs-4">
     <p class="text-gray-500">
-        ¿Aún no tiene una cuenta? <a href="auth-register.html">
+        ¿Aún no tiene una cuenta? <a asp-action="Registro" asp-controller="Home">
         Registrarse
         </a>
     </p>
