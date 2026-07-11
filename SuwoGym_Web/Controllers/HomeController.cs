@@ -11,6 +11,9 @@ namespace SuwoGym_Web.Controllers
         [HttpGet]
         public IActionResult Index() 
         {
+            ViewBag.Titulo1 = "INICIAR "; 
+            ViewBag.Titulo2 = "SESIÓN";
+            ViewBag.Subtitulo = "Bienvenido de nuevo a SUWÓ";
             return View();
         }
 
@@ -25,9 +28,13 @@ namespace SuwoGym_Web.Controllers
         #endregion
 
         #region Registrar usuario ------------------------
+
         [HttpGet]
         public IActionResult Registro() 
         {
+            ViewBag.Titulo1 = "CREA TU ";
+            ViewBag.Titulo2 = "CUENTA";
+            ViewBag.Subtitulo = "Empieza tu transformación hoy";
             return View();
         }
        
