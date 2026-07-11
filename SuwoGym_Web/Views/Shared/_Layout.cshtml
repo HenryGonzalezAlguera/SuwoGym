@@ -3,212 +3,218 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyecto Web Clase - Programación Avanzada Web</title>
+    <meta charset="UTF-8" />
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="~/css/bootstrap.css">
-    <link rel="stylesheet" href="~/css/perfect-scrollbar.css">
-    <link rel="stylesheet" href="~/css/bootstrap-icons.css">
-    <link rel="stylesheet" href="~/css/app.css">
+    <title>Plantilla 1 Web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="~/imgs/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/imgs/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/imgs/favicon-16x16.png">
+    <link rel="manifest" href="~/imgs/site.webmanifest">
+
+    <script type="module" crossorigin="" src="~/js/main_2.js"></script>
+    <script type="module" crossorigin="" src="~/js/main.js"></script>
+    <link rel="stylesheet" crossorigin="" href="~/css/main.css">
+    <link rel="stylesheet" crossorigin="" href="~/css/apexcharts.css">
+    <link rel="stylesheet" crossorigin="" href="~/css/colores.css">
+
 </head>
 
 <body>
-    <div id="app">
+  <div id="overlay" class="overlay"></div>
 
-        <!-- Menú -->
-        <div id="sidebar" class="active">
-            <div class="sidebar-wrapper active">
+  <!-- TOPBAR -->
+  <nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
+    
+    <!-- TOGGLE BUTTON -->
+    <button id="toggleBtn" class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm "> <!-- COMPUTER -->
+      <i class="ti ti-layout-sidebar-left-expand"></i>
+    </button>    
+    <button id="mobileBtn" class="btn btn-light btn-icon btn-sm d-lg-none me-2"> <!-- MOBILE -->
+      <i class="ti ti-layout-sidebar-left-expand"></i>
+    </button>
 
-                <div class="sidebar-header">
-                    <div class="d-flex justify-content-between">
-                        <div></div> <!--Este div es solo para alinear el logo al centro, pues se usa justify content-->
-                        <div class="logo">
-                            <a asp-action="Index" asp-controller="Home"><img src="~/images/logoSuwo.png" alt="Logo" srcset=""></a>
-                        </div>
-                        <div class="toggler">
-                            <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
-                        </div>
-                    </div>
+    <!-- Navbar nav -->
+    <div>
+      <ul class="list-unstyled d-flex align-items-center mb-0 gap-1">
+        <!-- Pages link -->
+
+        <!-- Bell icon -->
+        <li>
+          <a class="position-relative btn-icon btn-sm btn-light btn rounded-circle" data-bs-toggle="dropdown"
+            aria-expanded="false" href="#" role="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              class="icon icon-tabler icons-tabler-outline icon-tabler-bell">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" />
+              <path d="M9 17v1a3 3 0 0 0 6 0v-1" />
+            </svg>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mt-2 ms-n2">
+              2
+              <span class="visually-hidden">unread messages</span>
+            </span>
+          </a>
+
+          <div class="dropdown-menu dropdown-menu-end dropdown-menu-md p-0">
+            <ul class="list-unstyled p-0 m-0">
+              <li class="p-3 border-bottom ">
+                <div class="d-flex gap-3">
+                  <img src="~/imgs/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                  <div class="flex-grow-1 small">
+                    <p class="mb-0">New order received</p>
+                    <p class="mb-1">Order #12345 has been placed</p>
+                    <div class="text-secondary">5 minutes ago</div>
+                  </div>
                 </div>
+              </li>
+              <li class="p-3 border-bottom ">
+                <div class="d-flex gap-3">
+                  <img src="~/imgs/avatar/avatar-4.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                  <div class="flex-grow-1 small">
+                    <p class="mb-0">New user registered</p>
+                    <p class="mb-1">User john_doe has signed up</p>
+                    <div class="text-secondary">30 minutes ago</div>
+                  </div>
+                  </div>
 
-                <div class="sidebar-menu">
+              </li>
 
-                    <!-- Usuario Administrador -->
-
-                    <ul class="menu">
-
-                        <li class="sidebar-item active">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-bar-chart-line-fill"></i>
-                                <span>Estadísticas</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-person-fill"></i>
-                                <span>Usuarios</span>
-                            </a>
-                            <ul class="submenu ">
-                                <li class="submenu-item ">
-                                    <a href="#">Empleados</a>
-                                </li>
-                                <li class="submenu-item ">
-                                    <a href="#">Register</a>
-                                </li>
-                            </ul>
-                        </li>
-                        
-                       
-
-                        <hr class="dropdown-divider">
-                        
-                        <!-- Usuario Cliente -->
-
-                        <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-calendar-check-fill"></i>
-                                <span>Rutinas</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-person-fill"></i>
-                                <span>Mi cuenta</span>
-                            </a>
-                        </li>
-
-                        <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-door-closed-fill"></i>
-                                <span>Cerrar Sesión</span>
-                            </a>
-                        </li>
-
-                    </ul>
+              <li class="p-3 border-bottom">
+                <div class="d-flex gap-3">
+                  <img src="~/imgs/avatar/avatar-2.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+                  <div class="flex-grow-1 small">
+                    <p class="mb-0">Payment confirmed</p>
+                    <p class="mb-1">Payment of $299 has been received</p>
+                    <div class="text-secondary">1 hour ago</div>
+                  </div>
                 </div>
-                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+              </li>
+              <li class="px-4 py-3 text-center">
+                <a href="#" class="text-primary ">View all notifications</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <!-- Dropdown -->
+        <li class="ms-3 dropdown">
+          <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="~/imgs/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+          </a>
+          <div class="dropdown-menu dropdown-menu-end p-0" style="min-width: 200px;">
+            <div>
+              <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
+                <img src="~/imgs/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+                <div>
+                  <h4 class="mb-0 small">Shrina Tesla</h4>
+                  <p class="mb-0  small">imshrina</p>
+                </div>
+              </div>
+              <div class="p-3 d-flex flex-column gap-1 small lh-lg">
+                <a href="#!" class="">
+
+                  <span>Home</span>
+                </a>
+                <a href="#!" class="">
+
+                  <span> Inbox</span>
+                </a>
+                <a href="#!" class="">
+
+                  <span> Chat</span>
+                </a>
+                <a href="#!" class="">
+
+                  <span> Activity</span>
+                </a>
+                <a href="#!" class="">
+
+                  <span> Account Settings</span>
+                </a>
+              </div>
+
             </div>
-        </div>
-        
-        <!-- Contenido -->
-        <div id="main">
-
-            <!-- Encabezado -->
-            <header class="mb-3">
-            <!--Menú hamburguesa en resolución pequeña
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>-->
-
-                <nav class="navbar navbar-expand navbar-light ">
-
-                    <div class="container-fluid">
-                        <a href="#" class="burger-btn d-block">
-                            <i class="bi bi-justify fs-3"></i>
-                        </a>
-
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-
-                                <!-- Mensajes -->
-                                <li class="nav-item dropdown me-1">
-                                    <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <i class='bi bi-envelope bi-sub fs-4 text-gray-600'></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                            <h6 class="dropdown-header">Mensajes</h6>
-                                        </li>
-                                        <li><a class="dropdown-item" href="#">No tiene nuevos mensajes</a></li>
-                                    </ul>
-                                </li>
-
-                                <!-- Notificaciones -->
-                                <li class="nav-item dropdown me-3">
-                                    <a class="nav-link active dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        <i class='bi bi-bell bi-sub fs-4 text-gray-600'></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                        <li>
-                                            <h6 class="dropdown-header">Notifications</h6>
-                                        </li>
-                                        <li><a class="dropdown-item">No notification available</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-
-                            <!-- Usuario Activo -->
-                            <div class="dropdown">
-                                <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="user-menu d-flex">
-                                        <div class="user-name text-end me-3">
-                                            <h6 class="mb-0 text-gray-600">Nombre Usuario</h6>
-                                            <p class="mb-0 text-sm text-gray-600">Rol</p>
-                                        </div>
-                                        <div class="user-img d-flex align-items-center">
-                                            <div class="avatar avatar-md">
-                                                <img src="~/images/1.jpg">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                    <li>
-                                        <h6 class="dropdown-header">¡Bienvenido de vuelta!</h6>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-person me-2"></i>
-                                            Mi Perfil</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="icon-mid bi bi-gear me-2"></i>
-                                            Configuración</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" asp-action="Index" asp-controller="Home"><i
-                                                class="icon-mid bi bi-door-closed-fill me-2"></i> Cerrar Sesión</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-
-
-            </header>
-
-            <!-- Vista -->
-            <div class="page-heading">
-                @RenderBody()
-            </div>
-
-            <footer>
-                <div class="footer clearfix mb-0 text-muted">
-                    <div class="float-start">
-                        <p>@DateTime.Now.Year &copy; Mazer. Creado por <a href="http://ahmadsaugi.com">A. Saugi</a></p>
-                    </div>
-                    <div class="float-end text-muted">
-                        <p>
-                            Gimansio Suwó - Fuerza &#8226; Enfoque &#8226; Balance
-                        </p>
-                    </div>
-                </div>
-            </footer>
-        </div>
+          </div>
+        </li>
+      </ul>
     </div>
-    <script src="~/js/perfect-scrollbar.min.js"></script>
-    <script src="~/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/main.js"></script>
+
+  </nav>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+
+    <!-- TOP LOGO -->
+    <div class="logo-area">
+        <a href="index.html" class="d-inline-flex"><img src="~/images/logoSuwo_icon.png" alt="" width="32" height="32"> <!-- ícono -->
+        <span class="logo-text ms-2 "> <img src="~/images/logoSuwo_logotype.png" alt="" height="24" class="mt-1"></span> <!-- tipografía -->
+        </a>
+    </div>
+
+    <!-- NAVIGATION -->
+    <ul class="nav flex-column mt-2">
+      
+        <!-- Administrador --------------------------------------------------------------------------->
+        <li class="px-4 py-2 nav-text">ADMINISTRADOR</li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-graph"></i><span
+            class="nav-text">Dashboard</span></a></li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-badges"></i><span
+            class="nav-text">Entrenadores</span></a></li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-user"></i><span
+            class="nav-text">Clientes</span></a></li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-credit-card"></i><span
+            class="nav-text">Planes de Membresía</span></a></li>
+
+
+        <!-- Entrenador --------------------------------------------------------------------------->
+        <li class="px-4 py-2 nav-text">ENTRENADOR</li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-user"></i><span
+            class="nav-text">Clientes</span></a></li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-calendar"></i><span
+            class="nav-text">Cronograma</span></a></li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-layers-intersect"></i><span
+            class="nav-text">Ejercicios</span></a></li>
+        
+
+        <!-- Cliente --------------------------------------------------------------------------->
+        <li class="px-4 py-2 nav-text">CLIENTE</li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-user"></i><span
+            class="nav-text">Rutinas</span></a></li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-calendar"></i><span
+            class="nav-text">Cronograma</span></a></li>
+        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-graph"></i><span
+            class="nav-text">Desempeño</span></a></li>
+        
+        
+    </ul>
+
+
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="content" class="content py-10">
+    <div class="container-fluid">
+
+      <!-- Page Content -->
+      @RenderBody()
+
+      <!-- Footer -->
+      <div class="row">
+          <div class="col-12">
+              <footer class="text-center py-2 mt-6 text-secondary ">
+                <p class="mb-0">Copyright © @DateTime.Now.Year InApp Inventory Dashboard. Developed by <a href="https://codescandy.com/" target="_blank" class="text-primary">CodesCandy</a> • Distributed by <a href="https://themewagon.com/" target="_blank" class="text-primary">ThemeWagon</a> </p>
+              </footer>
+          </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="~/js/main.js" type="module"></script>
+
 </body>
 
 </html>
