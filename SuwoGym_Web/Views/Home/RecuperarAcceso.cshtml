@@ -2,21 +2,36 @@
     Layout = "_LayoutExterno";
 }
 
-<h1 class="auth-title">RECUPERAR <span class="naranjaClaro">ACCESO</span></h1>
-<p class="auth-subtitle mb-5">Ingresa tu correo electrónico y te enviaremos intrucciones para reestablecer tu contraseña.</p>
+<h2 class="card-title mt-1 mb-1" style="color:#0c0c0c;"><b>RECUPERAR <span class="naranjaClaro">ACCESO</span> </b></h2>
+<p class="mb-5 text-secondary"><span>
+        Ingresa tu correo electrónico y te enviaremos intrucciones para reestablecer tu contraseña
+</span></p>
 
-<form asp-action="RecuperarAcceso" asp-controller="Home" method="post">
-    <div class="form-group position-relative has-icon-left mb-4">
-        <input type="email" class="form-control form-control-xl text-gray-400" placeholder="Correo Electrónico">
-        <div class="form-control-icon">
-            <i class="bi bi-envelope"></i>
-        </div>
+
+<form class="needs-validation mt-3 align-content-start text-start" novalidate
+    asp-action="RecuperarAcceso" asp-controller="Home" method="post">
+   
+    <!-- Correo Electrónico -->
+    <div class="mb-5">
+        <label for="email" class="form-label text-start">
+            <span class="ti ti-mail mt-3"></span> Correo Electrónico
+        </label>
+        <input type="email" class="form-control" placeholder="nombre@ejemplo.com" required autofocus>
     </div>
-    <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-3 fs-4 p-3">SOLICITAR ACCESO</button>
+
+    <!-- Botón -->
+    <div class=" text-center align-content-center mt-2">
+        <button class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3"
+                asp-action="Index" asp-controller="Home">
+            RECUPERAR ACCESO
+        </button>
+    </div>
+
 </form>
-<div class="text-center mt-5 text-lg fs-4">
-    <p class='text-gray-600'>
-        ¿Ha recordado su contraseña? <a asp-action="Index" asp-controller="Home">
+
+<div class="text-center mt-5 text-lg fs-6">
+    <p class="text-secondary">
+        ¿Ha recordado su contraseña? <a class="link-primary" asp-action="Index" asp-controller="Home">
         Iniciar Sesión
     </a>
 </p>

@@ -5,15 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Pestaña -->
+    <link href="~/images/logoSuwo_icon.png" rel="icon" type="image/x-icon">
     <title>Suwo Gym</title>
-
-    <link rel="apple-touch-icon" sizes="180x180" href="~/imgs/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="~/imgs/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="~/imgs/favicon-16x16.png">
+    
     <link rel="manifest" href="~/images/site.webmanifest">
 
-    <script type="module" crossorigin="" src="~/js/main_2.js"></script>
-    <script type="module" crossorigin="" src="~/js/main_1.js"></script>
+    <script type="module" crossorigin="" src="~/js/main.js"></script>
     <link rel="stylesheet" crossorigin="" href="~/css/main.css">
     <link rel="stylesheet" crossorigin="" href="~/css/apexcharts.css">
     <link rel="stylesheet" crossorigin="" href="~/css/colores.css">
@@ -22,20 +21,16 @@
 
 <body>
 
-
     <!-- Main Content -->
     <div class="container d-flex align-items-center justify-content-center min-vh-100">
         
         <div class="card " style="max-width:420px; width:100%;">
             <div class="card-body p-5">
                 <div class="text-center mb-3">
-                    <a href="index.html" class="mb-4 d-inline-block">
+                    <a asp-action="Principal" asp-controller="Home" class="mb-5 mt-5 d-inline-block">
                         <img src="~/images/logoSuwo.png" alt="Logo" width="70">
-                        <!--<p class="mt-2" style="font-size:10px; color:#000;">FUERZA &#8226; ENFOQUE &#8226; BALANCE</p>-->
                     </a>
-                    <h1 class="card-title mb-1"><b>@ViewBag.Titulo1<span class="naranjaClaro">@ViewBag.Titulo2</span> </b></h1>
-                    <p class="mb-5"><span class="azulOscuro">@ViewBag.Subtitulo</span></p>
-                    
+
                     @RenderBody()
 
                 </div>

@@ -2,8 +2,14 @@
     Layout = "_LayoutExterno";
 }
 
-<form class="needs-validation mt-3 align-content-start text-start" novalidate>
-    <!-- asp-action="Index" asp-controller="Home" method="post"> -->
+<h2 class="card-title mt-1 mb-1" style="color:#0c0c0c;"><b>INICIAR <span class="naranjaClaro">SESIÓN</span> </b></h2>
+<p class="mb-5 text-secondary"><span>
+    Bienvenido de nuevo a SUWÓ
+</span></p>
+
+
+<form class="needs-validation mt-3 align-content-start text-start" novalidate
+     asp-action="Index" asp-controller="Home" method="post"> 
     
     <!-- Correo Electrónico -->
     <div class ="mb-5">
@@ -18,12 +24,12 @@
             <span><span class="ti ti-lock mt-3"></span> Contraseña</span>
             <a asp-action="RecuperarAcceso" asp-controller="Home" class="small link-primary">¿Olvidó su contraseña?</a>
         </label>
-        <input type="password" class="form-control" placeholder="Password" required minlength="6">
+        <input type="password" class="form-control" placeholder="_abc123" required minlength="6">
     </div>
 
     <!-- Botón -->
-    <div class=" text-center align-content-center mt-2">
-        <button class="btn btn-primary btn-block btn-md shadow-lg fs-5 pl-3"
+    <div class=" text-center align-content-center mt-2 mb-3">
+        <button class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3"
         asp-action="Principal" asp-controller="Home">
             INICIAR SESIÓN
         </button> 
@@ -32,7 +38,7 @@
 </form>
 
 <div class="text-center mt-5 text-lg fs-6">
-    <p class="text-gray-500">
+    <p class="text-secondary">
         ¿Aún no tiene una cuenta? <a asp-action="Registro" asp-controller="Home" class="link-primary">
         Registrarse
         </a>
