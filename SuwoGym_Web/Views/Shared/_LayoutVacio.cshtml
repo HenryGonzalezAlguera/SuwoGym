@@ -1,0 +1,53 @@
+﻿
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Pestaña -->
+    <link href="~/images/logoSuwo_icon.png" rel="icon" type="image/x-icon">
+    <title>Suwo Gym</title>
+    
+    <link rel="manifest" href="~/images/site.webmanifest">
+
+    <script type="module" crossorigin="" src="~/js/main.js"></script>
+    <link rel="stylesheet" crossorigin="" href="~/css/main.css">
+    <link rel="stylesheet" crossorigin="" href="~/css/apexcharts.css">
+    <link rel="stylesheet" crossorigin="" href="~/css/colores.css">
+
+</head>
+
+<body>
+
+  <!-- MAIN CONTENT -->
+  <main id="content" class="content py-10">
+    <div class="container-fluid">
+
+      <!-- Page Content -->
+      @RenderBody()
+
+      <!-- Footer -->
+      <div class="row">
+        <footer class="py-2 mt-6 text-secondary">
+            <div class="row">
+              <div class="col-6">
+                    <p class="mb-0">Gimnasio SUWÓ | Fuerza, Enfoque y Balance</p>
+              </div>
+              <div class="col-6 text-end">
+                    <p class="mb-0">Plantilla InApp, Copyright @DateTime.Now.Year por <a href="https://codescandy.com/" target="_blank" class="text-primary">CodesCandy</a></p>
+              </div>
+            </div>
+        </footer>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="~/js/main.js" type="module"></script>
+
+</body>
+
+</html>

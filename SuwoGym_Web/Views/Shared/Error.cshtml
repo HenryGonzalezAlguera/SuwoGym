@@ -1,14 +1,23 @@
 ﻿
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+@{
+    Layout = "_LayoutVacio";
+}
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+    <div class="container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="" style="max-width: 500px; width: 100%;">
+            <div class="text-center">
+                <div class="mb-4">
+                    <a asp-action="Index" asp-controller="Home" class="d-inline-flex">
+                        <img src="~/images/logoSuwo_icon.png" alt="" width="32" height="32"> <!-- ícono -->
+                        <span class="logo-text ms-2 "> <img src="~/images/logoSuwo_logotype.png" alt="" height="24" class="mt-1"></span> <!-- tipografía -->
+                    </a>
+                </div>
+
+                <h1 class="display-1 fw-bold text-primary mb-2">404</h1>
+                <h2 class="card-title h4 mb-3">Ups! Ha ocurrido un error</h2>
+                <p class="text-muted mb-4">Hemos tenido un inconveniente técnico. </p>
+
+                <a asp-action="Principal" asp-controller="Home" class="btn btn-primary fs-6">Volver al inicio</a>
+            </div>
+        </div>
+    </div>
