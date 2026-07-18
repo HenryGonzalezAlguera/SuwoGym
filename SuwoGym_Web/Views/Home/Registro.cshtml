@@ -1,5 +1,8 @@
-﻿@{
+﻿@model SuwoGym_Web.Models.Usuario
+
+@{
     Layout = "_LayoutExterno";
+    ViewData["Title"] = "Registro - SuwoGym";
 }
 
 <h2 class="card-title mt-1 mb-1" style="color:#0c0c0c;"><b>CREA TU <span class="naranjaClaro">CUENTA</span> </b></h2>
@@ -7,50 +10,75 @@
         Empieza tu transformación hoy
 </span></p>
 
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @foreach (var modelState in ViewData.ModelState.Values)
+        {
+            @foreach (var error in modelState.Errors)
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        }
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 
 <form class="needs-validation mt-3 align-content-start text-start" novalidate
     asp-action="Registro" asp-controller="Home" method="post">
-    
+
     <!-- Nombre -->
-    <div class="mb-5 text-start">            
-        <label for="email" class="form-label text-start">
-            <span class="ti ti-user mt-3"></span> Nombre Completo
+    <div class="mb-3 text-start">            
+        <label asp-for="Nombre" class="form-label text-start">
+            <span class="ti ti-user mt-3"></span> Nombre
         </label>
-        <input type="text" class="form-control" placeholder="John Doe" required autofocus>
+        <input asp-for="Nombre" class="form-control" placeholder="Tu nombre" required autofocus>
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <!-- Apellido -->
+    <div class="mb-3 text-start">            
+        <label asp-for="Apellido" class="form-label text-start">
+            <span class="ti ti-user mt-3"></span> Apellido
+        </label>
+        <input asp-for="Apellido" class="form-control" placeholder="Tu apellido" required>
+        <span asp-validation-for="Apellido" class="text-danger"></span>
     </div>
 
     <!-- Correo Electrónico -->
     <div class="mb-3 text-start">
-        <label for="email" class="form-label text-start">
+        <label asp-for="CorreoElectronico" class="form-label text-start">
             <span class="ti ti-mail mt-3"></span> Correo Electrónico
         </label>
-        <input type="email" class="form-control" placeholder="nombre@ejemplo.com" required autofocus>
+        <input asp-for="CorreoElectronico" class="form-control" type="email" placeholder="nombre@ejemplo.com" required>
+        <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
     </div>
 
     <!-- Contraseña -->
     <div class="mb-3 text-start">
-        <label for="password" class="form-label d-flex justify-content-between">
+        <label asp-for="Contrasenna" class="form-label d-flex justify-content-between">
             <span><span class="ti ti-lock mt-3"></span> Contraseña</span>
         </label>
-        <input type="password" class="form-control" placeholder="_abc123" required minlength="6">
+        <input asp-for="Contrasenna" class="form-control" type="password" placeholder="Mínimo 6 caracteres" required minlength="6">
+        <span asp-validation-for="Contrasenna" class="text-danger"></span>
     </div>
- 
+
     <!-- Confirmar Contraseña -->
     <div class="mb-5 text-start">
-        <label for="password" class="form-label d-flex justify-content-between">
+        <label asp-for="ConfirmarContrasenna" class="form-label d-flex justify-content-between">
             <span><span class="ti ti-lock mt-3"></span> Confirmar Contraseña</span>
         </label>
-        <input type="password" class="form-control" placeholder="_abc123" required minlength="6">
+        <input asp-for="ConfirmarContrasenna" class="form-control" type="password" placeholder="Confirma tu contraseña" required minlength="6">
+        <span asp-validation-for="ConfirmarContrasenna" class="text-danger"></span>
     </div>
 
     <!-- Botón -->
     <div class=" text-center align-content-center mt-2 mb-3">
-        <button class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3"
-                asp-action="Index" asp-controller="Home">
+        <button type="submit" class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3">
             REGISTRARSE
         </button>
     </div>
-    
+
 </form>
 
 <div class="text-center mt-5 text-lg fs-6">
@@ -60,3 +88,9 @@
     </a>
 </p>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
