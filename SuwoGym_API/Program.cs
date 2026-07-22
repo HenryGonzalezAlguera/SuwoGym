@@ -2,7 +2,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
 
 // CORS - permitir solicitudes desde la aplicación web
 builder.Services.AddCors(options =>
@@ -18,11 +17,6 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
 app.UseCors("AllowWebApp");
 app.UseHttpsRedirection();
 app.UseAuthorization();
