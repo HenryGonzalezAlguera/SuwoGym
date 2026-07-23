@@ -1,4 +1,10 @@
 ﻿
+@{
+    var nombre = Context.Session.GetString("Nombre");
+    var rol = Context.Session.GetString("Rol");
+}
+
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -12,10 +18,10 @@
     
     <link rel="manifest" href="~/images/site.webmanifest">
 
-    <script type="module" crossorigin="" src="~/js/main.js"></script>
-    <link rel="stylesheet" crossorigin="" href="~/css/main.css">
-    <link rel="stylesheet" crossorigin="" href="~/css/apexcharts.css">
-    <link rel="stylesheet" crossorigin="" href="~/css/colores.css">
+    <script type="module" crossorigin="" src="~/js/main.js" asp-append-version="true"></script>
+    <link rel="stylesheet" crossorigin="" href="~/css/main.css" asp-append-version="true">
+    <link rel="stylesheet" crossorigin="" href="~/css/apexcharts.css" asp-append-version="true">
+    <link rel="stylesheet" crossorigin="" href="~/css/colores.css" asp-append-version="true">
 
 </head>
 
@@ -37,21 +43,25 @@
 
     <!-- Navbar nav -->
     <div>
-      <ul class="list-unstyled d-flex align-items-center mb-0 gap-1">
+      <ul class="list-unstyled d-flex align-items-center mb-0 gap-2">
         <!-- Pages link -->
 
         <!-- Dropdown -->
         <li class="ms-3 dropdown">
-          <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="~/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" />
+           <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div style="background-color:aliceblue; border-radius:16px; padding:2px 6px; font-size:20px;">
+                <!-- <img src="~/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" /> -->
+                <i class="ti ti-user-circle"></i>
+                <i class="ti ti-chevron-down"></i>
+            </div>
           </a>
           <div class="dropdown-menu dropdown-menu-end p-0" style="min-width: 200px;">
             <div>
               <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
-                <img src="~/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" />
+               <!--  <img src="~/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" /> -->
                 <div>
-                  <h4 class="mb-0 small"><b>NOMBRE</b></h4> <!-- Viewbag.Nombre-->
-                  <p class="mb-0  small">ROL</p>      <!-- Viewbag.Rol --> 
+                  <h4 class="mb-0 small"><b>@nombre</b></h4> <!-- Viewbag.Nombre-->
+                  <p class="mb-0  small">@rol</p>      <!-- Viewbag.Rol --> 
                 </div>
               </div>
               <div class="p-3 d-flex flex-column gap-1 small lh-lg">
@@ -60,7 +70,7 @@
                   <i class="ti ti-settings"></i><span> Configuración</span>
                 </a>
 
-                <a asp-action="Index" asp-controller="Home" class="">
+                <a asp-action="Logout" asp-controller="Home" class="">
                   <i class="ti ti-door-exit"></i><span> Cerrar Sesión</span>
                 </a>
 
@@ -79,7 +89,7 @@
 
     <!-- TOP LOGO -->
     <div class="logo-area">
-        <a asp-action="Index" asp-controller="Home" class="d-inline-flex"><img src="~/images/logoSuwo_icon.png" alt="" width="32" height="32"> <!-- ícono -->
+        <a asp-action="Principal" asp-controller="Home" class="d-inline-flex"><img src="~/images/logoSuwo_icon.png" alt="" width="32" height="32"> <!-- ícono -->
         <span class="logo-text ms-2 "> <img src="~/images/logoSuwo_logotype.png" alt="" height="24" class="mt-1"></span> <!-- tipografía -->
         </a>
     </div>
@@ -87,37 +97,47 @@
     <!-- NAVIGATION -->
     <ul class="nav flex-column mt-2">
       
+        <!-- Página Home vista por todos -->
+        <li><a class="nav-link" asp-action="Principal" asp-controller="Home"><i class="ti ti-home"></i><span
+            class="nav-text">Principal</span></a></li>
+        
+            
+        @if (@rol == "Administrador")
+        {
         <!-- Administrador --------------------------------------------------------------------------->
-        <li class="px-4 py-2 nav-text">ADMINISTRADOR</li>
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-graph"></i><span
-            class="nav-text">Dashboard</span></a></li>
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-badges"></i><span
-            class="nav-text">Entrenadores</span></a></li>
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-user"></i><span
-            class="nav-text">Clientes</span></a></li>
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-credit-card"></i><span
-            class="nav-text">Planes de Membresía</span></a></li>
-
-
+            <li><a class="nav-link" asp-action="Dashboard" asp-controller="Admin"><i class="ti ti-graph"></i><span
+                    class="nav-text">Dashboard</span></a></li>
+            <li><a class="nav-link" asp-action="Empleados_Lista" asp-controller="Admin"><i class="ti ti-badges"></i><span
+                    class="nav-text">Empleados</span></a></li>
+            <li><a class="nav-link" asp-action="Clientes_Lista" asp-controller="Admin"><i class="ti ti-user"></i><span
+                    class="nav-text">Clientes</span></a></li>
+            <li><a class="nav-link" asp-action="Planes_Lista" asp-controller="Admin"><i class="ti ti-credit-card"></i><span
+                    class="nav-text">Planes de Membresía</span></a></li>
+            <li><a class="nav-link" asp-action="Rutinas_Lista" asp-controller="Admin"><i class="ti ti-activity"></i><span
+                    class="nav-text">Rutinas</span></a></li>
+            <li><a class="nav-link" asp-action="Horarios_Lista" asp-controller="Admin"><i class="ti ti-calendar"></i><span
+                    class="nav-text">Horarios</span></a></li>
+        }
+        else if (@rol == "Entrenador") 
+        {
         <!-- Entrenador --------------------------------------------------------------------------->
-        <li class="px-4 py-2 nav-text">ENTRENADOR</li>
         <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-user"></i><span
             class="nav-text">Clientes</span></a></li>
         <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-calendar"></i><span
             class="nav-text">Cronograma</span></a></li>
         <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-layers-intersect"></i><span
             class="nav-text">Ejercicios</span></a></li>
-        
-
+        }
+        else 
+        {
         <!-- Cliente --------------------------------------------------------------------------->
-        <li class="px-4 py-2 nav-text">CLIENTE</li>
         <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-user"></i><span
             class="nav-text">Rutinas</span></a></li>
         <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-calendar"></i><span
             class="nav-text">Cronograma</span></a></li>
         <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-graph"></i><span
             class="nav-text">Desempeño</span></a></li>
-        
+        }
         
     </ul>
 
@@ -149,7 +169,7 @@
   </main>
 
   <!-- Bootstrap JS -->
-  <script src="~/js/main.js" type="module"></script>
+  <script src="~/js/main.js" type="module" asp-append-version="true"></script>
 
 </body>
 
