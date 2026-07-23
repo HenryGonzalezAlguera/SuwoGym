@@ -11,15 +11,11 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Agregar HttpClientFactory
+builder.Services.AddHttpClient();
+
 // Agregar HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
-
-// Registrar AuthService con HttpClient
-builder.Services.AddHttpClient<SuwoGym_Web.Services.AuthService>()
-    .ConfigureHttpClient(client =>
-    {
-        client.Timeout = TimeSpan.FromSeconds(10);
-    });
 
 var app = builder.Build();
 

@@ -1,4 +1,4 @@
-﻿@model SuwoGym_Web.Models.Usuario
+﻿@model SuwoGym_Web.Models.UsuarioModel
 
 @{
     Layout = "_LayoutExterno";
@@ -24,52 +24,75 @@
     </div>
 }
 
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <p><i class="ti ti-alert-triangle"></i> @ViewBag.Mensaje</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <form class="needs-validation mt-3 align-content-start text-start" novalidate
     asp-action="Registro" asp-controller="Home" method="post">
 
     <!-- Nombre -->
     <div class="mb-3 text-start">            
-        <label asp-for="Nombre" class="form-label text-start">
+        <label asp-for="nombre" class="form-label text-start">
             <span class="ti ti-user mt-3"></span> Nombre
         </label>
-        <input asp-for="Nombre" class="form-control" placeholder="Tu nombre" required autofocus>
-        <span asp-validation-for="Nombre" class="text-danger"></span>
+        <input asp-for="nombre" class="form-control" placeholder="Tu nombre" required autofocus id="nombre">
+        <span asp-validation-for="nombre" class="text-danger"></span>
+        <div id="nombreError" class="text-danger mt-2" style="display:none;">
+            <small><i class="ti ti-alert-triangle"></i> El nombre es requerido</small>
+        </div>
     </div>
 
     <!-- Apellido -->
     <div class="mb-3 text-start">            
-        <label asp-for="Apellido" class="form-label text-start">
+        <label asp-for="apellido" class="form-label text-start">
             <span class="ti ti-user mt-3"></span> Apellido
         </label>
-        <input asp-for="Apellido" class="form-control" placeholder="Tu apellido" required>
-        <span asp-validation-for="Apellido" class="text-danger"></span>
+        <input asp-for="apellido" class="form-control" placeholder="Tu apellido" required id="apellido">
+        <span asp-validation-for="apellido" class="text-danger"></span>
+        <div id="apellidoError" class="text-danger mt-2" style="display:none;">
+            <small><i class="ti ti-alert-triangle"></i> El apellido es requerido</small>
+        </div>
     </div>
 
     <!-- Correo Electrónico -->
     <div class="mb-3 text-start">
-        <label asp-for="CorreoElectronico" class="form-label text-start">
+        <label asp-for="correoElectronico" class="form-label text-start">
             <span class="ti ti-mail mt-3"></span> Correo Electrónico
         </label>
-        <input asp-for="CorreoElectronico" class="form-control" type="email" placeholder="nombre@ejemplo.com" required>
-        <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+        <input asp-for="correoElectronico" class="form-control" type="email" placeholder="nombre@ejemplo.com" required id="correoElectronico">
+        <span asp-validation-for="correoElectronico" class="text-danger"></span>
+        <div id="correoError" class="text-danger mt-2" style="display:none;">
+            <small><i class="ti ti-alert-triangle"></i> <span id="correoErrorMsg">El correo es requerido</span></small>
+        </div>
+    </div>
+
+    <!-- Identificación -->
+    <div class="mb-3 text-start">
+        <label asp-for="identificacion" class="form-label text-start">
+            <span class="ti ti-id mt-3"></span> Identificación
+        </label>
+        <input asp-for="identificacion" class="form-control" placeholder="Tu número de cédula o identificación" required id="identificacion">
+        <span asp-validation-for="identificacion" class="text-danger"></span>
+        <div id="identificacionError" class="text-danger mt-2" style="display:none;">
+            <small><i class="ti ti-alert-triangle"></i> La identificación es requerida</small>
+        </div>
     </div>
 
     <!-- Contraseña -->
     <div class="mb-3 text-start">
-        <label asp-for="Contrasenna" class="form-label d-flex justify-content-between">
+        <label asp-for="contrasenna" class="form-label d-flex justify-content-between">
             <span><span class="ti ti-lock mt-3"></span> Contraseña</span>
         </label>
-        <input asp-for="Contrasenna" class="form-control" type="password" placeholder="Mínimo 6 caracteres" required minlength="6">
-        <span asp-validation-for="Contrasenna" class="text-danger"></span>
-    </div>
-
-    <!-- Confirmar Contraseña -->
-    <div class="mb-5 text-start">
-        <label asp-for="ConfirmarContrasenna" class="form-label d-flex justify-content-between">
-            <span><span class="ti ti-lock mt-3"></span> Confirmar Contraseña</span>
-        </label>
-        <input asp-for="ConfirmarContrasenna" class="form-control" type="password" placeholder="Confirma tu contraseña" required minlength="6">
-        <span asp-validation-for="ConfirmarContrasenna" class="text-danger"></span>
+        <input asp-for="contrasenna" class="form-control" type="password" placeholder="Mínimo 8 caracteres" required minlength="8" id="contrasenna">
+        <span asp-validation-for="contrasenna" class="text-danger"></span>
+        <div id="passwordError" class="text-danger mt-2" style="display:none;">
+            <small><i class="ti ti-alert-triangle"></i> La contraseña debe tener mínimo 8 caracteres</small>
+        </div>
     </div>
 
     <!-- Botón -->
@@ -94,3 +117,142 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+<script>
+    // Validar email
+    function isValidEmail(email) {
+        return email.includes('@@') && email.includes('.') && email.length > 5;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener referencias a los campos
+        const nombreInput = document.getElementById('nombre');
+        const apellidoInput = document.getElementById('apellido');
+        const correoInput = document.getElementById('correoElectronico');
+        const identificacionInput = document.getElementById('identificacion');
+        const passwordInput = document.getElementById('contrasenna');
+
+        // Obtener referencias a los mensajes de error
+        const nombreError = document.getElementById('nombreError');
+        const apellidoError = document.getElementById('apellidoError');
+        const correoError = document.getElementById('correoError');
+        const identificacionError = document.getElementById('identificacionError');
+        const passwordError = document.getElementById('passwordError');
+
+        const form = document.querySelector('form');
+
+        // Función para validar nombre
+        nombreInput.addEventListener('input', function() {
+            if (this.value.trim() === '' && this.value.length > 0) {
+                nombreError.style.display = 'block';
+                this.classList.add('is-invalid');
+            } else {
+                nombreError.style.display = 'none';
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        // Función para validar apellido
+        apellidoInput.addEventListener('input', function() {
+            if (this.value.trim() === '' && this.value.length > 0) {
+                apellidoError.style.display = 'block';
+                this.classList.add('is-invalid');
+            } else {
+                apellidoError.style.display = 'none';
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        // Función para validar correo
+        correoInput.addEventListener('input', function() {
+            if (this.value.length > 0 && !isValidEmail(this.value)) {
+                document.getElementById('correoErrorMsg').textContent = 'Ingrese un correo válido (ejemplo@@correo.com)';
+                correoError.style.display = 'block';
+                this.classList.add('is-invalid');
+            } else if (this.value === '') {
+                document.getElementById('correoErrorMsg').textContent = 'El correo es requerido';
+                correoError.style.display = 'none';
+                this.classList.remove('is-invalid');
+            } else {
+                correoError.style.display = 'none';
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        // Función para validar identificación
+        identificacionInput.addEventListener('input', function() {
+            if (this.value.trim() === '' && this.value.length > 0) {
+                identificacionError.style.display = 'block';
+                this.classList.add('is-invalid');
+            } else {
+                identificacionError.style.display = 'none';
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        // Función para validar contraseña
+        passwordInput.addEventListener('input', function() {
+            if (this.value.length < 8 && this.value.length > 0) {
+                passwordError.style.display = 'block';
+                this.classList.add('is-invalid');
+            } else {
+                passwordError.style.display = 'none';
+                this.classList.remove('is-invalid');
+            }
+        });
+
+        // Validar al enviar el formulario
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+
+            // Validar nombre
+            if (nombreInput.value.trim() === '') {
+                e.preventDefault();
+                nombreError.style.display = 'block';
+                nombreInput.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Validar apellido
+            if (apellidoInput.value.trim() === '') {
+                e.preventDefault();
+                apellidoError.style.display = 'block';
+                apellidoInput.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Validar correo
+            if (correoInput.value.trim() === '' || !isValidEmail(correoInput.value)) {
+                e.preventDefault();
+                correoError.style.display = 'block';
+                correoInput.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Validar identificación
+            if (identificacionInput.value.trim() === '') {
+                e.preventDefault();
+                identificacionError.style.display = 'block';
+                identificacionInput.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Validar contraseña
+            if (passwordInput.value.length < 8) {
+                e.preventDefault();
+                passwordError.style.display = 'block';
+                passwordInput.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Scroll al primer campo con error
+            if (!isValid) {
+                const firstError = document.querySelector('.is-invalid');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
+                }
+            }
+        });
+    });
+</script>
