@@ -2,7 +2,7 @@
 USE [master]
 GO
 
-/****** Object:  Database [SuwoGym]    Script Date: 22/7/2026 23:39:58 ******/
+/****** Object:  Database [SuwoGym]    ----------------------- ******/
 -- Borrar y crear base de datos
 DROP DATABASE IF EXISTS [SuwoGym];
 CREATE DATABASE [SuwoGym]
@@ -24,7 +24,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ErrorSistema]    Script Date: 22/7/2026 23:39:58 ******/
+/****** Object:  Table [dbo].[ErrorSistema]  ----------------------- ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -41,7 +41,7 @@ CREATE TABLE [dbo].[ErrorSistema](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MembresiaUsuario]    Script Date: 22/7/2026 23:39:58 ******/
+/****** Object:  Table [dbo].[MembresiaUsuario]  ----------------------- ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -59,7 +59,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Pago]    Script Date: 22/7/2026 23:39:58 ******/
+/****** Object:  Table [dbo].[Pago]   ----------------------- ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -80,7 +80,7 @@ CREATE TABLE [dbo].[Pago](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PlanMembresia]    Script Date: 22/7/2026 23:39:58 ******/
+/****** Object:  Table [dbo].[PlanMembresia]    ----------------------- ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -99,7 +99,7 @@ PRIMARY KEY CLUSTERED
 GO
 
 
-/****** Object:  Table [dbo].[Rol]    Script Date: 22/7/2026 23:39:58 ******/
+/****** Object:  Table [dbo].[Rol]    ----------------------- ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -114,7 +114,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SystemLog]    Script Date: 22/7/2026 23:39:58 ******/
+/****** Object:  Table [dbo].[SystemLog]    ----------------------- ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -130,7 +130,7 @@ CREATE TABLE [dbo].[SystemLog](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Usuario]    Script Date: 22/7/2026 23:39:58 ******/
+/****** Object:  Table [dbo].[Usuario]  ----------------------- ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -156,6 +156,56 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
+
+
+
+/****** Objeto: Table [dbo].[Rutinas] -------------------- ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Rutinas](
+	[IdRutina] [int] IDENTITY(1,1) NOT NULL,
+	[NombreRutina] [nvarchar](100) NOT NULL,
+	[Nivel] [nvarchar](10) NOT NULL,
+	[Detalles] [nvarchar](max) NOT NULL,
+ CONSTRAINT [PK_Rutinas] PRIMARY KEY CLUSTERED 
+(
+	[IdRutina] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+USE [SuwoGym]
+GO
+
+/****** Objeto: Table [dbo].[ClaseProgramada]--------------------- ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[ClaseProgramada](
+	[IdClaseProg] [int] IDENTITY(1,1) NOT NULL,
+	[IdEntrenador] [int] NOT NULL,
+	[IdClase] [int] NOT NULL,
+	[FechaHoraInicio] [datetime2](7) NOT NULL,
+	[FechaHoraFin] [datetime2](7) NOT NULL,
+	[CupoMaximo] [int] NOT NULL,
+	[CupoActual] [int] NOT NULL,
+	[Estado] [bit] NOT NULL,
+ CONSTRAINT [PK_ClaseProgramada] PRIMARY KEY CLUSTERED 
+(
+	[IdClaseProg] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
 
 
 /****** Object:  Index [UQ__Usuario__531402F3A863D846]    Script Date: 22/7/2026 23:39:58 ******/
