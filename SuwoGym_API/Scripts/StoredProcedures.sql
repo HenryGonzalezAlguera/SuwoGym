@@ -22,7 +22,7 @@ BEGIN
 		END
 
 		-- Verificar si la identificación ya existe
-		IF EXISTS (SELECT 1 FROM Clientes WHERE Identificacion = @Identificacion)
+		IF EXISTS (SELECT 1 FROM Usuario WHERE Identificacion = @Identificacion)
 		BEGIN
 			RAISERROR('La identificación ya está registrada en el sistema.', 16, 1);
 			RETURN;
@@ -37,10 +37,6 @@ BEGIN
 
 		-- Obtener el ID del usuario creado
 		DECLARE @IdUsuario INT = SCOPE_IDENTITY();
-
-		-- Crear registro de cliente
-		INSERT INTO Clientes (IdUsuario, Identificacion, Estado, FechaRegistro)
-		VALUES (@IdUsuario, @Identificacion, 1, GETDATE());
 
 		-- Confirmar la transacción
 		COMMIT TRANSACTION
