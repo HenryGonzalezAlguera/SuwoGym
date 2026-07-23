@@ -1,4 +1,6 @@
-﻿@{
+﻿@model SuwoGym_Web.Models.UsuarioModel
+
+@{
     Layout = "_LayoutExterno";
 }
 
@@ -10,19 +12,19 @@
 
 <form class="needs-validation mt-3 align-content-start text-start" novalidate
     asp-action="RecuperarAcceso" asp-controller="Home" method="post">
-   
+
     <!-- Correo Electrónico -->
     <div class="mb-5">
-        <label for="email" class="form-label text-start">
+        <label asp-for="correoElectronico" class="form-label text-start">
             <span class="ti ti-mail mt-3"></span> Correo Electrónico
         </label>
-        <input type="email" class="form-control" placeholder="nombre@ejemplo.com" required autofocus>
+        <input asp-for="correoElectronico" class="form-control" placeholder="nombre@ejemplo.com" required autofocus>
+        <span asp-validation-for="correoElectronico" class="text-danger"></span>
     </div>
 
     <!-- Botón -->
     <div class=" text-center align-content-center mt-2">
-        <button class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3"
-                asp-action="Index" asp-controller="Home">
+        <button type="submit" class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3">
             RECUPERAR ACCESO
         </button>
     </div>
@@ -36,3 +38,4 @@
     </a>
 </p>
 </div>
+

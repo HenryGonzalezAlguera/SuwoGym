@@ -1,5 +1,8 @@
-﻿@{
+﻿@model SuwoGym_Web.Models.UsuarioModel
+
+@{
     Layout = "_LayoutExterno";
+    ViewData["Title"] = "Iniciar Sesión - SuwoGym";
 }
 
 <h2 class="card-title mt-1 mb-1" style="color:#0c0c0c;"><b>INICIAR <span class="naranjaClaro">SESIÓN</span> </b></h2>
@@ -7,30 +10,60 @@
     Bienvenido de nuevo a SUWÓ
 </span></p>
 
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <p>@TempData["Mensaje"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["RegistroExitoso"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <p><i class="ti ti-check" style="color: green;"></i> @TempData["RegistroExitoso"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @foreach (var modelState in ViewData.ModelState.Values)
+        {
+            @foreach (var error in modelState.Errors)
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        }
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
 
 <form class="needs-validation mt-3 align-content-start text-start" novalidate
      asp-action="Index" asp-controller="Home" method="post"> 
-    
+
     <!-- Correo Electrónico -->
     <div class ="mb-5">
-        <label for="email" class="form-label text-start">
+        <label asp-for="correoElectronico" class="form-label text-start">
             <span class="ti ti-mail mt-3"></span> Correo Electrónico</label>
-        <input type="email" class="form-control" placeholder="nombre@ejemplo.com" required autofocus>
+        <input asp-for="correoElectronico" class="form-control" placeholder="nombre@ejemplo.com" required autofocus>
+        <span asp-validation-for="correoElectronico" class="text-danger"></span>
     </div>
 
     <!-- Contraseña -->
     <div class="mb-5">
-        <label for="password" class="form-label d-flex justify-content-between">
+        <label asp-for="contrasenna" class="form-label d-flex justify-content-between">
             <span><span class="ti ti-lock mt-3"></span> Contraseña</span>
             <a asp-action="RecuperarAcceso" asp-controller="Home" class="small link-primary">¿Olvidó su contraseña?</a>
         </label>
-        <input type="password" class="form-control" placeholder="_abc123" required minlength="6">
+        <input asp-for="contrasenna" class="form-control" placeholder="_abc123" type="password" required minlength="6">
+        <span asp-validation-for="contrasenna" class="text-danger"></span>
     </div>
 
     <!-- Botón -->
     <div class=" text-center align-content-center mt-2 mb-3">
-        <button class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3"
-        asp-action="Principal" asp-controller="Home">
+        <button type="submit" class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3">
             INICIAR SESIÓN
         </button> 
     </div>
@@ -44,3 +77,9 @@
         </a>
     </p>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
