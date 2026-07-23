@@ -104,9 +104,6 @@ namespace SuwoGym_API.Controllers
                 return Ok(response);
             }
 
-
-
-
         }
 
         #endregion

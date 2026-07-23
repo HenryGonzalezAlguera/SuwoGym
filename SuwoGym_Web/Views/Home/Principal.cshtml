@@ -1,28 +1,33 @@
 ﻿@{
     Layout = "_Layout";
     ViewData["Title"] = "Panel Principal - SuwoGym";
+
+    var nombre = Context.Session.GetString("Nombre");
+    var rol = Context.Session.GetString("Rol");
+
 }
 
 <div class="page-title">
     <div class="row">
         <div class="col-12 col-md-6 order-md-1 order-last mb-2">
             <h1>
-                <span class="ti ti-home"></span> Bienvenido, @ViewBag.NombreUsuario
+                <span class="ti ti-home"></span> Bienvenido, @nombre
             </h1>
             <p class="text-subtitle text-muted">Panel principal de SUWÓ</p>
         </div>
         <div class="col-12 col-md-6 order-md-2 order-first">
-            <div class="float-end">
+           <!--  <div class="float-end">
                 <a href="@Url.Action("Logout")" class="btn btn-danger btn-sm">
                     <span class="ti ti-logout"></span> Cerrar Sesión
-                </a>
-            </div>
+                </a> 
+            </div> -->
         </div>
     </div>
 </div>
 
 <section class="section">
     <div class="row">
+
         <!-- Información del usuario -->
         <div class="col-md-4 mb-3">
             <div class="card">
@@ -30,14 +35,14 @@
                     <h4 class="card-title">Información de Cuenta</h4>
                 </div>
                 <div class="card-body">
-                    <p><strong>Rol:</strong> <span class="badge bg-info">@ViewBag.NombreRol</span></p>
+                    <p><strong>Rol:</strong> <span class="badge bg-info">@rol</span></p>
                     <hr />
                     <small class="text-muted">Acceso desde hace poco</small>
                 </div>
             </div>
         </div>
 
-        @if (ViewBag.NombreRol == "Administrador")
+        @if (@rol == "Administrador")
         {
             <!-- Admin Panel -->
             <div class="col-md-8 mb-3">
@@ -71,7 +76,7 @@
                 </div>
             </div>
         }
-        else if (ViewBag.NombreRol == "Entrenador")
+        else if (@rol == "Entrenador")
         {
             <!-- Trainer Panel -->
             <div class="col-md-8 mb-3">
@@ -139,5 +144,6 @@
                 </div>
             </div>
         }
+
     </div>
 </section>

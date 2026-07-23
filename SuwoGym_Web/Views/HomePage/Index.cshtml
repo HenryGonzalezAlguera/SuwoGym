@@ -4,17 +4,24 @@
     Layout = "_LayoutVacio";
 }
 
+
+@{
+    Layout = null;
+}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" crossorigin="" href="~/css/homepage.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
+   
     <!-- ========== NAVBAR ========== -->
     <nav class="navbar">
         <a href="#inicio" class="navbar-brand">
@@ -29,9 +36,12 @@
             <li><a href="#metodologias">Metodologías</a></li>
             <li><a href="#membresias">Membresías</a></li>
             <li><a href="#horarios">Horarios</a></li>
+            <li><button class="btn-primary"><a asp-action="Index" asp-controller="Home"><small>Iniciar Sesión</small></a></button></li>
+            <li></li>
         </ul>
     </nav>
 
+    <main>
     <!-- ========== HERO ========== -->
     <section class="hero" id="inicio">
         <div class="hero-content">
@@ -178,6 +188,8 @@
             }
         </div>
     </section>
+
+    </main>
 
     <!-- ========== FOOTER ========== -->
     <footer class="footer">
