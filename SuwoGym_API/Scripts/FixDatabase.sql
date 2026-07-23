@@ -1,43 +1,25 @@
 -- =============================================
 -- SCRIPT DE CORRECCIÓN - SuwoGym Database
 -- =============================================
--- Este script corrige los errores en la base de datos existente
+-- Este script ejecuta los cambios necesarios si la BD ya existe
 
--- Usar la base de datos SuwoGym
 USE [SuwoGym]
 GO
 
 -- =============================================
--- 1. CREAR TABLA CLIENTES (FALTANTE)
+-- 1. AGREGAR CONSTRAINT ÚNICO A IDENTIFICACION SI NO EXISTE
 -- =============================================
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Clientes]') AND type in (N'U'))
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'UQ_Usuario_Identificacion')
 BEGIN
-	CREATE TABLE [dbo].[Clientes](
-		[IdCliente] [int] IDENTITY(1,1) NOT NULL,
-		[IdUsuario] [int] NOT NULL,
-		[Identificacion] [nvarchar](50) NOT NULL,
-		[Estado] [bit] NOT NULL DEFAULT 1,
-		[FechaRegistro] [datetime2](7) NOT NULL DEFAULT GETDATE(),
-		CONSTRAINT [PK_Clientes] PRIMARY KEY CLUSTERED 
-		(
-			[IdCliente] ASC
-		)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-	) ON [PRIMARY]
-END
-GO
-
--- Agregar Foreign Key a Usuario si no existe
-IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Cliente_Usuario')
-BEGIN
-	ALTER TABLE [dbo].[Clientes]  WITH CHECK ADD  CONSTRAINT [FK_Cliente_Usuario] FOREIGN KEY([IdUsuario])
-	REFERENCES [dbo].[Usuario] ([IdUsuario])
-	ALTER TABLE [dbo].[Clientes] CHECK CONSTRAINT [FK_Cliente_Usuario]
+	ALTER TABLE [dbo].[Usuario]
+	ADD CONSTRAINT UQ_Usuario_Identificacion UNIQUE (Identificacion);
 END
 GO
 
 -- =============================================
 -- 2. INSERTAR ROLES BÁSICOS
 -- =============================================
+
 IF NOT EXISTS (SELECT 1 FROM [dbo].[Rol] WHERE IdRol = 1)
 BEGIN
 	INSERT INTO [dbo].[Rol] (IdRol, NombreRol, Descripcion) 
@@ -86,7 +68,7 @@ BEGIN
 		END
 
 		-- Verificar si la identificación ya existe
-		IF EXISTS (SELECT 1 FROM Clientes WHERE Identificacion = @Identificacion)
+		IF EXISTS (SELECT 1 FROM Usuario WHERE Identificacion = @Identificacion)
 		BEGIN
 			RAISERROR('La identificación ya está registrada en el sistema.', 16, 1);
 			RETURN;
@@ -101,10 +83,6 @@ BEGIN
 
 		-- Obtener el ID del usuario creado
 		DECLARE @IdUsuario INT = SCOPE_IDENTITY();
-
-		-- Crear registro de cliente
-		INSERT INTO Clientes (IdUsuario, Identificacion, Estado, FechaRegistro)
-		VALUES (@IdUsuario, @Identificacion, 1, GETDATE());
 
 		-- Confirmar la transacción
 		COMMIT TRANSACTION
@@ -202,6 +180,6 @@ GO
 -- CONFIRMACIÓN
 -- =============================================
 PRINT N'✓ Script de corrección ejecutado exitosamente'
-PRINT N'✓ Tabla Clientes creada'
+PRINT N'✓ Constraint único en Identificacion agregado'
 PRINT N'✓ Roles básicos insertados'
 PRINT N'✓ Procedimientos almacenados corregidos'
