@@ -504,6 +504,26 @@ VALUES
 GO
 
 
+
+/* ============================================================
+   DATOS INICIALES: USUARIOS
+   ============================================================ */
+
+SET IDENTITY_INSERT [dbo].[Usuario] ON 
+GO
+INSERT [dbo].[Usuario] ([IdUsuario], [IdRol], [Nombre], [Apellido], [CorreoElectronico], [Identificacion], [Telefono], [FechaNacimiento], [Direccion], [ContrasennaHash], [DebeCambiarContrasenna], [Estado], [FechaRegistro], [FechaUltimoAcceso]) 
+VALUES (1, 1, N'Admin', N'Sistema', N'admin@mail.com', N'001', NULL, NULL, NULL, N'$2a$11$uTiuit1mfQYVLYo/fqCfu.eSYMw3n20FjTwibDDfFObTdCG0Sw8Qe', 0, 1, CAST(N'2026-07-24T06:48:40.4833333' AS DateTime2), NULL)
+GO
+INSERT [dbo].[Usuario] ([IdUsuario], [IdRol], [Nombre], [Apellido], [CorreoElectronico], [Identificacion], [Telefono], [FechaNacimiento], [Direccion], [ContrasennaHash], [DebeCambiarContrasenna], [Estado], [FechaRegistro], [FechaUltimoAcceso]) 
+VALUES (2, 2, N'Trainer', N'Sistema', N'entrenador@mail.com', N'002', NULL, NULL, NULL, N'$2a$11$NJx8LnBKcDb.Ind5jij0DO2.VVkBUEag3LR5LHwnDnlVw/kPuySZe', 0, 1, CAST(N'2026-07-24T06:51:31.4600000' AS DateTime2), NULL)
+GO
+INSERT [dbo].[Usuario] ([IdUsuario], [IdRol], [Nombre], [Apellido], [CorreoElectronico], [Identificacion], [Telefono], [FechaNacimiento], [Direccion], [ContrasennaHash], [DebeCambiarContrasenna], [Estado], [FechaRegistro], [FechaUltimoAcceso]) 
+VALUES (3, 3, N'Cliente', N'Sistema', N'cliente@mail.com', N'003', NULL, NULL, NULL, N'$2a$11$p/aBlaYzvA/WRt3TBH9Ue.ijUwgQ4rHYxbsWEe6qPa1ucJloX8KQ.', 0, 1, CAST(N'2026-07-24T06:51:57.8466667' AS DateTime2), NULL)
+GO
+SET IDENTITY_INSERT [dbo].[Usuario] OFF
+GO
+
+
 /* ============================================================
    PROCEDIMIENTO: REGISTRAR USUARIO
    ============================================================ */
@@ -736,6 +756,63 @@ BEGIN
 
 END
 GO
+
+
+/* ============================================================
+   PROCEDIMIENTO: LISTAR EMPLEADOS
+   ============================================================ */
+   
+CREATE PROCEDURE [dbo].[spListarEmpleados] 
+AS
+BEGIN
+    SELECT  u.Identificacion, u.Nombre, u.Apellido, r.NombreRol, u.CorreoElectronico, u.Estado
+    FROM Usuario AS u
+    INNER JOIN Rol as r
+        ON r.IdRol = u.IdRol
+    WHERE u.IdRol != 3
+    ORDER BY u.Apellido ASC
+END
+GO
+
+
+/* ============================================================
+   PROCEDIMIENTO: LISTAR CLIENTES
+   ============================================================ 
+   
+   NOTA:
+   Este procedimiento requiere que en el registro de usuarios se
+   proceda con un módulo de definir el plan de membresía
+
+   ============================================================ */
+
+CREATE PROCEDURE [dbo].[spListarClientes] 
+AS
+BEGIN
+    SELECT  u.Nombre, u.Apellido, u.CorreoElectronico, u.Estado
+        -- , p.NombrePlan, m.EstadoMembresia, m.FechaVencimiento
+    FROM Usuario AS u
+    /*INNER JOIN MembresiaUsuario as m
+        ON m.IdUsuario = u.IdUsuario
+    INNER JOIN PlanMembresia as p
+        ON p.IdPlan = m.IdPlan */
+    WHERE u.IdRol = 3
+    ORDER BY u.Apellido ASC
+END
+GO
+
+
+/* ============================================================
+   PROCEDIMIENTO: LISTAR PLANES DE MEMBRESÍA
+   ============================================================ */
+
+CREATE PROCEDURE [dbo].[spListarPlanesMembresia] 
+AS
+BEGIN
+    SELECT  NombrePlan, Descripcion, DuracionDias, Precio
+    FROM PlanMembresia
+END
+GO
+
 
 
 /* ============================================================

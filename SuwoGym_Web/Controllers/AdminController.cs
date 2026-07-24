@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SuwoGym_Web.Models;
 
 namespace SuwoGym_Web.Controllers
 {
@@ -18,14 +19,30 @@ namespace SuwoGym_Web.Controllers
         #region Empleados ----------------------------------
 
         [HttpGet]
-        public IActionResult Empleados_Lista()
+        public async Task <IActionResult> Empleados_Lista()
         {
-            return View();
+            var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaEmpleadosAPI";
+            var response = await client.GetFromJsonAsync<List<EmpleadoLista>>(urlApi);
+
+            // Verificar respuesta
+            if (response != null && response.Count() > 0) // 200
+            {
+                return View(response);
+            }
+            else if (response == null || response.Count() <= 0)
+            {
+                ViewBag.MensajeError = "No hay empleados registrados. Por favor registre un empleado.";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
+
+
 
         [HttpGet]
         public IActionResult Empleados_Agregar()
-        {
+        { 
             return View();
         }
 
@@ -36,9 +53,23 @@ namespace SuwoGym_Web.Controllers
         #region Clientes ----------------------------------
 
         [HttpGet]
-        public IActionResult Clientes_Lista()
+        public async Task<IActionResult> Clientes_Lista()
         {
-            return View();
+            var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaClientesAPI";
+            var response = await client.GetFromJsonAsync<List<ClienteLista>>(urlApi);
+
+            // Verificar respuesta
+            if (response != null && response.Count() > 0) // 200
+            {
+                return View(response);
+            }
+            else if (response == null || response.Count() <= 0)
+            {
+                ViewBag.MensajeError = "No hay clientes registrados.";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
 
 
@@ -55,9 +86,23 @@ namespace SuwoGym_Web.Controllers
         #region Planes ----------------------------------
 
         [HttpGet]
-        public IActionResult Planes_Lista()
+        public async Task<IActionResult> Planes_Lista()
         {
-            return View();
+            var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaPlanesAPI";
+            var response = await client.GetFromJsonAsync<List<PlanesMLista>>(urlApi);
+
+            // Verificar respuesta
+            if (response != null && response.Count() > 0) // 200
+            {
+                return View(response);
+            }
+            else if (response == null || response.Count() <= 0)
+            {
+                ViewBag.MensajeError = "No hay clientes registrados.";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
 
 
