@@ -18,6 +18,9 @@ namespace SuwoGym_Web.Controllers
 
         #region Empleados ----------------------------------
 
+
+        // LISTA DE EMPLEADOS ---
+
         [HttpGet]
         public async Task <IActionResult> Empleados_Lista()
         {
@@ -38,13 +41,44 @@ namespace SuwoGym_Web.Controllers
             throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
 
+        [HttpPost]
+        public IActionResult Empleados_CambiarEstado(UsuarioModel model)
+        {
+            /*
+             * este espacio es para que, con el botón en la columna estado, se cambie el estado de usuario
+             * esto redirige a la misma página Empleados_Lista
+             */
+            return View(); 
+        }
 
+        
+        // AGREGAR EMPLEADO -----
 
         [HttpGet]
         public IActionResult Empleados_Agregar()
         { 
             return View();
         }
+      
+        [HttpPost]
+        public IActionResult Empleados_Agregar(UsuarioModel model)
+        { 
+            /*
+             * Aquí se llama al API, ahí se debe asignar una contraseña (como la de cambiar) 
+             * para que cuando entre el entrenador, él cambie la contraseña,
+             * pero no se la asigna el administrador, para efectos de seguridad
+             */
+            return View();
+        }
+
+
+        // VER DETALLES EMPLEADO
+        [HttpGet]
+        public IActionResult Empleados_Ver()
+        {
+            return View();
+        }
+
 
 
         #endregion
@@ -72,14 +106,6 @@ namespace SuwoGym_Web.Controllers
             throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
 
-
-        [HttpGet]
-        public IActionResult Clientes_Agregar()
-        {
-            return View();
-        }
-
-
         #endregion
 
 
@@ -106,12 +132,13 @@ namespace SuwoGym_Web.Controllers
         }
 
 
-        // NOTA: buscar manera de que no sea por medio de una vista adicional,
-        // sino por un pop up o algo
-        // Este solo se le varían los precios
+        
         [HttpGet]        
         public IActionResult Planes_Modificar()
         {
+            // NOTA: buscar manera de que no sea por medio de una vista adicional,
+        // sino por un pop up o algo
+        // Este solo se le varían los precios
             return View();
         }
 
