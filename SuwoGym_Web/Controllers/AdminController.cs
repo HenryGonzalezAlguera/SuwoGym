@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SuwoGym_Web.Models;
 
 namespace SuwoGym_Web.Controllers
 {
@@ -17,17 +18,67 @@ namespace SuwoGym_Web.Controllers
 
         #region Empleados ----------------------------------
 
+
+        // LISTA DE EMPLEADOS ---
+
         [HttpGet]
-        public IActionResult Empleados_Lista()
+        public async Task <IActionResult> Empleados_Lista()
+        {
+            var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaEmpleadosAPI";
+            var response = await client.GetFromJsonAsync<List<EmpleadoLista>>(urlApi);
+
+            // Verificar respuesta
+            if (response != null && response.Count() > 0) // 200
+            {
+                return View(response);
+            }
+            else if (response == null || response.Count() <= 0)
+            {
+                ViewBag.MensajeError = "No hay empleados registrados. Por favor registre un empleado.";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
+        }
+
+        [HttpPost]
+        public IActionResult Empleados_CambiarEstado(UsuarioModel model)
+        {
+            /*
+             * este espacio es para que, con el botón en la columna estado, se cambie el estado de usuario
+             * esto redirige a la misma página Empleados_Lista
+             */
+            return View(); 
+        }
+
+        
+        // AGREGAR EMPLEADO -----
+
+        [HttpGet]
+        public IActionResult Empleados_Agregar()
+        { 
+            return View();
+        }
+      
+        [HttpPost]
+        public IActionResult Empleados_Agregar(UsuarioModel model)
+        { 
+            /*
+             * Aquí se llama al API, ahí se debe asignar una contraseña (como la de cambiar) 
+             * para que cuando entre el entrenador, él cambie la contraseña,
+             * pero no se la asigna el administrador, para efectos de seguridad
+             */
+            return View();
+        }
+
+
+        // VER DETALLES EMPLEADO
+        [HttpGet]
+        public IActionResult Empleados_Ver()
         {
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Empleados_Agregar()
-        {
-            return View();
-        }
 
 
         #endregion
@@ -36,18 +87,24 @@ namespace SuwoGym_Web.Controllers
         #region Clientes ----------------------------------
 
         [HttpGet]
-        public IActionResult Clientes_Lista()
+        public async Task<IActionResult> Clientes_Lista()
         {
-            return View();
+            var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaClientesAPI";
+            var response = await client.GetFromJsonAsync<List<ClienteLista>>(urlApi);
+
+            // Verificar respuesta
+            if (response != null && response.Count() > 0) // 200
+            {
+                return View(response);
+            }
+            else if (response == null || response.Count() <= 0)
+            {
+                ViewBag.MensajeError = "No hay clientes registrados.";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
-
-
-        [HttpGet]
-        public IActionResult Clientes_Agregar()
-        {
-            return View();
-        }
-
 
         #endregion
 
@@ -55,18 +112,33 @@ namespace SuwoGym_Web.Controllers
         #region Planes ----------------------------------
 
         [HttpGet]
-        public IActionResult Planes_Lista()
+        public async Task<IActionResult> Planes_Lista()
         {
-            return View();
+            var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaPlanesAPI";
+            var response = await client.GetFromJsonAsync<List<PlanesMLista>>(urlApi);
+
+            // Verificar respuesta
+            if (response != null && response.Count() > 0) // 200
+            {
+                return View(response);
+            }
+            else if (response == null || response.Count() <= 0)
+            {
+                ViewBag.MensajeError = "No hay clientes registrados.";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
 
 
-        // NOTA: buscar manera de que no sea por medio de una vista adicional,
-        // sino por un pop up o algo
-        // Este solo se le varían los precios
+        
         [HttpGet]        
         public IActionResult Planes_Modificar()
         {
+            // NOTA: buscar manera de que no sea por medio de una vista adicional,
+        // sino por un pop up o algo
+        // Este solo se le varían los precios
             return View();
         }
 

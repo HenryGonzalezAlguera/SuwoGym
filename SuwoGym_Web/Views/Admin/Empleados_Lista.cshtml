@@ -1,2 +1,85 @@
 ﻿
-<h1>Empleados</h1>
+@model IEnumerable<EmpleadoLista>
+
+<!-- Header -->
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="">
+                <h1>Empleados</h1>
+                <p class="mb-0">Listado del personal de Gimnasio SUWÓ</p>
+            </div>
+            <div>
+                <a asp-action="Empleados_Agregar" asp-controller="Admin" class="btn btn-primary">
+                    <i class="ti ti-plus"></i><span> Agregar Empleado</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-12">
+
+    <!-- Botones -->
+    <!-- <div class="row">
+
+            <div class="col-12">
+                <div class="d-flex gap-2 mb-3 flex-wrap justify-content-between">
+                    <input type="text" class="form-control" placeholder="Search products..." style="max-width: 250px;">
+                    <div class="d-flex gap-2">
+
+                        <button class="btn btn-outline-secondary">
+                            <i class="ti ti-filter"></i> Filter
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            <i class="ti ti-file-excel"></i> Excel
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            <i class="ti ti-file-pdf"></i> PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    <!-- Lista de rutinas -->
+    <div class="card table-responsive p-2">
+
+        <table class="table mb-0 text-nowrap table-hover">
+            <thead class="border-light">
+                <tr>
+                    <th><b>Identificación</b></th>
+                    <th><b>Nombre Completo</b></th>
+                    <th><b>Correo Electrónico</b></th>
+                    <th><b>Rol</b></th>
+                    <th><b>Estado</b></th>
+                    <th><b>Acciones</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="align-middle">
+                        <td>@item.Identificacion</td>
+                        <td>@item.Apellido @item.Nombre</td>
+                        <td>@item.CorreoElectronico</td>
+                        <td>@item.NombreRol</td>
+                        <td>
+                            @if (@item.Estado){
+                                <span class="badge bg-success-subtle text-success">Activo</span>                
+                            }
+                            else{
+                                <span class="badge bg-danger-subtle text-success">Inactivo</span>
+                            }                           
+                            <a href="#" class=""><i class="ti ti-reload ms-1"></i></a> <!-- Para cambiar el estado -->
+                        </td>
+                        <td class="">
+                            <a asp-action="Empleados_Ver" asp-controller="Admin" class=""><i class="ti ti-eye ms-1"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+  
+        </table>
+    </div>
+</div>
