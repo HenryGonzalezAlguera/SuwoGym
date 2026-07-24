@@ -1,49 +1,87 @@
-﻿
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Pestaña -->
-    <link href="~/images/logoSuwo_icon.png" rel="icon" type="image/x-icon">
-    <title>Suwo Gym</title>
-    
-    <link rel="manifest" href="~/images/site.webmanifest">
 
-    <script type="module" crossorigin="" src="~/js/main.js"></script>
-    <link rel="stylesheet" crossorigin="" href="~/css/main.css">
-    <link rel="stylesheet" crossorigin="" href="~/css/apexcharts.css">
-    <link rel="stylesheet" crossorigin="" href="~/css/colores.css">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <link href="~/images/logoSuwo_icon.png"
+          rel="icon"
+          type="image/x-icon">
+
+    <title>Suwo Gym</title>
+
+    <link rel="manifest"
+          href="~/images/site.webmanifest">
+
+    <link rel="stylesheet"
+          crossorigin=""
+          href="~/css/main.css"
+          asp-append-version="true">
+
+    <link rel="stylesheet"
+          crossorigin=""
+          href="~/css/apexcharts.css"
+          asp-append-version="true">
+
+    <link rel="stylesheet"
+          crossorigin=""
+          href="~/css/colores.css"
+          asp-append-version="true">
 
 </head>
 
 <body>
 
-    <!-- Main Content -->
-    <div class="container d-flex align-items-center justify-content-center min-vh-100">
-        
-        <div class="card " style="max-width:420px; width:100%;">
+    <div class="container d-flex
+        align-items-center
+        justify-content-center
+        min-vh-100">
+
+        <div class="card"
+             style="max-width:420px; width:100%;">
+
             <div class="card-body p-5">
+
                 <div class="text-center mb-3">
-                    <a asp-action="Index" asp-controller="HomePage" class="mb-5 mt-5 d-inline-block">
-                        <img src="~/images/logoSuwo.png" alt="Logo" width="70">
+
+                    <a asp-action="Index"
+                       asp-controller="HomePage"
+                       class="mb-5 mt-5 d-inline-block">
+
+                        <img src="~/images/logoSuwo.png"
+                             alt="Logo SUWÓ"
+                             width="70">
+
                     </a>
 
                     @RenderBody()
 
                 </div>
+
             </div>
+
         </div>
-            
-         
+
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="~/js/main.js" type="module"></script>
+    <!-- Primero se carga jQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"
+            asp-append-version="true">
+    </script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+    <!-- Después se cargan los scripts de cada vista -->
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false)
+
+    <!-- Scripts de la plantilla -->
+    <script src="~/js/main.js"
+            type="module"
+            asp-append-version="true">
+    </script>
 
 </body>
 

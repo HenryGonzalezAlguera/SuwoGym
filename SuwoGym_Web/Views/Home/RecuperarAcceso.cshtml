@@ -4,38 +4,88 @@
     Layout = "_LayoutExterno";
 }
 
-<h2 class="card-title mt-1 mb-1" style="color:#0c0c0c;"><b>RECUPERAR <span class="naranjaClaro">ACCESO</span> </b></h2>
-<p class="mb-5 text-secondary"><span>
-        Ingresa tu correo electrónico y te enviaremos intrucciones para reestablecer tu contraseña
-</span></p>
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-danger text-center">
+        @ViewBag.Mensaje
+    </div>
+}
 
+<h2 class="card-title mt-1 mb-1"
+    style="color:#0c0c0c;">
 
-<form class="needs-validation mt-3 align-content-start text-start" novalidate
-    asp-action="RecuperarAcceso" asp-controller="Home" method="post">
+    <b>
+        RECUPERAR
+        <span class="naranjaClaro">
+            ACCESO
+        </span>
+    </b>
+</h2>
 
-    <!-- Correo Electrónico -->
-    <div class="mb-5">
-        <label asp-for="correoElectronico" class="form-label text-start">
-            <span class="ti ti-mail mt-3"></span> Correo Electrónico
+<p class="mb-5 text-secondary">
+    Ingresa tu correo electrónico y te enviaremos
+    instrucciones para restablecer tu contraseña.
+</p>
+
+<form id="RecuperarAccesoForm"
+      class="needs-validation mt-3 align-content-start text-start"
+      novalidate
+      asp-action="RecuperarAcceso"
+      asp-controller="Home"
+      method="post">
+
+    <div class="mb-5 form-group">
+
+        <label asp-for="correoElectronico"
+               class="form-label text-start">
+
+            <span class="ti ti-mail mt-3"></span>
+            Correo electrónico
         </label>
-        <input asp-for="correoElectronico" class="form-control" placeholder="nombre@ejemplo.com" required autofocus>
-        <span asp-validation-for="correoElectronico" class="text-danger"></span>
+
+        <input asp-for="correoElectronico"
+               type="email"
+               class="form-control"
+               placeholder="nombre@ejemplo.com"
+               autofocus>
+
     </div>
 
-    <!-- Botón -->
-    <div class=" text-center align-content-center mt-2">
-        <button type="submit" class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3">
+    <div class="text-center align-content-center mt-2">
+
+        <button type="submit"
+                class="btn btn-primary btn-block btn-md shadow-lg fs-6 pl-3">
+
             RECUPERAR ACCESO
         </button>
+
     </div>
 
 </form>
 
 <div class="text-center mt-5 text-lg fs-6">
+
     <p class="text-secondary">
-        ¿Ha recordado su contraseña? <a class="link-primary" asp-action="Index" asp-controller="Home">
-        Iniciar Sesión
-    </a>
-</p>
+
+        ¿Ha recordado su contraseña?
+
+        <a class="link-primary"
+           asp-action="Index"
+           asp-controller="Home">
+
+            Iniciar sesión
+        </a>
+
+    </p>
+
 </div>
 
+@section Scripts
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+    <script src="~/js/recuperarAcceso.js"
+            asp-append-version="true"></script>
+}

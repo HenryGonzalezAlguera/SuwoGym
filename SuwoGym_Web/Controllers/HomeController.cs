@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using SuwoGym_Web.Models;
-using System.Diagnostics;
 using System.Net;
 
 namespace SuwoGym_Web.Controllers
 {
-    public class HomeController(IHttpClientFactory _http, IConfiguration _config) : Controller
+    public class HomeController(
+        IHttpClientFactory _http,
+        IConfiguration _config) : Controller
     {
-
-        #region Iniciar Sesion -------------------------------------------------
+        #region Iniciar sesión
 
         [HttpGet]
         public IActionResult Index()
@@ -17,39 +17,99 @@ namespace SuwoGym_Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(UsuarioModel model)
+        public IActionResult Index(
+            UsuarioModel model)
         {
-            using var client = _http.CreateClient();
+            using var client =
+                _http.CreateClient();
 
-            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Home/IniciarSesionAPI";
-            var response = client.PostAsJsonAsync(urlApi, model).Result;
+            var urlApi =
+                _config[
+                    "ConnectionStringsWeb:urlApi"]
+                + "/api/Home/IniciarSesionAPI";
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            var response =
+                client.PostAsJsonAsync(
+                    urlApi,
+                    model).Result;
+
+            if (response.StatusCode ==
+                HttpStatusCode.OK)
             {
-                var datos = response.Content.ReadFromJsonAsync<UsuarioModel>().Result;
-                HttpContext.Session.SetString("Autenticado", "1");
-                HttpContext.Session.SetString("Nombre", datos!.nombre);
-                HttpContext.Session.SetString("Apellido", datos!.apellido);
-                HttpContext.Session.SetString("Rol", datos!.NombreRol);
-                HttpContext.Session.SetString("CorreoElectronico", datos!.correoElectronico);
+                var datos = response.Content
+                    .ReadFromJsonAsync<UsuarioModel>()
+                    .Result;
 
-                return RedirectToAction("Principal", "Home");
+                HttpContext.Session.SetString(
+                    "Autenticado",
+                    "1");
+
+                HttpContext.Session.SetInt32(
+                    "IdUsuario",
+                    datos!.IdUsuario);
+
+                HttpContext.Session.SetString(
+                    "Nombre",
+                    datos.nombre);
+
+                HttpContext.Session.SetString(
+                    "Apellido",
+                    datos.apellido);
+
+                HttpContext.Session.SetString(
+                    "CorreoElectronico",
+                    datos.correoElectronico);
+
+                HttpContext.Session.SetString(
+                    "Token",
+                    datos.Token);
+
+                HttpContext.Session.SetInt32(
+                    "IdRol",
+                    datos.IdRol);
+
+                /*
+                 * Conservamos la llave "Rol" porque
+                 * las vistas actuales de SUWÓ la utilizan.
+                 */
+                HttpContext.Session.SetString(
+                    "Rol",
+                    datos.NombreRol);
+
+                HttpContext.Session.SetString(
+                    "NombreRol",
+                    datos.NombreRol);
+
+                if (datos.DebeCambiarContrasenna)
+                {
+                    return RedirectToAction(
+                        "Configuracion",
+                        "Usuario");
+                }
+
+                return RedirectToAction(
+                    "Principal",
+                    "Home");
             }
-            else if (response.StatusCode == HttpStatusCode.NotFound)
+
+            if (response.StatusCode ==
+                HttpStatusCode.NotFound)
             {
-                ViewBag.Mensaje = response.Content.ReadAsStringAsync().Result;
+                ViewBag.Mensaje =
+                    response.Content
+                        .ReadAsStringAsync()
+                        .Result;
+
                 return View();
             }
-            else
-            {
-                throw new Exception("Ocurrió un error al intentar iniciar sesión.");
-            }
-            
+
+            throw new Exception(
+                "Ocurrió un error al intentar iniciar sesión.");
         }
 
         #endregion
 
-        #region RegistrarUsuarios ------------------------
+        #region Registrar usuarios
 
         [HttpGet]
         public IActionResult Registro()
@@ -58,96 +118,129 @@ namespace SuwoGym_Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Registro(UsuarioModel model)
+        public IActionResult Registro(
+            UsuarioModel model)
         {
-            using var client = _http.CreateClient();
+            /*
+             * Igual que RepoSM:
+             * la WEB genera el hash antes de enviarlo.
+             */
+            model.contrasenna =
+                BCrypt.Net.BCrypt.HashPassword(
+                    model.contrasenna);
 
-            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Home/RegistroAPI";
-            var response = client.PostAsJsonAsync(urlApi, model).Result;
+            using var client =
+                _http.CreateClient();
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            var urlApi =
+                _config[
+                    "ConnectionStringsWeb:urlApi"]
+                + "/api/Home/RegistroAPI";
+
+            var response =
+                client.PostAsJsonAsync(
+                    urlApi,
+                    model).Result;
+
+            if (response.StatusCode ==
+                HttpStatusCode.OK)
             {
-                // Mostrar mensaje de éxito y redirigir al login
-                TempData["RegistroExitoso"] = "¡Registro exitoso! Tu cuenta ha sido creada correctamente. Por favor, inicia sesión.";
-                return RedirectToAction("Index", "Home");
+                TempData["RegistroExitoso"] =
+                    "¡Registro exitoso! Tu cuenta ha sido creada correctamente. Por favor, inicia sesión.";
+
+                return RedirectToAction(
+                    "Index",
+                    "Home");
             }
-            else if (response.StatusCode == HttpStatusCode.BadRequest)
+
+            if (response.StatusCode ==
+                HttpStatusCode.BadRequest)
             {
-                ViewBag.Mensaje = response.Content.ReadAsStringAsync().Result;
+                ViewBag.Mensaje =
+                    response.Content
+                        .ReadAsStringAsync()
+                        .Result;
+
                 return View();
             }
-            else
-            {
-                throw new Exception("Ocurrió un error al intentar registrar el usuario.");
-            }
+
+            throw new Exception(
+                "Ocurrió un error al intentar registrar el usuario.");
         }
 
         #endregion
 
-        #region Cerrar Sesión ----------------------------
-
-        [HttpGet]
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Home");
-        }
-
-        #endregion
-
-        #region Recuperar Acceso ---------------------------
+        #region Recuperar acceso
 
         [HttpGet]
         public IActionResult RecuperarAcceso()
-
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult RecuperarAcceso(UsuarioModel model)
-
+        public IActionResult RecuperarAcceso(
+            UsuarioModel model)
         {
-            using (var client = _http.CreateClient())
+            using var client =
+                _http.CreateClient();
+
+            var urlApi =
+                _config[
+                    "ConnectionStringsWeb:urlApi"]
+                + "/api/Home/RecuperarAccesoAPI";
+
+            var response =
+                client.PostAsJsonAsync(
+                    urlApi,
+                    model).Result;
+
+            if (response.StatusCode ==
+                HttpStatusCode.OK)
             {
-
-
-
-                var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Home/RecuperarAccesoAPI";
-
-                var response = client.PostAsJsonAsync(urlApi, model).Result;
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-
-
-                    return RedirectToAction("Index", "Home");
-                }
-                else if (response.StatusCode == HttpStatusCode.NotFound)
-                {
-
-
-                    ViewBag.Mensaje = response.Content.ReadAsStringAsync().Result;
-                    return View();
-
-                }
-                else
-                {
-
-                    throw new Exception("Ocurrió un error al intentar recuperar su acceso");
-                }
+                return RedirectToAction(
+                    "Index",
+                    "Home");
             }
 
+            if (response.StatusCode ==
+                    HttpStatusCode.NotFound
+                ||
+                response.StatusCode ==
+                    HttpStatusCode.BadRequest)
+            {
+                ViewBag.Mensaje =
+                    response.Content
+                        .ReadAsStringAsync()
+                        .Result;
+
+                return View();
+            }
+
+            throw new Exception(
+                "Ocurrió un error al intentar recuperar su acceso.");
         }
+
         #endregion
 
+        #region Cerrar sesión
 
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
 
+            return RedirectToAction(
+                "Index",
+                "Home");
+        }
+
+        #endregion
+
+        [HttpGet]
         public IActionResult Principal()
         {
             return View();
         }
-
     }
 }
-

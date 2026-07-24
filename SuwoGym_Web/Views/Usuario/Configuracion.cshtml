@@ -1,0 +1,159 @@
+﻿@model SuwoGym_Web.Models.UsuarioModel
+
+@{
+    Layout = "_Layout";
+
+    var nombre =
+        Context.Session.GetString("Nombre");
+
+    var nombreRol =
+        Context.Session.GetString("NombreRol");
+}
+
+<div class="page-title mb-4">
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <h1>
+                <span class="ti ti-settings"></span>
+                Configuración
+            </h1>
+
+            <p class="text-subtitle text-muted">
+                Actualiza la contraseña de acceso a tu cuenta.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-12 col-lg-5 mx-auto">
+
+        <div class="card bg-transparent border-0 m-0">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-center
+                            align-items-center flex-column">
+
+                    <div class="mb-3">
+
+                        <img src="~/images/logoSuwo.png"
+                             alt="Logo SUWÓ"
+                             width="90">
+
+                    </div>
+
+                    <h3 class="mt-2">
+                        @nombre
+                    </h3>
+
+                    <p class="text-small text-muted">
+                        @nombreRol
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-12 col-lg-6 mx-auto">
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h4 class="card-title mb-0">
+
+                    <span class="ti ti-lock"></span>
+                    Cambiar contraseña
+
+                </h4>
+
+            </div>
+
+            <div class="card-body">
+
+                @if (ViewBag.MensajeSeguridad != null)
+                {
+                    <div class="alert
+                                alert-@ViewBag.ClaseMensajeSeguridad
+                                text-center">
+
+                        @ViewBag.MensajeSeguridad
+
+                    </div>
+                }
+
+                <form id="SeguridadForm"
+                      asp-action="CambiarContrasenna"
+                      asp-controller="Usuario"
+                      method="post">
+
+                    <div class="form-group mb-3">
+
+                        <label asp-for="contrasenna"
+                               class="form-label">
+
+                            Contraseña nueva
+                        </label>
+
+                        <input asp-for="contrasenna"
+                               type="password"
+                               class="form-control"
+                               autocomplete="new-password">
+
+                    </div>
+
+                    <div class="form-group mb-4">
+
+                        <label asp-for="confirmarContrasenna"
+                               class="form-label">
+
+                            Confirmar contraseña
+                        </label>
+
+                        <input asp-for="confirmarContrasenna"
+                               type="password"
+                               class="form-control"
+                               autocomplete="new-password">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            <span class="ti ti-device-floppy"></span>
+                            Procesar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="~/js/configuracion.js"
+        asp-append-version="true"></script>

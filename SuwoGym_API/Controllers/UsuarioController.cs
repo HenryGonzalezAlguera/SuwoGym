@@ -1,0 +1,87 @@
+﻿using Dapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using SuwoGym_API.Models;
+
+namespace SuwoGym_API.Controllers
+{
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UsuarioController(
+        IConfiguration _databasekey) : ControllerBase
+    {
+        #region Consultar Usuario
+
+        [HttpGet("ConsultarUsuarioAPI")]
+        public IActionResult ConsultarUsuarioAPI(
+            int IdUsuario)
+        {
+            using var context = new SqlConnection(
+                _databasekey[
+                    "ConnectionStringsApi:DefaultConnection"]);
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add(
+                "@IdUsuario",
+                IdUsuario);
+
+            var response =
+                context.QueryFirstOrDefault
+                <DatoUsuarioResponseModel>(
+                    "spConsultarUsuario",
+                    parameters);
+
+            if (response != null)
+            {
+                return Ok(response);
+            }
+
+            return NotFound(
+                "El usuario no se pudo encontrar.");
+        }
+
+        #endregion
+
+        #region Cambiar Contraseña
+
+        [HttpPut("CambiarContrasennaAPI")]
+        public IActionResult CambiarContrasennaAPI(
+            CambiarAccesoRequestModel model)
+        {
+            using var context = new SqlConnection(
+                _databasekey[
+                    "ConnectionStringsApi:DefaultConnection"]);
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add(
+                "@IdUsuario",
+                model.IdUsuario);
+
+            parameters.Add(
+                "@ContrasennaHash",
+                model.contrasenna);
+
+            parameters.Add(
+                "@DebeCambiarContrasenna",
+                false);
+
+            var actualizacion = context.Execute(
+                "spActualizarContrasenna",
+                parameters);
+
+            if (actualizacion > 0)
+            {
+                return Ok(actualizacion);
+            }
+
+            return BadRequest(
+                "La contraseña no se pudo actualizar correctamente.");
+        }
+
+        #endregion
+    }
+}

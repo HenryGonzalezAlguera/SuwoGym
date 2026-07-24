@@ -1,125 +1,209 @@
 using Dapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using SuwoGym_API.Models;
+using SuwoGym_API.Services;
+using System.Data;
 
 namespace SuwoGym_API.Controllers
 {
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
-    public class HomeController(IConfiguration _databasekey) : ControllerBase
+    public class HomeController(
+        IConfiguration _databasekey,
+        IUtilesService _utiles) : ControllerBase
     {
+        #region Registro API
 
-        #region RegistroApi
         [HttpPost("RegistroAPI")]
-        public IActionResult RegistroAPI(UsuarioRegistroModel model)
+        public IActionResult RegistroAPI(
+            UsuarioRegistroModel model)
         {
             try
             {
-                using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
+                using var context = new SqlConnection(
+                    _databasekey[
+                        "ConnectionStringsApi:DefaultConnection"]);
 
                 var parameters = new DynamicParameters();
-                parameters.Add("@Nombre", model.nombre);
-                parameters.Add("@Apellido", model.apellido);
-                parameters.Add("@CorreoElectronico", model.correoElectronico);
-                parameters.Add("@ContrasennaHash", model.contrasenna);
-                parameters.Add("@Identificacion", model.identificacion);
 
-                var response = context.QueryFirstOrDefault<DatoUsuarioResponseModel>("spRegistrarUsuario", parameters, commandType: System.Data.CommandType.StoredProcedure);
+                parameters.Add(
+                    "@Nombre",
+                    model.nombre);
 
-                if (response != null && response.IdUsuario > 0)
+                parameters.Add(
+                    "@Apellido",
+                    model.apellido);
+
+                parameters.Add(
+                    "@CorreoElectronico",
+                    model.correoElectronico);
+
+                parameters.Add(
+                    "@ContrasennaHash",
+                    model.contrasenna);
+
+                parameters.Add(
+                    "@Identificacion",
+                    model.identificacion);
+
+                var response =
+                    context.QueryFirstOrDefault
+                    <DatoUsuarioResponseModel>(
+                        "spRegistrarUsuario",
+                        parameters,
+                        commandType:
+                            CommandType.StoredProcedure);
+
+                if (response != null &&
+                    response.IdUsuario > 0)
                 {
-                    return Ok(new { mensaje = "Registro exitoso. Bienvenido a SuwoGym.", usuario = response });
+                    return Ok(response);
                 }
-                else
-                {
-                    return BadRequest("Error al registrar el usuario.");
-                }
+
+                return BadRequest(
+                    "La información no se pudo registrar correctamente");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
         #endregion
 
-        #region IniciarSesionApi
+        #region Iniciar sesión API
+
         [HttpPost("IniciarSesionAPI")]
-        public IActionResult IniciarSesionAPI(UsuarioLoginModel model)
+        public IActionResult IniciarSesionAPI(
+            UsuarioLoginModel model)
         {
-            using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
+            using var context = new SqlConnection(
+                _databasekey[
+                    "ConnectionStringsApi:DefaultConnection"]);
 
             var parameters = new DynamicParameters();
-            parameters.Add("@CorreoElectronico", model.correoElectronico);
-            parameters.Add("@ContrasennaHash", model.contrasenna);
 
-            var response = context.QueryFirstOrDefault<DatoUsuarioResponseModel>("spIniciarSesionUsuario", parameters);
+            parameters.Add(
+                "@CorreoElectronico",
+                model.correoElectronico);
 
-            if (response != null)
+            parameters.Add(
+                "@ContrasennaHash",
+                model.contrasenna);
+
+            var response =
+                context.QueryFirstOrDefault
+                <DatoUsuarioResponseModel>(
+                    "spIniciarSesionUsuario",
+                    parameters);
+
+            if (response != null &&
+                BCrypt.Net.BCrypt.Verify(
+                    model.contrasenna,
+                    response.ContrasennaHash))
             {
+                response.Token =
+                    _utiles.GenerarToken(
+                        response.IdUsuario);
+
                 return Ok(response);
             }
-            else
-            {
-                return NotFound("Usuario no encontrado o credenciales incorrectas.");
-            }
+
+            return NotFound(
+                "La información no se pudo validar correctamente");
         }
 
         #endregion
 
-        #region RecuperarAccesoApi
+        #region Recuperar acceso API
 
         [HttpPost("RecuperarAccesoAPI")]
-        public IActionResult RecuperarAccesoAPI(RecuperarAccesoRequestModel model)
+        public async Task<IActionResult>
+            RecuperarAccesoAPI(
+                RecuperarAccesoRequestModel model)
         {
-
-            using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
-
+            using var context = new SqlConnection(
+                _databasekey[
+                    "ConnectionStringsApi:DefaultConnection"]);
 
             var parameters = new DynamicParameters();
 
-            parameters.Add("@CorreoElectronico", model.correoElectronico);
+            parameters.Add(
+                "@CorreoElectronico",
+                model.CorreoElectronico);
 
-
-            var response = context.QueryFirstOrDefault<DatoUsuarioResponseModel>("spValidarCorreo", parameters);
-
+            var response =
+                context.QueryFirstOrDefault
+                <DatoUsuarioResponseModel>(
+                    "spValidarCorreo",
+                    parameters);
 
             if (response == null)
             {
-                return NotFound("Usuario no encontrado o credenciales incorrectas.");
+                return NotFound(
+                    "La información no se pudo validar correctamente");
             }
-            else
+
+            // Generar nueva contraseña temporal
+            var temporal =
+                _utiles.GenerarContrasena();
+
+            var temporalHash =
+                BCrypt.Net.BCrypt.HashPassword(
+                    temporal);
+
+            parameters = new DynamicParameters();
+
+            parameters.Add(
+                "@IdUsuario",
+                response.IdUsuario);
+
+            parameters.Add(
+                "@ContrasennaHash",
+                temporalHash);
+
+            parameters.Add(
+                "@DebeCambiarContrasenna",
+                true);
+
+            var actualizacion = context.Execute(
+                "spActualizarContrasenna",
+                parameters);
+
+            if (actualizacion > 0)
             {
-                // Generar una contraseña temporal y actualizarla en la base de datos
+                // Enviar correo con la contraseña temporal
+                string ruta = Path.Combine(
+                    AppContext.BaseDirectory,
+                    "Templates",
+                    "RecuperarAcceso.html");
 
-                var temporal = GenerarContrasena();
+                string plantilla =
+                    System.IO.File.ReadAllText(ruta);
 
-                parameters = new DynamicParameters();
-                parameters.Add("@IdUsuario", response.IdUsuario);
-                parameters.Add("@ContrasennaHash", temporal);
+                plantilla = plantilla.Replace(
+                    "{{NOMBRE}}",
+                    response.Nombre);
 
+                plantilla = plantilla.Replace(
+                    "{{TEMPORAL}}",
+                    temporal);
 
-                var actualizacion = context.Execute("spActualizarContrasenna", parameters);
+                await _utiles.EnviarCorreoAsync(
+                    response.CorreoElectronico,
+                    "Recuperación de acceso",
+                    plantilla);
+
                 return Ok(response);
             }
 
+            return BadRequest(
+                "No se ha recuperado su acceso, por favor intente nuevamente.");
         }
 
         #endregion
-
-        private static string GenerarContrasena(int longitud = 10)
-        {
-            const string caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var random = new Random();
-            var chars = new char[longitud];
-
-            for (int i = 0; i < longitud; i++)
-                chars[i] = caracteres[random.Next(caracteres.Length)];
-
-            return new string(chars);
-        }
     }
 }
-
-

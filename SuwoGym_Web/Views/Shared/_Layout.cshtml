@@ -1,175 +1,500 @@
-﻿
-@{
+﻿@{
     var nombre = Context.Session.GetString("Nombre");
     var rol = Context.Session.GetString("Rol");
 }
-
 
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-    <!-- Pestaña -->
-    <link href="~/images/logoSuwo_icon.png" rel="icon" type="image/x-icon">
-    <title>Suwo Gym</title>
-    
-    <link rel="manifest" href="~/images/site.webmanifest">
 
-    <script type="module" crossorigin="" src="~/js/main.js" asp-append-version="true"></script>
-    <link rel="stylesheet" crossorigin="" href="~/css/main.css" asp-append-version="true">
-    <link rel="stylesheet" crossorigin="" href="~/css/apexcharts.css" asp-append-version="true">
-    <link rel="stylesheet" crossorigin="" href="~/css/colores.css" asp-append-version="true">
+    <meta charset="UTF-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <!-- Pestaña -->
+    <link href="~/images/logoSuwo_icon.png"
+          rel="icon"
+          type="image/x-icon">
+
+    <title>Suwo Gym</title>
+
+    <link rel="manifest"
+          href="~/images/site.webmanifest">
+
+    <!-- Archivos principales -->
+    <script type="module"
+            crossorigin=""
+            src="~/js/main.js"
+            asp-append-version="true">
+    </script>
+
+    <!-- Estilos -->
+    <link rel="stylesheet"
+          crossorigin=""
+          href="~/css/main.css"
+          asp-append-version="true">
+
+    <link rel="stylesheet"
+          crossorigin=""
+          href="~/css/apexcharts.css"
+          asp-append-version="true">
+
+    <link rel="stylesheet"
+          crossorigin=""
+          href="~/css/colores.css"
+          asp-append-version="true">
+
+    <!-- jQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"
+            asp-append-version="true">
+    </script>
+
+    <!-- jQuery Validate -->
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"
+            asp-append-version="true">
+    </script>
 
 </head>
 
 <body>
 
-  <div id="overlay" class="overlay"></div>
-
-  <!-- TOPBAR -->
-  <nav id="topbar" class="navbar bg-white border-bottom fixed-top topbar px-3">
-    
-    <!-- TOGGLE BUTTON -->
-    <button id="toggleBtn" class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm "> <!-- COMPUTER -->
-      <i class="ti ti-layout-sidebar-left-expand"></i>
-    </button> 
-    
-    <button id="mobileBtn" class="btn btn-light btn-icon btn-sm d-lg-none me-2"> <!-- MOBILE -->
-      <i class="ti ti-layout-sidebar-left-expand"></i>
-    </button>
-
-    <!-- Navbar nav -->
-    <div>
-      <ul class="list-unstyled d-flex align-items-center mb-0 gap-2">
-        <!-- Pages link -->
-
-        <!-- Dropdown -->
-        <li class="ms-3 dropdown">
-           <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div style="background-color:aliceblue; border-radius:16px; padding:2px 6px; font-size:20px;">
-                <!-- <img src="~/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-sm rounded-circle" /> -->
-                <i class="ti ti-user-circle"></i>
-                <i class="ti ti-chevron-down"></i>
-            </div>
-          </a>
-          <div class="dropdown-menu dropdown-menu-end p-0" style="min-width: 200px;">
-            <div>
-              <div class="d-flex gap-3 align-items-center border-dashed border-bottom px-3 py-3">
-               <!--  <img src="~/images/avatar/avatar-1.jpg" alt="" class="avatar avatar-md rounded-circle" /> -->
-                <div>
-                  <h4 class="mb-0 small"><b>@nombre</b></h4> <!-- Viewbag.Nombre-->
-                  <p class="mb-0  small">@rol</p>      <!-- Viewbag.Rol --> 
-                </div>
-              </div>
-              <div class="p-3 d-flex flex-column gap-1 small lh-lg">
-                
-                <a href="#!" class="">
-                  <i class="ti ti-settings"></i><span> Configuración</span>
-                </a>
-
-                <a asp-action="Logout" asp-controller="Home" class="">
-                  <i class="ti ti-door-exit"></i><span> Cerrar Sesión</span>
-                </a>
-
-              </div>
-
-            </div>
-          </div>
-        </li>
-      </ul>
+    <div id="overlay"
+         class="overlay">
     </div>
 
-  </nav>
+    <!-- TOPBAR -->
+    <nav id="topbar"
+         class="navbar bg-white border-bottom fixed-top topbar px-3">
 
-  <!-- SIDEBAR -->
-  <aside id="sidebar" class="sidebar">
+        <!-- TOGGLE BUTTON PARA COMPUTADORA -->
+        <button id="toggleBtn"
+                class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm">
 
-    <!-- TOP LOGO -->
-    <div class="logo-area">
-        <a asp-action="Principal" asp-controller="Home" class="d-inline-flex"><img src="~/images/logoSuwo_icon.png" alt="" width="32" height="32"> <!-- ícono -->
-        <span class="logo-text ms-2 "> <img src="~/images/logoSuwo_logotype.png" alt="" height="24" class="mt-1"></span> <!-- tipografía -->
-        </a>
-    </div>
+            <i class="ti ti-layout-sidebar-left-expand"></i>
 
-    <!-- NAVIGATION -->
-    <ul class="nav flex-column mt-2">
-      
-        <!-- Página Home vista por todos -->
-        <li><a class="nav-link" asp-action="Principal" asp-controller="Home"><i class="ti ti-home"></i><span
-            class="nav-text">Principal</span></a></li>
-        
-            
-        @if (@rol == "Administrador")
-        {
-        <!-- Administrador --------------------------------------------------------------------------->
-            <li><a class="nav-link" asp-action="Dashboard" asp-controller="Admin"><i class="ti ti-graph"></i><span
-                    class="nav-text">Dashboard</span></a></li>
-            <li><a class="nav-link" asp-action="Empleados_Lista" asp-controller="Admin"><i class="ti ti-badges"></i><span
-                    class="nav-text">Empleados</span></a></li>
-            <li><a class="nav-link" asp-action="Clientes_Lista" asp-controller="Admin"><i class="ti ti-user"></i><span
-                    class="nav-text">Clientes</span></a></li>
-            <li><a class="nav-link" asp-action="Planes_Lista" asp-controller="Admin"><i class="ti ti-credit-card"></i><span
-                    class="nav-text">Planes de Membresía</span></a></li>
-            <li><a class="nav-link" asp-action="Rutinas_Lista" asp-controller="Admin"><i class="ti ti-activity"></i><span
-                    class="nav-text">Rutinas</span></a></li>
-            <li><a class="nav-link" asp-action="Horarios_Lista" asp-controller="Admin"><i class="ti ti-calendar"></i><span
-                    class="nav-text">Horarios</span></a></li>
-        }
-        else if (@rol == "Entrenador") 
-        {
-        <!-- Entrenador --------------------------------------------------------------------------->
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-user"></i><span
-            class="nav-text">Clientes</span></a></li>
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-calendar"></i><span
-            class="nav-text">Cronograma</span></a></li>
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-layers-intersect"></i><span
-            class="nav-text">Ejercicios</span></a></li>
-        }
-        else 
-        {
-        <!-- Cliente --------------------------------------------------------------------------->
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-user"></i><span
-            class="nav-text">Rutinas</span></a></li>
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-calendar"></i><span
-            class="nav-text">Cronograma</span></a></li>
-        <li><a class="nav-link" asp-action="Index" asp-controller="Home"><i class="ti ti-graph"></i><span
-            class="nav-text">Desempeño</span></a></li>
-        }
-        
-    </ul>
+        </button>
 
+        <!-- TOGGLE BUTTON PARA MÓVIL -->
+        <button id="mobileBtn"
+                class="btn btn-light btn-icon btn-sm d-lg-none me-2">
 
-  </aside>
+            <i class="ti ti-layout-sidebar-left-expand"></i>
 
-  <!-- MAIN CONTENT -->
-  <main id="content" class="content py-10">
-    <div class="container-fluid">
+        </button>
 
-      <!-- Page Content -->
-      @RenderBody()
+        <!-- Navegación superior -->
+        <div>
 
-      <!-- Footer -->
-      <div class="row">
-        <footer class="py-2 mt-6 text-secondary">
+            <ul class="list-unstyled d-flex align-items-center mb-0 gap-2">
+
+                <li class="ms-3 dropdown">
+
+                    <a href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+
+                        <div style="
+                            background-color: aliceblue;
+                            border-radius: 16px;
+                            padding: 2px 6px;
+                            font-size: 20px;">
+
+                            <i class="ti ti-user-circle"></i>
+                            <i class="ti ti-chevron-down"></i>
+
+                        </div>
+
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-end p-0"
+                         style="min-width: 200px;">
+
+                        <div>
+
+                            <div class="d-flex gap-3
+                                align-items-center
+                                border-dashed
+                                border-bottom
+                                px-3 py-3">
+
+                                <div>
+
+                                    <h4 class="mb-0 small">
+                                        <b>@nombre</b>
+                                    </h4>
+
+                                    <p class="mb-0 small">
+                                        @rol
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="p-3
+                                d-flex
+                                flex-column
+                                gap-1
+                                small
+                                lh-lg">
+
+                                <a asp-action="Configuracion"
+                                   asp-controller="Usuario"
+                                   class="">
+
+                                    <i class="ti ti-settings"></i>
+
+                                    <span>
+                                        Configuración
+                                    </span>
+
+                                </a>
+
+                                <a asp-action="Logout"
+                                   asp-controller="Home"
+                                   class="">
+
+                                    <i class="ti ti-door-exit"></i>
+
+                                    <span>
+                                        Cerrar Sesión
+                                    </span>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar"
+           class="sidebar">
+
+        <!-- LOGO -->
+        <div class="logo-area">
+
+            <a asp-action="Principal"
+               asp-controller="Home"
+               class="d-inline-flex">
+
+                <img src="~/images/logoSuwo_icon.png"
+                     alt="Logo SUWÓ"
+                     width="32"
+                     height="32">
+
+                <span class="logo-text ms-2">
+
+                    <img src="~/images/logoSuwo_logotype.png"
+                         alt="SUWÓ Gym"
+                         height="24"
+                         class="mt-1">
+
+                </span>
+
+            </a>
+
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <ul class="nav flex-column mt-2">
+
+            <!-- Página principal para todos -->
+            <li>
+
+                <a class="nav-link"
+                   asp-action="Principal"
+                   asp-controller="Home">
+
+                    <i class="ti ti-home"></i>
+
+                    <span class="nav-text">
+                        Principal
+                    </span>
+
+                </a>
+
+            </li>
+
+            @if (rol == "Administrador")
+            {
+                <!-- MENÚ DEL ADMINISTRADOR -->
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Dashboard"
+                       asp-controller="Admin">
+
+                        <i class="ti ti-graph"></i>
+
+                        <span class="nav-text">
+                            Dashboard
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Empleados_Lista"
+                       asp-controller="Admin">
+
+                        <i class="ti ti-badges"></i>
+
+                        <span class="nav-text">
+                            Empleados
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Clientes_Lista"
+                       asp-controller="Admin">
+
+                        <i class="ti ti-user"></i>
+
+                        <span class="nav-text">
+                            Clientes
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Planes_Lista"
+                       asp-controller="Admin">
+
+                        <i class="ti ti-credit-card"></i>
+
+                        <span class="nav-text">
+                            Planes de Membresía
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Rutinas_Lista"
+                       asp-controller="Admin">
+
+                        <i class="ti ti-activity"></i>
+
+                        <span class="nav-text">
+                            Rutinas
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Horarios_Lista"
+                       asp-controller="Admin">
+
+                        <i class="ti ti-calendar"></i>
+
+                        <span class="nav-text">
+                            Horarios
+                        </span>
+
+                    </a>
+
+                </li>
+            }
+            else if (rol == "Entrenador")
+            {
+                <!-- MENÚ DEL ENTRENADOR -->
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Index"
+                       asp-controller="Home">
+
+                        <i class="ti ti-user"></i>
+
+                        <span class="nav-text">
+                            Clientes
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Index"
+                       asp-controller="Home">
+
+                        <i class="ti ti-calendar"></i>
+
+                        <span class="nav-text">
+                            Cronograma
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Index"
+                       asp-controller="Home">
+
+                        <i class="ti ti-layers-intersect"></i>
+
+                        <span class="nav-text">
+                            Ejercicios
+                        </span>
+
+                    </a>
+
+                </li>
+            }
+            else
+            {
+                <!-- MENÚ DEL MIEMBRO -->
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Index"
+                       asp-controller="Home">
+
+                        <i class="ti ti-user"></i>
+
+                        <span class="nav-text">
+                            Rutinas
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Index"
+                       asp-controller="Home">
+
+                        <i class="ti ti-calendar"></i>
+
+                        <span class="nav-text">
+                            Cronograma
+                        </span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Index"
+                       asp-controller="Home">
+
+                        <i class="ti ti-graph"></i>
+
+                        <span class="nav-text">
+                            Desempeño
+                        </span>
+
+                    </a>
+
+                </li>
+            }
+
+        </ul>
+
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main id="content"
+          class="content py-10">
+
+        <div class="container-fluid">
+
+            <!-- Contenido de cada vista -->
+            @RenderBody()
+
+            <!-- Footer -->
             <div class="row">
-              <div class="col-6">
-                    <p class="mb-0">Gimnasio SUWÓ | Fuerza, Enfoque y Balance</p>
-              </div>
-              <div class="col-6 text-end">
-                    <p class="mb-0">Plantilla InApp, Copyright @DateTime.Now.Year por <a href="https://codescandy.com/" target="_blank" class="text-primary">CodesCandy</a></p>
-              </div>
+
+                <footer class="py-2 mt-6 text-secondary">
+
+                    <div class="row">
+
+                        <div class="col-6">
+
+                            <p class="mb-0">
+                                Gimnasio SUWÓ | Fuerza, Enfoque y Balance
+                            </p>
+
+                        </div>
+
+                        <div class="col-6 text-end">
+
+                            <p class="mb-0">
+
+                                Plantilla InApp,
+                                Copyright @DateTime.Now.Year por
+
+                                <a href="https://codescandy.com/"
+                                   target="_blank"
+                                   class="text-primary">
+
+                                    CodesCandy
+
+                                </a>
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </footer>
+
             </div>
-        </footer>
-      </div>
 
-    </div>
-  </main>
+        </div>
 
-  <!-- Bootstrap JS -->
-  <script src="~/js/main.js" type="module" asp-append-version="true"></script>
+    </main>
+
+    <!-- Bootstrap y scripts principales -->
+    <script src="~/js/main.js"
+            type="module"
+            asp-append-version="true">
+    </script>
 
 </body>
 
