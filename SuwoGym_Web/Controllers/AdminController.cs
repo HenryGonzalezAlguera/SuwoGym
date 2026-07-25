@@ -1,23 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SuwoGym_Web.Models;
+using System.Net;
 
 namespace SuwoGym_Web.Controllers
 {
     public class AdminController(IHttpClientFactory _http, IConfiguration _config) : Controller
     {
 
-        #region Dashboard ----------------------------------
-        [HttpGet]
-        public IActionResult Dashboard()
-        {
-            return View();
-        }
-
-        #endregion
-
-
         #region Empleados ----------------------------------
-
 
         // LISTA DE EMPLEADOS ---
 
@@ -61,21 +51,35 @@ namespace SuwoGym_Web.Controllers
         }
       
         [HttpPost]
-        public IActionResult Empleados_Agregar(UsuarioModel model)
-        { 
-            /*
-             * Aquí se llama al API, ahí se debe asignar una contraseña (como la de cambiar) 
-             * para que cuando entre el entrenador, él cambie la contraseña,
-             * pero no se la asigna el administrador, para efectos de seguridad
-             */
-            return View();
+        public IActionResult Empleados_Agregar(EmpleadoCrear model)
+        {
+            using var client = _http.CreateClient();
+            var urlApi =_config["ConnectionStringsWeb:urlApi"]+ "/api/Admin/EmpleadoAgregar";
+            var response = client.PostAsJsonAsync(urlApi, model).Result;
+
+            if(response.StatusCode == HttpStatusCode.OK)
+            {
+                ViewBag.MensajeExito = "Se ha agregado el usuario correctamente";
+                return RedirectToAction("Empleados_Lista", "Admin");
+            }
+            else if(response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                ViewBag.MensajeError = response.Content.ReadAsStringAsync().Result;
+                return View();
+            }
+            throw new Exception(
+                "Ocurrió un error al intentar registrar el empleado.");
         }
 
 
+
         // VER DETALLES EMPLEADO
+
         [HttpGet]
         public IActionResult Empleados_Ver()
         {
+            
+            
             return View();
         }
 
@@ -182,6 +186,18 @@ namespace SuwoGym_Web.Controllers
 
 
         #endregion
+
+
+
+        #region Dashboard ----------------------------------
+        [HttpGet]
+        public IActionResult Dashboard()
+        {
+            return View();
+        }
+
+        #endregion
+
 
 
     }

@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using SuwoGym_API.Models;
+using SuwoGym_API.Services;
 
 namespace SuwoGym_API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController (IConfiguration _databasekey) : ControllerBase
+    public class AdminController (IConfiguration _databasekey, IUtilesService _utiles) : ControllerBase
     {
 
         #region Gestión de Empleados --------------------------------------------------------------------
@@ -21,7 +22,55 @@ namespace SuwoGym_API.Controllers
             return Ok(response);
         }
 
-        
+
+        [HttpPost("EmpleadoAgregar")]
+        public async Task<IActionResult> EmpleadoAgregar(EmpleadoCrearRequestModel model)
+        {
+            // Conexión
+            using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
+
+            // Generar nueva contraseña temporal (para que el Admin no lo haga)
+            var temporal = _utiles.GenerarContrasena();
+            var temporalHash = BCrypt.Net.BCrypt.HashPassword(temporal);
+
+            // Parámetros
+            var parameters = new DynamicParameters();
+            parameters.Add("@Nombre", model.Nombre);
+            parameters.Add("@Apellido", model.Apellido);
+            parameters.Add("@Identificacion", model.Identificacion);
+            parameters.Add("@FechaNacimiento", model.FechaNac);
+            parameters.Add("@Telefono", model.Telefono);
+            parameters.Add("@CorreoElectronico", model.CorreoElectronico);
+            parameters.Add("@Rol", model.Rol);
+            parameters.Add("@Direccion", model.Direccion);
+            //parameters.Add("@ContrasennaHash", temporalHash);
+            parameters.Add("@ContrasennaHash", temporal); // Momentaneo, porque no a todos nos llegan los correos
+            parameters.Add("@FechaRegistro", DateTime.Now);
+
+            var response = context.Execute("spRegistrarEmpleado", parameters);
+
+
+            if (response > 0)
+            {
+                // Enviar correo con la contraseña temporal
+                string ruta = Path.Combine( AppContext.BaseDirectory, "Templates", "BienvenidaEmpleado.html");
+                string plantilla = System.IO.File.ReadAllText(ruta);
+
+                // Agregar Datos a la plantilla
+                plantilla = plantilla.Replace("{{NOMBRE}}",model.Nombre);
+                plantilla = plantilla.Replace("{{APELLIDO}}",model.Nombre);
+                plantilla = plantilla.Replace("{{TEMPORAL}}",temporal);
+
+                // Enviar correos y respuesta
+                await _utiles.EnviarCorreoAsync(model.CorreoElectronico, "Nueva Cuenta en SUWÓ", plantilla);
+                return Ok(response);
+            } 
+                
+            return BadRequest("La información no se pudo validar correctamente");
+        }
+
+
+
         #endregion
 
 
