@@ -520,6 +520,9 @@ GO
 INSERT [dbo].[Usuario] ([IdUsuario], [IdRol], [Nombre], [Apellido], [CorreoElectronico], [Identificacion], [Telefono], [FechaNacimiento], [Direccion], [ContrasennaHash], [DebeCambiarContrasenna], [Estado], [FechaRegistro], [FechaUltimoAcceso]) 
 VALUES (3, 3, N'Cliente', N'Sistema', N'cliente@mail.com', N'003', NULL, NULL, NULL, N'$2a$11$p/aBlaYzvA/WRt3TBH9Ue.ijUwgQ4rHYxbsWEe6qPa1ucJloX8KQ.', 0, 1, CAST(N'2026-07-24T06:51:57.8466667' AS DateTime2), NULL)
 GO
+INSERT [dbo].[Usuario] ([IdUsuario], [IdRol], [Nombre], [Apellido], [CorreoElectronico], [Identificacion], [Telefono], [FechaNacimiento], [Direccion], [ContrasennaHash], [DebeCambiarContrasenna], [Estado], [FechaRegistro], [FechaUltimoAcceso]) 
+VALUES (4, 1, N'Henry', N'González Alguera', N'KkaiserKing@gmail.com', N'98765431', N'456788765432', N'Oct 10 2002 12:00AM', N'De la subestación JASEC 50N, 50O', N'$2a$11$s9XLDctwe23lO/0hr0tT3uLRQgnvjaL10J9ZQX.lWpbocuKZgrQiW', 0, 1, CAST(N'2026-07-27T20:55:13.6866667' AS DateTime2), NULL)
+GO
 SET IDENTITY_INSERT [dbo].[Usuario] OFF
 GO
 
@@ -720,7 +723,6 @@ CREATE PROCEDURE [dbo].[spActualizarContrasenna]
     @DebeCambiarContrasenna BIT
 AS
 BEGIN
-    SET NOCOUNT ON;
 
     UPDATE dbo.Usuario
     SET ContrasennaHash = @ContrasennaHash,
@@ -819,7 +821,7 @@ GO
    PROCEDIMIENTO: REGISTRAR EMPLEADO
    ============================================================ */
 
-   CREATE PROCEDURE [dbo].[spRegistrarEmpleado]
+CREATE PROCEDURE [dbo].[spRegistrarEmpleado]
     @Nombre NVARCHAR(80),
     @Apellido NVARCHAR(80),
     @Identificacion NVARCHAR(50),
@@ -831,111 +833,41 @@ GO
     @ContrasennaHash NVARCHAR(300),
     @FechaRegistro DATETIME
 AS
+
 BEGIN
-    SET NOCOUNT ON;
-
-    BEGIN TRY
-
-        IF EXISTS
-        (
-            SELECT 1
-            FROM dbo.Usuario
-            WHERE CorreoElectronico = @CorreoElectronico
-        )
+    
+    IF EXISTS ( SELECT 1 FROM dbo.Usuario
+                WHERE CorreoElectronico = @CorreoElectronico)
         BEGIN
-            RAISERROR(
-                'El correo electrónico ya está registrado.',
-                16,
-                1
-            );
-
+            RAISERROR( 'El correo electrónico ya está registrado.', 16,1);
             RETURN;
         END
 
-        IF EXISTS
-        (
-            SELECT 1
-            FROM dbo.Usuario
-            WHERE Identificacion = @Identificacion
-        )
+    IF EXISTS ( SELECT 1 FROM dbo.Usuario
+                WHERE Identificacion = @Identificacion)
         BEGIN
-            RAISERROR(
-                'La identificación ya está registrada en el sistema.',
-                16,
-                1
-            );
-
+            RAISERROR('La identificación ya está registrada en el sistema.',16,1);
             RETURN;
         END
 
-        BEGIN TRANSACTION;
 
-        INSERT INTO dbo.Usuario
-        (
-            IdRol,
-            Nombre,
-            Apellido,
-            CorreoElectronico,
-            Identificacion,
-            Telefono,
-            FechaNacimiento,
-            Direccion,
-            ContrasennaHash,
-            DebeCambiarContrasenna,
-            Estado,
-            FechaRegistro
-        )
-        VALUES
-        (
-            @Rol,
-            @Nombre,
-            @Apellido,
-            @CorreoElectronico,
-            @Identificacion,
-            @Telefono,
-            @FechaNacimiento,
-            @Direccion,
-            @ContrasennaHash,
-            1,
-            1,
-            @FechaRegistro
-        );
 
-        DECLARE @IdUsuario INT =
-            SCOPE_IDENTITY();
+    INSERT INTO dbo.Usuario (
+        IdRol, Nombre, Apellido, CorreoElectronico, Identificacion, Telefono,
+        FechaNacimiento, Direccion, ContrasennaHash, DebeCambiarContrasenna, Estado, FechaRegistro
+    )
+    VALUES
+    (
+        @Rol,@Nombre,@Apellido,@CorreoElectronico,@Identificacion,@Telefono,
+        @FechaNacimiento, @Direccion, @ContrasennaHash, 1,1, @FechaRegistro
+    );
 
-        COMMIT TRANSACTION;
 
-        SELECT
-            U.IdUsuario,
-            U.Nombre,
-            U.Apellido,
-            U.CorreoElectronico,
-            U.IdRol,
-            R.NombreRol
-        FROM dbo.Usuario U
-        INNER JOIN dbo.Rol R
-            ON U.IdRol = R.IdRol
-        WHERE U.IdUsuario = @IdUsuario;
-
-    END TRY
-    BEGIN CATCH
-
-        IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
-
-        DECLARE @ErrorMessage NVARCHAR(4000) =
-            ERROR_MESSAGE();
-
-        RAISERROR(
-            @ErrorMessage,
-            16,
-            1
-        );
-
-    END CATCH
 END
 GO
+
+
+
 
 
 

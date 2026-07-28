@@ -20,6 +20,12 @@
 		</None>
 	</ItemGroup>
 	
+	<ItemGroup>
+		<None Update="Templates\BienvenidaEmpleado.html">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	
 
 
 </Project>

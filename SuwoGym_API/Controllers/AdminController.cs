@@ -43,8 +43,7 @@ namespace SuwoGym_API.Controllers
             parameters.Add("@CorreoElectronico", model.CorreoElectronico);
             parameters.Add("@Rol", model.Rol);
             parameters.Add("@Direccion", model.Direccion);
-            //parameters.Add("@ContrasennaHash", temporalHash);
-            parameters.Add("@ContrasennaHash", temporal); // Momentaneo, porque no a todos nos llegan los correos
+            parameters.Add("@ContrasennaHash", temporalHash);
             parameters.Add("@FechaRegistro", DateTime.Now);
 
             var response = context.Execute("spRegistrarEmpleado", parameters);
@@ -58,7 +57,7 @@ namespace SuwoGym_API.Controllers
 
                 // Agregar Datos a la plantilla
                 plantilla = plantilla.Replace("{{NOMBRE}}",model.Nombre);
-                plantilla = plantilla.Replace("{{APELLIDO}}",model.Nombre);
+                plantilla = plantilla.Replace("{{APELLIDO}}",model.Apellido);
                 plantilla = plantilla.Replace("{{TEMPORAL}}",temporal);
 
                 // Enviar correos y respuesta
