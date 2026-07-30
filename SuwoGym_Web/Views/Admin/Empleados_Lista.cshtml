@@ -44,7 +44,6 @@
         </div> -->
     <!-- Lista de rutinas -->
     <div class="card table-responsive p-2">
-
         <table class="table mb-0 text-nowrap table-hover">
             <thead class="border-light">
                 <tr>
@@ -71,10 +70,14 @@
                             else{
                                 <span class="badge bg-danger-subtle text-success">Inactivo</span>
                             }                           
-                            <a href="#" class=""><i class="ti ti-reload ms-1"></i></a> <!-- Para cambiar el estado -->
                         </td>
                         <td class="">
-                            <a asp-action="Empleados_Ver" asp-controller="Admin" class=""><i class="ti ti-eye ms-1"></i></a>
+                            <!-- Ver detalles del empleado -->
+                            <a asp-action="Empleados_Ver" asp-controller="Admin" asp-route-i=@item.IdUsuario
+                                class="btn btn-sm btn-light"><i class="ti ti-eye"></i></a>
+                            <!-- Para cambiar el estado -->
+                            <a asp-action="Empleados_Editar" asp-controller="Admin" asp-route-i=@item.IdUsuario
+                               class="btn btn-sm btn-light"><i class="ti ti-pencil"></i></a>
                         </td>
                     </tr>
                 }

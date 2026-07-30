@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using SuwoGym_API.Models;
 using SuwoGym_API.Services;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace SuwoGym_API.Controllers
 {
@@ -14,11 +15,13 @@ namespace SuwoGym_API.Controllers
 
         #region Gestión de Empleados --------------------------------------------------------------------
 
-        [HttpGet("ListaEmpleadosAPI")]
-        public async Task<IActionResult> ListaEmpleadosAPI()
+        [HttpGet("ListaEmpleadosAPI/{id}")]
+        public async Task<IActionResult> ListaEmpleadosAPI(int id)
         {
             using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
-            var response = await context.QueryAsync<EmpleadoListaResponseModel>("spListarEmpleados");
+            var parameters= new DynamicParameters();
+            parameters.Add("@IdUser", id);
+            var response = await context.QueryAsync<EmpleadoListaResponseModel>("spListarEmpleados",parameters);
             return Ok(response);
         }
 
@@ -68,6 +71,36 @@ namespace SuwoGym_API.Controllers
             return BadRequest("La información no se pudo validar correctamente");
         }
 
+
+        [HttpGet("EmpleadoDetalles/{id}")]
+        public async Task<IActionResult> EmpleadoDetalles(int id)
+        {
+            using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
+            var parameters = new DynamicParameters();
+            parameters.Add("@IdUser", id);
+            var response = context.QueryFirstOrDefault<EmpleadoDetalleResponseModel>("spDetalleEmpleado",parameters);
+
+            if (response != null) 
+                return Ok(response);
+
+            return BadRequest("No se ha podido encontrar información del empleado");
+        }
+
+
+
+        [HttpPut("EmpleadoCambiarEstado/{id}")]
+        public async Task<IActionResult> Empleados_Editar(int id)
+        {
+            using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
+            var parameters = new DynamicParameters();
+            parameters.Add("@IdUser", id);
+            var response = context.QueryFirstOrDefault<EmpleadoDetalleResponseModel>("spCambiarEstadoUsuario", parameters);
+
+            if (response != null) 
+                return Ok(response);
+
+            return BadRequest("No se ha podido encontrar información del empleado");
+        }
 
 
         #endregion

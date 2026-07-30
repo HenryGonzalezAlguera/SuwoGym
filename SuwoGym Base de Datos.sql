@@ -1,3 +1,5 @@
+
+
 /* ============================================================
    BASE DE DATOS: SUWOGYM
    ============================================================ */
@@ -134,7 +136,7 @@ CREATE TABLE [dbo].[Usuario]
     [CorreoElectronico] NVARCHAR(150) NOT NULL,
     [Identificacion] NVARCHAR(50) NOT NULL,
     [Telefono] NVARCHAR(30) NULL,
-    [FechaNacimiento] NVARCHAR(30) NULL,
+    [FechaNacimiento] DATETIME2(7) NULL,
     [Direccion] NVARCHAR(200) NULL,
     [ContrasennaHash] NVARCHAR(300) NOT NULL,
     [DebeCambiarContrasenna] BIT NOT NULL,
@@ -765,13 +767,15 @@ GO
    ============================================================ */
    
 CREATE PROCEDURE [dbo].[spListarEmpleados] 
+    @IdUser INT
 AS
 BEGIN
-    SELECT  u.Identificacion, u.Nombre, u.Apellido, r.NombreRol, u.CorreoElectronico, u.Estado
+    SELECT u.IdUsuario, u.Identificacion, u.Nombre, u.Apellido, r.NombreRol, u.CorreoElectronico, u.Estado
     FROM Usuario AS u
     INNER JOIN Rol as r
         ON r.IdRol = u.IdRol
-    WHERE u.IdRol != 3
+    WHERE u.IdRol != 3 
+      AND u.IdUsuario != @IdUser
     ORDER BY u.Apellido ASC
 END
 GO
@@ -825,7 +829,7 @@ CREATE PROCEDURE [dbo].[spRegistrarEmpleado]
     @Nombre NVARCHAR(80),
     @Apellido NVARCHAR(80),
     @Identificacion NVARCHAR(50),
-    @FechaNacimiento NVARCHAR(30),
+    @FechaNacimiento DATETIME,
     @Telefono NVARCHAR(30),
     @CorreoElectronico NVARCHAR(150),
     @Rol INT,
@@ -850,8 +854,6 @@ BEGIN
             RETURN;
         END
 
-
-
     INSERT INTO dbo.Usuario (
         IdRol, Nombre, Apellido, CorreoElectronico, Identificacion, Telefono,
         FechaNacimiento, Direccion, ContrasennaHash, DebeCambiarContrasenna, Estado, FechaRegistro
@@ -861,14 +863,47 @@ BEGIN
         @Rol,@Nombre,@Apellido,@CorreoElectronico,@Identificacion,@Telefono,
         @FechaNacimiento, @Direccion, @ContrasennaHash, 1,1, @FechaRegistro
     );
-
-
 END
 GO
 
 
 
+/* ============================================================
+   PROCEDIMIENTO: DETALLES DE EMPLEADOS
+   ============================================================ */
 
+CREATE PROCEDURE [dbo].[spDetalleEmpleado] 
+    @IdUser INT
+AS
+BEGIN
+    SELECT u.Nombre, u.Apellido, u.Identificacion, u.FechaNacimiento AS 'FechaNac',
+           u.Telefono, u.CorreoElectronico, r.NombreRol AS 'Rol', u.Direccion, 
+           u.FechaRegistro, u.Estado
+    FROM Usuario AS u
+    INNER JOIN Rol as r
+        ON r.IdRol = u.IdRol
+    WHERE u.IdUsuario = @IdUser
+END
+GO
+
+
+/* ============================================================
+   PROCEDIMIENTO: CAMBIAR ESTADO USUARIO
+   ============================================================ */
+
+CREATE PROCEDURE [dbo].[spCambiarEstadoUsuario] 
+    @IdUser INT
+AS
+BEGIN
+    UPDATE Usuario
+    SET Estado = 
+        CASE
+            WHEN Estado = 1 THEN 0
+            ELSE 1
+        END
+    WHERE IdUsuario = @IdUser
+END
+GO
 
 
 /* ============================================================

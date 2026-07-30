@@ -29022,8 +29022,10 @@ textarea.form-control-lg {
     word-wrap: break-word;
     background-color: var(--bs-card-bg);
     background-clip: border-box;
-    border: var(--bs-card-border-width) solid var(--bs-card-border-color);
-    border-radius: var(--bs-card-border-radius)
+    /*border: var(--bs-card-border-width) solid var(--bs-card-border-color);*/
+    border-radius: var(--bs-card-border-radius);
+    border: none;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
 }
 
     .card > hr {

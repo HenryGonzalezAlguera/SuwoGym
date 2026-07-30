@@ -14,8 +14,10 @@ namespace SuwoGym_Web.Controllers
         [HttpGet]
         public async Task <IActionResult> Empleados_Lista()
         {
+            var idUsuario = HttpContext.Session.GetInt32("IdUsuario")!.Value;
+
             var client = _http.CreateClient();
-            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaEmpleadosAPI";
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaEmpleadosAPI/"+idUsuario;
             var response = await client.GetFromJsonAsync<List<EmpleadoLista>>(urlApi);
 
             // Verificar respuesta
@@ -29,16 +31,6 @@ namespace SuwoGym_Web.Controllers
                 return View();
             }
             throw new Exception("Lo sentimos, se ha presentado un problema.");
-        }
-
-        [HttpPost]
-        public IActionResult Empleados_CambiarEstado(UsuarioModel model)
-        {
-            /*
-             * este espacio es para que, con el botón en la columna estado, se cambie el estado de usuario
-             * esto redirige a la misma página Empleados_Lista
-             */
-            return View(); 
         }
 
         
@@ -76,14 +68,72 @@ namespace SuwoGym_Web.Controllers
         // VER DETALLES EMPLEADO
 
         [HttpGet]
-        public IActionResult Empleados_Ver()
+        public async Task<IActionResult> Empleados_Ver(int i)
         {
-            
-            
-            return View();
+            using var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoDetalles/" + i;
+            var response = await client.GetFromJsonAsync<EmpleadoDetalle>(urlApi);
+
+            // Verificar respuesta
+            if (response != null) // 200
+            {
+                return View(response);
+            }
+            else if (response == null)
+            {
+                ViewBag.MensajeError = "No se ha podido recuperar la información del empleado";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
+         }
+
+
+        // EDITAR EMPLEADOS
+
+        [HttpGet]
+        public async Task<IActionResult> Empleados_Editar(int i)
+        {
+            using var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoDetalles/" + i;
+            var response = await client.GetFromJsonAsync<EmpleadoDetalle>(urlApi);
+
+            // Verificar respuesta
+            if (response != null) // 200
+            {
+                return View(response);
+            }
+            else if (response == null)
+            {
+                ViewBag.MensajeError = "No se ha podido recuperar la información del empleado";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
 
 
+        [HttpPost]
+        public IActionResult Empleados_CambiarEstado(int i)
+        {
+            EmpleadoLista model = new EmpleadoLista();
+            model.IdUsuario = i;
+
+            using var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoCambiarEstado/" + i;
+            var response = client.PutAsJsonAsync(urlApi, model).Result;
+
+            // Verificar respuesta
+            if (response != null) // 200
+            {
+                ViewBag.MensajeExito = "Se ha agregado el usuario correctamente";
+                return RedirectToAction("Empleados_Lista", "Admin");
+            }
+            else if (response == null)
+            {
+                ViewBag.MensajeError = "No se ha posido cambiar el estado del empleado.";
+                return RedirectToAction("Principal", "Admin");
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
+        }
 
         #endregion
 
@@ -172,7 +222,7 @@ namespace SuwoGym_Web.Controllers
         #region Horarios ----------------------------------
 
         [HttpGet]
-        public IActionResult Horarios_Lista()
+        public async Task<IActionResult> Horarios_Lista()
         {
             return View();
         }
@@ -180,6 +230,12 @@ namespace SuwoGym_Web.Controllers
 
         [HttpGet]
         public IActionResult Horarios_Agregar()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Horarios_Ver()
         {
             return View();
         }
@@ -199,6 +255,62 @@ namespace SuwoGym_Web.Controllers
         #endregion
 
 
+
+
+        #region Prueba visual --------------------------
+
+        [HttpGet]
+        public async Task<IActionResult> Prueba_Lista()
+        {
+            var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaEmpleadosAPI";
+            var response = await client.GetFromJsonAsync<List<EmpleadoLista>>(urlApi);
+
+            // Verificar respuesta
+            if (response != null && response.Count() > 0) // 200
+            {
+                return View(response);
+            }
+            else if (response == null || response.Count() <= 0)
+            {
+                ViewBag.MensajeError = "No hay empleados registrados. Por favor registre un empleado.";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
+        }
+
+
+        [HttpGet]
+        public IActionResult Prueba_Agregar ()
+        {
+            return View();
+        }
+       
+
+        [HttpGet]
+        public async Task<IActionResult> Prueba_Detalles (int i)
+        {
+            using var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoDetalles/" + i;
+            var response = await client.GetFromJsonAsync<EmpleadoDetalle>(urlApi);
+
+            // Verificar respuesta
+            if (response != null) // 200
+            {
+                return View(response);
+            }
+            else if (response == null)
+            {
+                ViewBag.MensajeError = "No se ha podido recuperar la información del empleado";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
+        }
+
+
+
+
+        #endregion
 
     }
 }

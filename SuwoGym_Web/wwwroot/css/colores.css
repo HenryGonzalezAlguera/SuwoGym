@@ -40,3 +40,38 @@
 .fondoInput {
     color: #131519;
 }
+
+
+/* Colores de respaldo */
+.gris {
+    color: #6c757d;
+}
+
+.lineaGris {
+    border-color: #e0e0e0;
+}
+
+
+/* Otros */
+.info-boxi {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border: none;
+    color: #6c757d;
+    padding:1rem 1rem 0.4rem;
+    margin-bottom:8px; 
+}
+
+
+.btnNav {
+    color: #293039;
+    font-weight: 500;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 12px 20px; 
+    transition: all 0.3s ease;
+}
+
+    .btnNav:hover {
+        color: #007bff;
+    }

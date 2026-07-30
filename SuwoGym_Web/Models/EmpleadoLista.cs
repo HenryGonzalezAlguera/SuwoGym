@@ -2,6 +2,8 @@
 {
     public class EmpleadoLista
     {
+        public int IdUsuario { get; set; }
+
         public string Identificacion { get; set; } = string.Empty;
 
         public string Nombre { get; set; } = string.Empty;

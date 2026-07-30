@@ -5,17 +5,178 @@
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-action="Empleados_Lista" asp-controller="Admin">Empleados</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Detalles del Empleado</li>
+                    <li class="breadcrumb-item">
+                        <a asp-action="Empleados_Lista" asp-controller="Admin" class="link-primary">Empleados</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <span>Detalles del Empleado</span>
+                    </li>
                 </ol>
             </nav>
         </div>
-        <br />
         <!-- Titulo -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="">
-                <h2>Detalles del Empleado</h2>
+                <h4>Detalles del Empleado</h4>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Encabezado nombre-->
+<div class="card">
+    <div class="card-body p-4">
+        <div class="row">
+            <!-- Nombre y Rol -->
+            <div class="col-lg-8">
+                <div class="mt-2">
+                    <h2 class="mb-2"><b>@Model.Nombre @Model.Apellido</b></h2>
+                    <p>
+                        <span class="badge bg-info-subtle text-info-emphasis">
+                            <i class="ti ti-user"></i> @Model.Rol
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>               
+    </div>
+</div>  
+<br />
+
+
+<!-- Tarjeta de información detallada -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body p-4">
+
+                <!-- Botones de menu -->
+                <ul class="nav nav-tabs mb-4 justify-content-center" id="infoTabs" role="tablist" 
+                style="border-bottom: 2px solid #e0e0e0;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link btnNav" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab">
+                            <i class="ti ti-user"></i>
+                            Personal
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                            <button class="nav-link btnNav" id="laboral-tab" data-bs-toggle="tab" data-bs-target="#laboral" type="button" role="tab">
+                            <i class="ti ti-briefcase-2"></i>
+                            Laboral
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Contenido de tabs -->
+                <div class="tab-content">
+
+                    <!-- Pestaña Personal -->
+                    <div class="tab-pane fade show active" id="personal" role="tabpanel">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #007bff;">
+                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Identificación</label>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">@Model.Identificacion</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #007bff;">
+                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Fecha de Nacimiento</label>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">
+                                        <i class="fas fa-calendar-alt me-2" style="color: #007bff;"></i>
+                                        @Model.FechaNac
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #007bff;">
+                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Correo Electrónico</label>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">
+                                        <i class="fas fa-envelope me-2" style="color: #007bff;"></i>
+                                        @Model.CorreoElectronico
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #007bff;">
+                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Teléfono</label>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">
+                                        <i class="fas fa-phone me-2" style="color: #007bff;"></i>
+                                        @Model.Telefono
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #293039;">
+                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Dirección de Vivienda</label>
+                                    <p style="color: #293039; font-weight: 500; margin: 0; font-size: 1.05rem;">
+                                        <i class="fas fa-map-pin me-2" style="color: #293039;"></i>
+                                        @Model.Direccion
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pestaña Laboral -->
+                    <div class="tab-pane fade" id="laboral" role="tabpanel">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #ff5500;">
+                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Rol</label>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">
+                                        <i class="fas fa-user-tag me-2" style="color: #ff5500;"></i>
+                                        @Model.Rol
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #ff5500;">
+                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Estado</label>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">
+                                        @if (Model.Estado)
+                                        {
+                                            <span class="badge" style="background-color: #28a745; color: white; padding: 6px 14px; border-radius: 20px;">
+                                                <i class="fas fa-check-circle me-1"></i> Activo
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge" style="background-color: #dc3545; color: white; padding: 6px 14px; border-radius: 20px;">
+                                                <i class="fas fa-times-circle me-1"></i> Inactivo
+                                            </span>
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #ff5500;">
+                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Fecha de Ingreso</label>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">
+                                        <i class="fas fa-calendar-plus me-2" style="color: #ff5500;"></i>
+                                        @Model.FechaRegistro.ToString("dd/MM/yyyy")
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #ff5500;">
+                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Antigüedad</label>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">
+                                        <i class="fas fa-clock me-2" style="color: #ff5500;"></i>
+                                        Antiguedad
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+

@@ -9,9 +9,7 @@
 <head>
 
     <meta charset="UTF-8" />
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Pestaña -->
     <link href="~/images/logoSuwo_icon.png"
@@ -327,6 +325,14 @@
                     </a>
 
                 </li>
+
+                <li>
+                    <a class="nav-link" asp-action="Prueba_Lista" asp-controller="Admin">
+                        <i class="ti ti-calendar"></i> <span class="nav-text">
+                            Prueba
+                        </span>
+                    </a>
+                </li>
             }
             else if (rol == "Entrenador")
             {
@@ -438,9 +444,7 @@
     </aside>
 
     <!-- CONTENIDO PRINCIPAL -->
-    <main id="content"
-          class="content py-10">
-
+    <main id="content" class="content py-10">
         <div class="container-fluid">
 
             <!-- Contenido de cada vista -->
@@ -487,7 +491,6 @@
             </div>
 
         </div>
-
     </main>
 
     <!-- Bootstrap y scripts principales -->

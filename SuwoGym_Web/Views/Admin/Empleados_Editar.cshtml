@@ -1,0 +1,81 @@
+﻿
+
+<!-- Header -->
+<div class="row">
+    <div class="col-12">
+        <!-- Breadcrumb-->
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-action="Empleados_Lista" asp-controller="Admin" class="link-primary">Empleados</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        <span>Editar Empleado</span>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <!-- Titulo -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="">
+                <h4>Editar Empleado</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    
+    <!-- Datos Generales -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="mt-2">
+                    <h2 class="mb-2"><b>@Model.Nombre @Model.Apellido</b></h2>
+                    <p>
+                        <span class="badge bg-info-subtle text-info-emphasis">
+                            <i class="ti ti-user"></i> @Model.Rol
+                        </span>
+                    </p>
+                </div>
+                <hr class="lineaGris"/>
+                <div class="">
+                    <small class="gris">Identificación</small>
+                    <p>
+                        <i class="ti ti-mail gris"></i>
+                        <span>@Model.Identificacion</span>
+                    </p>
+                </div>
+                <div class="">
+                    <small class="gris">Correo Electrónico</small>
+                    <p>
+                        <i class="ti ti-mail gris"></i>
+                        <span>@Model.CorreoElectronico</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modificación Datos -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body p-4">
+                
+                <h2>Pendiente</h2>
+                <p>Colocar en esta zona form para que cambie tanto estado como rol</p>
+                <p>Considerar un botón de editar desde detalles</p>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
