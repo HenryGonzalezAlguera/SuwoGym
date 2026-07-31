@@ -25,6 +25,16 @@ namespace SuwoGym_API.Controllers
             return Ok(response);
         }
 
+        [HttpGet("ListaRolesAPI")]
+        public async Task<IActionResult> ListaRolesAPI()
+        {
+            using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
+            var response = await context.QueryAsync<RolesListaResponseModel>("spListarRoles");
+            return Ok(response);
+        }
+
+
+
 
         [HttpPost("EmpleadoAgregar")]
         public async Task<IActionResult> EmpleadoAgregar(EmpleadoCrearRequestModel model)
@@ -87,16 +97,17 @@ namespace SuwoGym_API.Controllers
         }
 
 
-
-        [HttpPut("EmpleadoCambiarEstado/{id}")]
-        public async Task<IActionResult> Empleados_Editar(int id)
+        [HttpPut("EmpleadoEditar")]
+        public async Task<IActionResult> Empleados_Editar(EmpleadoEditarRequestModel model)
         {
             using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
             var parameters = new DynamicParameters();
-            parameters.Add("@IdUser", id);
-            var response = context.QueryFirstOrDefault<EmpleadoDetalleResponseModel>("spCambiarEstadoUsuario", parameters);
+            parameters.Add("@IdUser", model.IdUsuario);
+            parameters.Add("@Estado", model.Estado);
+            parameters.Add("@Rol", model.IdRol);
+            var response = context.Execute("spEditarEmpleado", parameters);
 
-            if (response != null) 
+            if (response > 0) 
                 return Ok(response);
 
             return BadRequest("No se ha podido encontrar información del empleado");

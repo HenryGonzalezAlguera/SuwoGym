@@ -876,8 +876,8 @@ CREATE PROCEDURE [dbo].[spDetalleEmpleado]
     @IdUser INT
 AS
 BEGIN
-    SELECT u.Nombre, u.Apellido, u.Identificacion, u.FechaNacimiento AS 'FechaNac',
-           u.Telefono, u.CorreoElectronico, r.NombreRol AS 'Rol', u.Direccion, 
+    SELECT u.IdUsuario, u.Nombre, u.Apellido, u.Identificacion, u.FechaNacimiento AS 'FechaNac',
+           u.Telefono, u.CorreoElectronico, r.IdRol, r.NombreRol AS 'Rol', u.Direccion, 
            u.FechaRegistro, u.Estado
     FROM Usuario AS u
     INNER JOIN Rol as r
@@ -886,24 +886,40 @@ BEGIN
 END
 GO
 
-
 /* ============================================================
-   PROCEDIMIENTO: CAMBIAR ESTADO USUARIO
+   PROCEDIMIENTO: EDITAR UN EMPLEADO
    ============================================================ */
 
-CREATE PROCEDURE [dbo].[spCambiarEstadoUsuario] 
-    @IdUser INT
+CREATE PROCEDURE [dbo].[spEditarEmpleado]
+    @IdUser INT,
+    @Estado BIT,
+    @Rol INT
 AS
 BEGIN
     UPDATE Usuario
-    SET Estado = 
-        CASE
-            WHEN Estado = 1 THEN 0
-            ELSE 1
-        END
+    SET Estado = @Estado
+    WHERE IdUsuario = @IdUser
+
+    UPDATE Usuario
+    SET IdRol = @Rol
     WHERE IdUsuario = @IdUser
 END
 GO
+
+
+/* ============================================================
+   PROCEDIMIENTO: LISTAR ROLES PARA ADMINISTRADOR
+   ============================================================ */
+
+CREATE PROCEDURE [dbo].[spListarRoles] 
+AS
+BEGIN
+    SELECT IdRol, NombreRol
+    FROM Rol
+    WHERE IdRol != 3
+END
+GO
+
 
 
 /* ============================================================

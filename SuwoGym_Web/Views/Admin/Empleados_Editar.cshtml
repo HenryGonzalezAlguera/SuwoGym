@@ -1,5 +1,7 @@
 ﻿
 
+@model EmpleadoDetalle
+
 <!-- Header -->
 <div class="row">
     <div class="col-12">
@@ -30,16 +32,11 @@
 <div class="row">
     
     <!-- Datos Generales -->
-    <div class="col-lg-4">
+    <div class="col-lg-6 mb-4">
         <div class="card">
             <div class="card-body p-4">
                 <div class="mt-2">
                     <h2 class="mb-2"><b>@Model.Nombre @Model.Apellido</b></h2>
-                    <p>
-                        <span class="badge bg-info-subtle text-info-emphasis">
-                            <i class="ti ti-user"></i> @Model.Rol
-                        </span>
-                    </p>
                 </div>
                 <hr class="lineaGris"/>
                 <div class="">
@@ -61,13 +58,68 @@
     </div>
 
     <!-- Modificación Datos -->
-    <div class="col-lg-8">
+    <div class="col-lg-6">
         <div class="card">
             <div class="card-body p-4">
+
+                <!-- Editar Rol -->
+                <form id="editarRolForm" asp-action="Empleados_EditarRol" asp-controller="Admin" method="post">
+                    <input type="hidden" asp-for="@Model.IdUsuario" />
+                    <input type="hidden" asp-for="@Model.Estado" />
+
+                    <h5 class="mb-4"><b>Cambiar Rol</b></h5>
+                    <div class="row">
+                        <div class="col-sm-3 align-content-center mb-1">
+                            <p>Rol actual:  
+                                <span class="badge bg-info-subtle text-info-emphasis">
+                            <i class="ti ti-user"></i> @Model.Rol
+                        </span></p>
+                        </div>
+                        <div class="col-sm-6 align-content-center mb-3">
+                            <select asp-for=@Model.IdRol class="form-select" id="definirRol" asp-items="ViewBag.Roles">
+                                <option value=""> --- Seleccione nuevo rol ---- </option>
+                            </select>
+                        </div>
+                        <div class=" col-sm-3 align-content-center mb-3 text-end">
+                            <button type="submit" class="btn btn-primary">Cambiar</button>
+                        </div>
+                    </div>
+                </form>
                 
-                <h2>Pendiente</h2>
-                <p>Colocar en esta zona form para que cambie tanto estado como rol</p>
-                <p>Considerar un botón de editar desde detalles</p>
+                <hr class="lineaGris"/> <br /> 
+                    
+                <!-- Editar Estado -->
+                <form id="editarEstadoForm" asp-action="Empleados_EditarEstado" asp-controller="Admin" method="post">
+                    <input type="hidden" asp-for="@Model.IdUsuario" />
+                    <input type="hidden" asp-for="@Model.IdRol" />
+                    <input type="hidden" asp-for="@Model.Estado" />
+                    
+                    <h5 class="mb-4"><b>Cambiar Estado</b></h5>
+                    <div class="row">
+                        <div class="col-sm-3 align-content-center mb-1">
+                            @if (Model.Estado)
+                            {
+                                <p>
+                                    Estado actual:
+                                    <span class="badge bg-success-subtle text-success-emphasis">
+                                        Activo
+                                    </span>
+                                </p>
+                            }
+                            else
+                            {
+                                <p>
+                                    Estado actual:<span class="badge bg-danger-subtle text-danger-emphasis">
+                                    Inactivo
+                                </span>
+                            </p>
+                        }
+                    </div>
+                    <div class=" col-sm-9 align-content-center mb-3 text-end">
+                        <button type="submit" class="btn btn-primary">Cambiar</button>
+                    </div>
+                    </div>
+                </form>
 
             </div>
         </div>

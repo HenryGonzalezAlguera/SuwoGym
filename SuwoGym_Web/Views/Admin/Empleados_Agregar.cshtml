@@ -67,10 +67,8 @@
                     
                     <div class="mb-3">
                         <label for="rol" class="form-label">Rol</label>
-                        <select asp-for="Rol" class="form-select" id="rol">
+                        <select asp-for="Rol" class="form-select" id="rol" asp-items="ViewBag.Roles">
                             <option value=""> -- Seleccionar Rol -- </option>
-                            <option value="1">Administrador</option>
-                            <option value="2">Entrenador</option>
                         </select>
                     </div>
 

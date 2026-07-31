@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SuwoGym_Web.Models;
 using System.Net;
 
@@ -37,11 +38,27 @@ namespace SuwoGym_Web.Controllers
         // AGREGAR EMPLEADO -----
 
         [HttpGet]
-        public IActionResult Empleados_Agregar()
-        { 
-            return View();
+        public async Task<IActionResult> Empleados_Agregar()
+        {
+            var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaRolesAPI/";
+            var response = await client.GetFromJsonAsync<List<RolesLista>>(urlApi);
+
+            // Verificar respuesta
+            if (response != null) // 200
+            {
+                ViewBag.Roles = new SelectList(response, "IdRol", "NombreRol");
+                return View();
+            }
+            else if (response == null)
+            {
+                ViewBag.MensajeError = "No hay roles disponible";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
+
         }
-      
+
         [HttpPost]
         public IActionResult Empleados_Agregar(EmpleadoCrear model)
         {
@@ -97,12 +114,17 @@ namespace SuwoGym_Web.Controllers
             var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoDetalles/" + i;
             var response = await client.GetFromJsonAsync<EmpleadoDetalle>(urlApi);
 
+            var urlApi2 = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaRolesAPI/";
+            var response2 = await client.GetFromJsonAsync<List<RolesLista>>(urlApi2);
+
+
             // Verificar respuesta
-            if (response != null) // 200
+            if (response != null &&  response2 != null) // 200
             {
+                ViewBag.Roles = new SelectList(response2, "IdRol", "NombreRol", response.IdRol);
                 return View(response);
             }
-            else if (response == null)
+            else if (response == null || response2 == null)
             {
                 ViewBag.MensajeError = "No se ha podido recuperar la información del empleado";
                 return View();
@@ -112,20 +134,41 @@ namespace SuwoGym_Web.Controllers
 
 
         [HttpPost]
-        public IActionResult Empleados_CambiarEstado(int i)
+        public IActionResult Empleados_EditarRol(EmpleadoDetalle model)
         {
-            EmpleadoLista model = new EmpleadoLista();
-            model.IdUsuario = i;
-
             using var client = _http.CreateClient();
-            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoCambiarEstado/" + i;
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoEditar";
             var response = client.PutAsJsonAsync(urlApi, model).Result;
 
             // Verificar respuesta
             if (response != null) // 200
             {
                 ViewBag.MensajeExito = "Se ha agregado el usuario correctamente";
+                return RedirectToAction("Empleados_Editar", "Admin", new { i = model.IdUsuario });
+            }
+            else if (response == null)
+            {
+                ViewBag.MensajeError = "No se ha podido cambiar el  rol del empleado.";
                 return RedirectToAction("Empleados_Lista", "Admin");
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
+        }
+
+        [HttpPost]
+        public IActionResult Empleados_EditarEstado(EmpleadoDetalle model)
+        {
+            if (model.Estado) model.Estado = false;
+            else model.Estado = true;
+
+            using var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoEditar";
+            var response = client.PutAsJsonAsync(urlApi, model).Result;
+
+            // Verificar respuesta
+            if (response != null) // 200
+            {
+                ViewBag.MensajeExito = "Se ha agregado el usuario correctamente";
+                return RedirectToAction("Empleados_Editar", "Admin", new { i = model.IdUsuario });
             }
             else if (response == null)
             {
