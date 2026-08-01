@@ -953,6 +953,24 @@ GO
 
 
 
+/* ============================================================
+   PROCEDIMIENTO: EDITAR ESTADO DE CLIENTE
+   ============================================================ */
+
+CREATE PROCEDURE [dbo].[spEditarEstadoCliente]
+    @IdUser INT,
+    @Estado BIT
+AS
+BEGIN
+    UPDATE Usuario
+    SET Estado = @Estado
+    WHERE IdUsuario = @IdUser
+END
+GO
+
+
+
+
 
 
 /* ============================================================
