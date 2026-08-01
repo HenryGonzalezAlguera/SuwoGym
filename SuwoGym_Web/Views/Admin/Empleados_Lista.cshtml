@@ -1,5 +1,5 @@
 ﻿
-@model IEnumerable<EmpleadoLista>
+@model IEnumerable<UsuarioModel>
 
 <!-- Header -->
 <div class="row">
@@ -59,9 +59,9 @@
                 @foreach (var item in Model)
                 {
                     <tr class="align-middle">
-                        <td>@item.Identificacion</td>
-                        <td>@item.Apellido @item.Nombre</td>
-                        <td>@item.CorreoElectronico</td>
+                        <td>@item.identificacion</td>
+                        <td>@item.apellido @item.nombre</td>
+                        <td>@item.correoElectronico</td>
                         <td>@item.NombreRol</td>
                         <td>
                             @if (@item.Estado){

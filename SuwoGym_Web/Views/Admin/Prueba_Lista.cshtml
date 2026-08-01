@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EmpleadoLista>
+﻿@model IEnumerable<UsuarioModel>
 <link href="~/css/ejemplo.css" rel="stylesheet" />
 
 <!-- Header -->
@@ -125,24 +125,24 @@
                             style="transition: all 0.3s ease; border-bottom: 1px solid #f0f0f0;"
                             onmouseover="this.style.backgroundColor='#f8f9fa'; this.style.transform='scale(1.002)';"
                             onmouseout="this.style.backgroundColor='transparent'; this.style.transform='scale(1)';"
-                            data-identificacion="@item.Identificacion"
-                            data-nombre="@item.Nombre"
-                            data-apellido="@item.Apellido"
-                            data-correo="@item.CorreoElectronico"
+                            data-identificacion="@item.identificacion"
+                            data-nombre="@item.nombre"
+                            data-apellido="@item.apellido"
+                            data-correo="@item.correoElectronico"
                             data-rol="@item.NombreRol"
                             data-estado="@item.Estado.ToString().ToLower()">
                             <td style="padding: 14px 20px; font-weight: 500; color: #293039;">
                                 <span class="badge" style="background-color: #f0f4ff; color: #007bff; padding: 6px 12px; border-radius: 8px; font-weight: 600;">
-                                    @item.Identificacion
+                                    @item.identificacion
                                 </span>
                             </td>
                             <td style="padding: 14px 20px; color: #293039; font-weight: 500;">
                                 <i class="fas fa-user-circle me-2" style="color: #007bff;"></i>
-                                @item.Apellido @item.Nombre
+                                @item.apellido @item.nombre
                             </td>
                             <td style="padding: 14px 20px; color: #6c757d;">
                                 <i class="fas fa-envelope me-2" style="color: #007bff;"></i>
-                                @item.CorreoElectronico
+                                @item.correoElectronico
                             </td>
                             <td style="padding: 14px 20px;">
                                 <span class="badge" style="background-color: #e8f4fd; color: #007bff; padding: 6px 14px; border-radius: 20px; font-weight: 500;">
@@ -163,7 +163,7 @@
                                             <i class="fas fa-times-circle me-1"></i> Inactivo
                                         </span>
                                     }
-                                    <a href="#" class="btn-toggle-estado" data-id="@item.Identificacion"
+                                    <a href="#" class="btn-toggle-estado" data-id="@item.identificacion"
                                        style="color: #007bff; text-decoration: none; transition: all 0.3s ease;"
                                        onmouseover="this.style.color='#ff5500'; this.style.transform='rotate(180deg)';"
                                        onmouseout="this.style.color='#007bff'; this.style.transform='rotate(0deg)';">

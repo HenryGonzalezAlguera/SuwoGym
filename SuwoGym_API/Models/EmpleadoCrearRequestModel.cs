@@ -14,7 +14,7 @@
 
         public string CorreoElectronico { get; set; } = string.Empty;
 
-        public int Rol { get; set; }
+        public int IdRol { get; set; }
 
         public string Direccion { get; set; } = string.Empty;
     }

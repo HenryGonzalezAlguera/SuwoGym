@@ -1,5 +1,5 @@
 ﻿
-@model EmpleadoCrear
+@model UsuarioModel
 
 <!-- Header -->
 <div class="row">
@@ -41,20 +41,20 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="nombre" class="form-label" style="color: #293039; font-weight: 500;">Nombre</label>
-                            <input asp-for="Nombre" type="text" class="form-control" id="nombre"
+                            <input asp-for="nombre" type="text" class="form-control" id="nombre"
                                    style="border-color: #e0e0e0; border-radius: 10px; padding: 12px 16px; transition: all 0.3s ease;"
                                    onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.15)';"
                                    onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';" />
 
-                            <span asp-validation-for="Nombre" class="text-danger" style="font-size: 0.875rem;"></span>
+                            <span asp-validation-for="nombre" class="text-danger" style="font-size: 0.875rem;"></span>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="apellido" class="form-label" style="color: #293039; font-weight: 500;">Apellido</label>
-                            <input asp-for="Apellido" type="text" class="form-control" id="apellido"
+                            <input asp-for="apellido" type="text" class="form-control" id="apellido"
                                    style="border-color: #e0e0e0; border-radius: 10px; padding: 12px 16px; transition: all 0.3s ease;"
                                    onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.15)';"
                                    onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';" />
-                            <span asp-validation-for="Apellido" class="text-danger" style="font-size: 0.875rem;"></span>
+                            <span asp-validation-for="apellido" class="text-danger" style="font-size: 0.875rem;"></span>
                         </div>
                     </div>
 
@@ -65,20 +65,20 @@
                                 <span class="input-group-text" style="background-color: #f8f9fa; border-color: #e0e0e0; border-radius: 10px 0 0 10px;">
                                     <i class="fas fa-id-card" style="color: #007bff;"></i>
                                 </span>
-                                <input asp-for="Identificacion" type="text" class="form-control" id="identificacion"
+                                <input asp-for="identificacion" type="text" class="form-control" id="identificacion"
                                        style="border-color: #e0e0e0; border-radius: 0 10px 10px 0; padding: 12px 16px; transition: all 0.3s ease;"
                                        onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.15)';"
                                        onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';" />
                             </div>
-                            <span asp-validation-for="Identificacion" class="text-danger" style="font-size: 0.875rem;"></span>
+                            <span asp-validation-for="identificacion" class="text-danger" style="font-size: 0.875rem;"></span>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="fechaNac" class="form-label" style="color: #293039; font-weight: 500;">Fecha de Nacimiento</label>
-                            <input asp-for="FechaNac" type="date" class="form-control" id="fechaNac"
+                            <input asp-for="fechaNac" type="date" class="form-control" id="fechaNac"
                                    style="border-color: #e0e0e0; border-radius: 10px; padding: 12px 16px; transition: all 0.3s ease;"
                                    onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.15)';"
                                    onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';" />
-                            <span asp-validation-for="FechaNac" class="text-danger" style="font-size: 0.875rem;"></span>
+                            <span asp-validation-for="fechaNac" class="text-danger" style="font-size: 0.875rem;"></span>
                         </div>
                     </div>
 
@@ -89,12 +89,12 @@
                                 <span class="input-group-text" style="background-color: #f8f9fa; border-color: #e0e0e0; border-radius: 10px 0 0 10px;">
                                     <i class="fas fa-phone" style="color: #007bff;"></i>
                                 </span>
-                                <input asp-for="Telefono" type="text" class="form-control" id="telefono"
+                                <input asp-for="telefono" type="text" class="form-control" id="telefono"
                                        style="border-color: #e0e0e0; border-radius: 0 10px 10px 0; padding: 12px 16px; transition: all 0.3s ease;"
                                        onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.15)';"
                                        onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';" />
                             </div>
-                            <span asp-validation-for="Telefono" class="text-danger" style="font-size: 0.875rem;"></span>
+                            <span asp-validation-for="telefono" class="text-danger" style="font-size: 0.875rem;"></span>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="correo" class="form-label" style="color: #293039; font-weight: 500;">Correo Electrónico</label>
@@ -102,18 +102,18 @@
                                 <span class="input-group-text" style="background-color: #f8f9fa; border-color: #e0e0e0; border-radius: 10px 0 0 10px;">
                                     <i class="fas fa-envelope" style="color: #007bff;"></i>
                                 </span>
-                                <input asp-for="CorreoElectronico" type="email" class="form-control" id="correo"
+                                <input asp-for="correoElectronico" type="email" class="form-control" id="correo"
                                        style="border-color: #e0e0e0; border-radius: 0 10px 10px 0; padding: 12px 16px; transition: all 0.3s ease;"
                                        onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.15)';"
                                        onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';" />
                             </div>
-                            <span asp-validation-for="CorreoElectronico" class="text-danger" style="font-size: 0.875rem;"></span>
+                            <span asp-validation-for="correoElectronico" class="text-danger" style="font-size: 0.875rem;"></span>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="rol" class="form-label" style="color: #293039; font-weight: 500;">Rol</label>
-                        <select asp-for="Rol" class="form-select" id="rol"
+                        <select asp-for="IdRol" class="form-select" id="rol"
                                 style="border-color: #e0e0e0; border-radius: 10px; padding: 12px 16px; transition: all 0.3s ease;"
                                 onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.15)';"
                                 onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';">
@@ -121,16 +121,16 @@
                             <option value="1">Administrador</option>
                             <option value="2">Entrenador</option>
                         </select>
-                        <span asp-validation-for="Rol" class="text-danger" style="font-size: 0.875rem;"></span>
+                        <span asp-validation-for="IdRol" class="text-danger" style="font-size: 0.875rem;"></span>
                     </div>
 
                     <div class="mb-5">
                         <label for="direccion" class="form-label" style="color: #293039; font-weight: 500;">Dirección de Vivienda</label>
-                        <textarea asp-for="Direccion" class="form-control" id="direccion" rows="4"
+                        <textarea asp-for="direccion" class="form-control" id="direccion" rows="4"
                                   style="border-color: #e0e0e0; border-radius: 10px; padding: 12px 16px; transition: all 0.3s ease; resize: vertical;"
                                   onfocus="this.style.borderColor='#007bff'; this.style.boxShadow='0 0 0 3px rgba(0,123,255,0.15)';"
                                   onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';"></textarea>
-                        <span asp-validation-for="Direccion" class="text-danger" style="font-size: 0.875rem;"></span>
+                        <span asp-validation-for="direccion" class="text-danger" style="font-size: 0.875rem;"></span>
                     </div>
 
                     <!-- Barra de progreso interactiva -->

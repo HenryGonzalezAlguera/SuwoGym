@@ -30,58 +30,58 @@ $.validator.addMethod(
 $(document).ready(function () {
     $("#EmpleadoAgregarForm").validate({
         rules: {
-            Nombre: {
+            nombre: {
                 required: true
             },
-            Apellido: {
+            apellido: {
                 required: true
             },
-            Identificacion: {
+            identificacion: {
                 required: true
             },
-            FechaNac: {
+            fechaNac: {
                 required: true,
                 mayorDe15: true
             },
-            CorreoElectronico: {
+            correoElectronico: {
                 required: true,
                 email: true
             },
-            Telefono: {
+            telefono: {
                 required: true
             },
-            Rol: {
+            IdRol: {
                 required: true,
             },
-            Direccion: {
+            direccion: {
                 required: true
             }
         },
         messages: {
-            Nombre: {
+            nombre: {
                 required: "Campo obligatorio."
             },
-            Apellido: {
+            apellido: {
                 required: "Campo obligatorio."
             },
-            Identificacion: {
+            identificacion: {
                 required: "Campo obligatorio."
             },
-            FechaNac: {
+            fechaNac: {
                 required: "Campo obligatorio.",
                 mayorDe15: "El empleado debe tener al menos 15 años"
             },
-            Telefono: {
+            telefono: {
                 required: "Campo obligatorio."
             },
-            CorreoElectronico: {
+            correoElectronico: {
                 required: "Campo obligatorio.",
                 email: "Formato no válido."
             },
-            Rol: {
+            IdRol: {
                 required: "Campo obligatorio."
             },
-            Direccion: {
+            direccion: {
                 required: "Campo obligatorio."
             }
         },

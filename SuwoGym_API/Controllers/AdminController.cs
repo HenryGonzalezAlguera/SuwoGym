@@ -22,9 +22,12 @@ namespace SuwoGym_API.Controllers
             var parameters= new DynamicParameters();
             parameters.Add("@IdUser", id);
             var response = await context.QueryAsync<EmpleadoListaResponseModel>("spListarEmpleados",parameters);
-            return Ok(response);
+
+            if(response != null) return Ok(response);
+            return BadRequest("No hay empleados registrados");
         }
 
+        
         [HttpGet("ListaRolesAPI")]
         public async Task<IActionResult> ListaRolesAPI()
         {
@@ -32,8 +35,6 @@ namespace SuwoGym_API.Controllers
             var response = await context.QueryAsync<RolesListaResponseModel>("spListarRoles");
             return Ok(response);
         }
-
-
 
 
         [HttpPost("EmpleadoAgregar")]
@@ -54,7 +55,7 @@ namespace SuwoGym_API.Controllers
             parameters.Add("@FechaNacimiento", model.FechaNac);
             parameters.Add("@Telefono", model.Telefono);
             parameters.Add("@CorreoElectronico", model.CorreoElectronico);
-            parameters.Add("@Rol", model.Rol);
+            parameters.Add("@Rol", model.IdRol);
             parameters.Add("@Direccion", model.Direccion);
             parameters.Add("@ContrasennaHash", temporalHash);
             parameters.Add("@FechaRegistro", DateTime.Now);
@@ -125,7 +126,40 @@ namespace SuwoGym_API.Controllers
         {
             using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
             var response = await context.QueryAsync<ClienteListaResponseModel>("spListarClientes");
-            return Ok(response);
+            if (response != null) return Ok(response);
+            return BadRequest("No hay clientes registrados");
+        }
+
+
+
+        [HttpGet("ClienteDetallesAPI/{id}")]
+        public async Task<IActionResult> ClienteDetallesAPI(int id)
+        {
+            using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
+            var parameters = new DynamicParameters();
+            parameters.Add("@IdUser", id);
+            var response = context.QueryFirstOrDefault<ClienteDetalleResponseModel>("spDetalleCliente", parameters);
+
+            if (response != null) return Ok(response);
+
+            return BadRequest("No se ha podido encontrar información del cliente");
+        }
+
+
+
+        [HttpPut("ClienteCambiarEstadoAPI")]
+        public async Task<IActionResult> ClienteCambiarEstadoAPI(ClienteCambiarEstadoRequestModel model)
+        {
+            using var context = new SqlConnection(_databasekey["ConnectionStringsApi:DefaultConnection"]);
+            var parameters = new DynamicParameters();
+            parameters.Add("@IdUser", model.IdUsuario);
+            parameters.Add("@Estado", model.Estado);
+            var response = context.Execute("spEditarEstadoCliente", parameters);
+
+            if (response > 0)
+                return Ok(response);
+
+            return BadRequest("No se ha podido encontrar información del empleado");
         }
 
 

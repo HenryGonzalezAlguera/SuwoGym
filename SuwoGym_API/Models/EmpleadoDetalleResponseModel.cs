@@ -18,7 +18,7 @@
         
         public int IdRol { get; set; }
 
-        public string Rol { get; set; } = string.Empty;
+        public string NombreRol { get; set; } = string.Empty;
 
         public string Direccion { get; set; } = string.Empty;
 

@@ -1,4 +1,4 @@
-﻿@model EmpleadoDetalle
+﻿@model UsuarioModel
 <link href="~/css/ejemplo.css" rel="stylesheet" />
 
 
@@ -83,15 +83,15 @@
                     </div>
                 </div>
 
-                <h4 style="color: #293039; font-weight: 600;">@Model.Nombre @Model.Apellido</h4>
+                <h4 style="color: #293039; font-weight: 600;">@Model.nombre @Model.apellido</h4>
                 <p style="color: #6c757d;">
                     <span class="badge" style="background-color: #e8f4fd; color: #007bff; padding: 6px 14px; border-radius: 20px; font-weight: 500;">
-                        <i class="fas fa-user-tag me-1"></i> @Model.Rol
+                        <i class="fas fa-user-tag me-1"></i> @Model.NombreRol
                     </span>
                 </p>
                 <p style="color: #6c757d; font-size: 0.9rem;">
                     <i class="fas fa-id-card me-1" style="color: #007bff;"></i>
-                    ID: <strong style="color: #293039;">@Model.Identificacion</strong>
+                    ID: <strong style="color: #293039;">@Model.identificacion</strong>
                 </p>
                 <hr style="border-color: #e0e0e0;">
 
@@ -102,7 +102,7 @@
                             <small style="color: #6c757d;">Correo</small>
                             <p style="color: #293039; font-weight: 500; margin: 0; font-size: 0.9rem;">
                                 <i class="fas fa-envelope me-1" style="color: #007bff;"></i>
-                                @Model.CorreoElectronico
+                                @Model.correoElectronico
                             </p>
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                             <small style="color: #6c757d;">Teléfono</small>
                             <p style="color: #293039; font-weight: 500; margin: 0; font-size: 0.9rem;">
                                 <i class="fas fa-phone me-1" style="color: #007bff;"></i>
-                                @Model.Telefono
+                                @Model.telefono
                             </p>
                         </div>
                     </div>
@@ -194,13 +194,13 @@
                             <div class="col-md-6">
                                 <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #007bff;">
                                     <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Nombre Completo</label>
-                                    <p style="color: #293039; font-weight: 600; margin: 0;">@Model.Nombre @Model.Apellido</p>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">@Model.nombre @Model.apellido</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #007bff;">
                                     <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Identificación</label>
-                                    <p style="color: #293039; font-weight: 600; margin: 0;">@Model.Identificacion</p>
+                                    <p style="color: #293039; font-weight: 600; margin: 0;">@Model.identificacion</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -208,7 +208,7 @@
                                     <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Fecha de Nacimiento</label>
                                     <p style="color: #293039; font-weight: 600; margin: 0;">
                                         <i class="fas fa-calendar-alt me-2" style="color: #007bff;"></i>
-                                        @Model.FechaNac
+                                        @Model.fechaNac
                                     </p>
                                 </div>
                             </div>
@@ -226,7 +226,7 @@
                                     <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Correo Electrónico</label>
                                     <p style="color: #293039; font-weight: 600; margin: 0;">
                                         <i class="fas fa-envelope me-2" style="color: #007bff;"></i>
-                                        @Model.CorreoElectronico
+                                        @Model.correoElectronico
                                     </p>
                                 </div>
                             </div>
@@ -235,7 +235,7 @@
                                     <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Teléfono</label>
                                     <p style="color: #293039; font-weight: 600; margin: 0;">
                                         <i class="fas fa-phone me-2" style="color: #007bff;"></i>
-                                        @Model.Telefono
+                                        @Model.telefono
                                     </p>
                                 </div>
                             </div>
@@ -250,7 +250,7 @@
                                     <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Rol</label>
                                     <p style="color: #293039; font-weight: 600; margin: 0;">
                                         <i class="fas fa-user-tag me-2" style="color: #ff5500;"></i>
-                                        @Model.Rol
+                                        @Model.NombreRol
                                     </p>
                                 </div>
                             </div>
@@ -278,7 +278,7 @@
                                     <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Fecha de Ingreso</label>
                                     <p style="color: #293039; font-weight: 600; margin: 0;">
                                         <i class="fas fa-calendar-plus me-2" style="color: #ff5500;"></i>
-                                        @Model.FechaRegistro.ToString("dd/MM/yyyy")
+                                        @Model.fechaRegistro.ToString("dd/MM/yyyy")
                                     </p>
                                 </div>
                             </div>
@@ -302,7 +302,7 @@
                                     <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Dirección de Vivienda</label>
                                     <p style="color: #293039; font-weight: 500; margin: 0; font-size: 1.05rem;">
                                         <i class="fas fa-map-pin me-2" style="color: #293039;"></i>
-                                        @Model.Direccion
+                                        @Model.direccion
                                         </p>
                                 </div>
                             </div>

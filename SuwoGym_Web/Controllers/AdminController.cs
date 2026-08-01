@@ -19,7 +19,7 @@ namespace SuwoGym_Web.Controllers
 
             var client = _http.CreateClient();
             var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaEmpleadosAPI/"+idUsuario;
-            var response = await client.GetFromJsonAsync<List<EmpleadoLista>>(urlApi);
+            var response = await client.GetFromJsonAsync<List<UsuarioModel>>(urlApi);
 
             // Verificar respuesta
             if (response != null && response.Count() > 0) // 200
@@ -35,7 +35,7 @@ namespace SuwoGym_Web.Controllers
         }
 
         
-        // AGREGAR EMPLEADO -----
+        // AGREGAR EMPLEADO 
 
         [HttpGet]
         public async Task<IActionResult> Empleados_Agregar()
@@ -59,8 +59,9 @@ namespace SuwoGym_Web.Controllers
 
         }
 
+
         [HttpPost]
-        public IActionResult Empleados_Agregar(EmpleadoCrear model)
+        public IActionResult Empleados_Agregar(UsuarioModel model)
         {
             using var client = _http.CreateClient();
             var urlApi =_config["ConnectionStringsWeb:urlApi"]+ "/api/Admin/EmpleadoAgregar";
@@ -89,7 +90,7 @@ namespace SuwoGym_Web.Controllers
         {
             using var client = _http.CreateClient();
             var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoDetalles/" + i;
-            var response = await client.GetFromJsonAsync<EmpleadoDetalle>(urlApi);
+            var response = await client.GetFromJsonAsync<UsuarioModel>(urlApi);
 
             // Verificar respuesta
             if (response != null) // 200
@@ -105,6 +106,7 @@ namespace SuwoGym_Web.Controllers
          }
 
 
+
         // EDITAR EMPLEADOS
 
         [HttpGet]
@@ -112,7 +114,7 @@ namespace SuwoGym_Web.Controllers
         {
             using var client = _http.CreateClient();
             var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoDetalles/" + i;
-            var response = await client.GetFromJsonAsync<EmpleadoDetalle>(urlApi);
+            var response = await client.GetFromJsonAsync<UsuarioModel>(urlApi);
 
             var urlApi2 = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaRolesAPI/";
             var response2 = await client.GetFromJsonAsync<List<RolesLista>>(urlApi2);
@@ -134,7 +136,7 @@ namespace SuwoGym_Web.Controllers
 
 
         [HttpPost]
-        public IActionResult Empleados_EditarRol(EmpleadoDetalle model)
+        public IActionResult Empleados_EditarRol(UsuarioModel model)
         {
             using var client = _http.CreateClient();
             var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoEditar";
@@ -154,8 +156,9 @@ namespace SuwoGym_Web.Controllers
             throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
 
+
         [HttpPost]
-        public IActionResult Empleados_EditarEstado(EmpleadoDetalle model)
+        public IActionResult Empleados_EditarEstado(UsuarioModel model)
         {
             if (model.Estado) model.Estado = false;
             else model.Estado = true;
@@ -188,7 +191,7 @@ namespace SuwoGym_Web.Controllers
         {
             var client = _http.CreateClient();
             var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaClientesAPI";
-            var response = await client.GetFromJsonAsync<List<ClienteLista>>(urlApi);
+            var response = await client.GetFromJsonAsync<List<ClienteModel>>(urlApi);
 
             // Verificar respuesta
             if (response != null && response.Count() > 0) // 200
@@ -202,6 +205,31 @@ namespace SuwoGym_Web.Controllers
             }
             throw new Exception("Lo sentimos, se ha presentado un problema.");
         }
+
+
+        // VER DETALLES CLIENTE
+
+        [HttpGet]
+        public async Task<IActionResult> Clientes_Ver(int i)
+        {
+            using var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ClienteDetallesAPI/" + i;
+            var response = await client.GetFromJsonAsync<ClienteModel>(urlApi);
+
+            // Verificar respuesta
+            if (response != null) // 200
+            {
+                return View(response);
+            }
+            else if (response == null)
+            {
+                ViewBag.MensajeError = "No se ha podido recuperar la información del usuario";
+                return View();
+            }
+            throw new Exception("Lo sentimos, se ha presentado un problema.");
+        }
+
+
 
         #endregion
 
@@ -287,7 +315,6 @@ namespace SuwoGym_Web.Controllers
         #endregion
 
 
-
         #region Dashboard ----------------------------------
         [HttpGet]
         public IActionResult Dashboard()
@@ -305,9 +332,11 @@ namespace SuwoGym_Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Prueba_Lista()
         {
+            var idUsuario = HttpContext.Session.GetInt32("IdUsuario")!.Value;
+
             var client = _http.CreateClient();
-            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaEmpleadosAPI";
-            var response = await client.GetFromJsonAsync<List<EmpleadoLista>>(urlApi);
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/ListaEmpleadosAPI/" + idUsuario;
+            var response = await client.GetFromJsonAsync<List<UsuarioModel>>(urlApi);
 
             // Verificar respuesta
             if (response != null && response.Count() > 0) // 200
@@ -335,7 +364,7 @@ namespace SuwoGym_Web.Controllers
         {
             using var client = _http.CreateClient();
             var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Admin/EmpleadoDetalles/" + i;
-            var response = await client.GetFromJsonAsync<EmpleadoDetalle>(urlApi);
+            var response = await client.GetFromJsonAsync<UsuarioModel>(urlApi);
 
             // Verificar respuesta
             if (response != null) // 200

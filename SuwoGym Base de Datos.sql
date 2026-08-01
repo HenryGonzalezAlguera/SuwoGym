@@ -794,7 +794,7 @@ GO
 CREATE PROCEDURE [dbo].[spListarClientes] 
 AS
 BEGIN
-    SELECT  u.Nombre, u.Apellido, u.CorreoElectronico, u.Estado
+    SELECT  u.IdUsuario, u.Nombre, u.Apellido, u.CorreoElectronico, u.Estado
         -- , p.NombrePlan, m.EstadoMembresia, m.FechaVencimiento
     FROM Usuario AS u
     /*INNER JOIN MembresiaUsuario as m
@@ -877,7 +877,7 @@ CREATE PROCEDURE [dbo].[spDetalleEmpleado]
 AS
 BEGIN
     SELECT u.IdUsuario, u.Nombre, u.Apellido, u.Identificacion, u.FechaNacimiento AS 'FechaNac',
-           u.Telefono, u.CorreoElectronico, r.IdRol, r.NombreRol AS 'Rol', u.Direccion, 
+           u.Telefono, u.CorreoElectronico, r.IdRol, r.NombreRol, u.Direccion, 
            u.FechaRegistro, u.Estado
     FROM Usuario AS u
     INNER JOIN Rol as r
@@ -919,6 +919,39 @@ BEGIN
     WHERE IdRol != 3
 END
 GO
+
+
+
+/* ============================================================
+   PROCEDIMIENTO: DETALLE DE CLIENTES
+   ============================================================ 
+   
+   NOTA:
+   Este procedimiento requiere que en el registro de usuarios se
+   proceda con un módulo de definir el plan de membresía
+
+   ============================================================ */
+
+CREATE PROCEDURE [dbo].[spDetalleCliente] 
+AS
+BEGIN
+    SELECT u.IdUsuario, u.Nombre, u.Apellido, u.Identificacion, u.FechaNacimiento AS 'FechaNac',
+           u.Telefono, u.CorreoElectronico, u.Direccion, u.FechaRegistro, u.Estado,
+           r.IdRol, r.NombreRol
+        -- , p.NombrePlan, m.EstadoMembresia, m.FechaVencimiento
+    FROM Usuario AS u
+    INNER JOIN Rol as r
+        ON r.IdRol = u.IdRol
+    /*INNER JOIN MembresiaUsuario as m
+        ON m.IdUsuario = u.IdUsuario
+    INNER JOIN PlanMembresia as p
+        ON p.IdPlan = m.IdPlan */
+    WHERE u.IdRol = 3
+    ORDER BY u.Apellido ASC
+END
+GO
+
+
 
 
 

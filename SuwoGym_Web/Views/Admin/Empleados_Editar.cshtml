@@ -1,6 +1,5 @@
 ﻿
-
-@model EmpleadoDetalle
+@model UsuarioModel
 
 <!-- Header -->
 <div class="row">
@@ -36,21 +35,21 @@
         <div class="card">
             <div class="card-body p-4">
                 <div class="mt-2">
-                    <h2 class="mb-2"><b>@Model.Nombre @Model.Apellido</b></h2>
+                    <h2 class="mb-2"><b>@Model.nombre @Model.apellido</b></h2>
                 </div>
                 <hr class="lineaGris"/>
                 <div class="">
                     <small class="gris">Identificación</small>
                     <p>
                         <i class="ti ti-mail gris"></i>
-                        <span>@Model.Identificacion</span>
+                        <span>@Model.identificacion</span>
                     </p>
                 </div>
                 <div class="">
                     <small class="gris">Correo Electrónico</small>
                     <p>
                         <i class="ti ti-mail gris"></i>
-                        <span>@Model.CorreoElectronico</span>
+                        <span>@Model.correoElectronico</span>
                     </p>
                 </div>
             </div>
@@ -72,7 +71,7 @@
                         <div class="col-sm-3 align-content-center mb-1">
                             <p>Rol actual:  
                                 <span class="badge bg-info-subtle text-info-emphasis">
-                            <i class="ti ti-user"></i> @Model.Rol
+                            <i class="ti ti-user"></i> @Model.NombreRol
                         </span></p>
                         </div>
                         <div class="col-sm-6 align-content-center mb-3">
