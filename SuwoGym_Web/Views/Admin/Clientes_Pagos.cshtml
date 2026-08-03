@@ -1,0 +1,170 @@
+﻿@model IEnumerable<PagoListaModel>
+
+<div class="row">
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                    <a asp-action="Clientes_Lista"
+                       asp-controller="Admin">
+                        Clientes
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    Historial de pagos
+                </li>
+
+            </ol>
+        </nav>
+
+        <div class="d-flex
+            justify-content-between
+            align-items-center
+            mb-4">
+
+            <div>
+                <h2>Historial de pagos</h2>
+
+                <p class="mb-0">
+                    Pagos registrados para el cliente
+                </p>
+            </div>
+
+            <a asp-action="Clientes_Ver"
+               asp-controller="Admin"
+               asp-route-i="@ViewBag.IdUsuario"
+               class="btn btn-light">
+
+                Volver al cliente
+
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success"
+         role="alert">
+
+        @TempData["MensajeExito"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-warning"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card table-responsive p-2">
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table
+            table-hover
+            text-nowrap
+            mb-0">
+
+            <thead>
+                <tr>
+
+                    <th>Pago</th>
+
+                    <th>Plan</th>
+
+                    <th>Método</th>
+
+                    <th>Fecha</th>
+
+                    <th>Referencia</th>
+
+                    <th>Total</th>
+
+                    <th class="text-center">
+                        Acciones
+                    </th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr class="align-middle">
+
+                        <td>
+                            #@item.IdPago
+                        </td>
+
+                        <td>
+                            @item.NombrePlan
+                        </td>
+
+                        <td>
+                            @item.MetodoPago
+                        </td>
+
+                        <td>
+                            @item.FechaEmision.ToString(
+                                "dd/MM/yyyy HH:mm")
+                        </td>
+
+                        <td>
+                            @(string.IsNullOrWhiteSpace(
+                                item.NumeroReferencia)
+                                ? "Sin referencia"
+                                : item.NumeroReferencia)
+                        </td>
+
+                        <td>
+                            ₡@item.Total.ToString("N2")
+                        </td>
+
+                        <td class="text-center">
+
+                            <a asp-action="Pagos_Ver"
+                               asp-controller="Admin"
+                               asp-route-i="@item.IdPago"
+                               class="btn btn-sm btn-light"
+                               title="Ver pago">
+
+                                <i class="ti ti-eye"></i>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    }
+    else
+    {
+        <div class="text-center p-4">
+
+            <p class="mb-0">
+                El cliente no tiene pagos registrados.
+            </p>
+
+        </div>
+    }
+
+</div>

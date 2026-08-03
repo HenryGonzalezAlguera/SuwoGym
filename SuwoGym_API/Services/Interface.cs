@@ -9,6 +9,10 @@
             string asunto,
             string cuerpoHtml);
 
-        string GenerarToken(int idUsuario);
+        string GenerarToken(
+            int idUsuario,
+            int idRol);
+
+        int ObtenerIdUsuarioToken();
     }
 }

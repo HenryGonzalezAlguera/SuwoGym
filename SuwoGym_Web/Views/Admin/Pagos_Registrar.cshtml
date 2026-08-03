@@ -1,0 +1,277 @@
+﻿@model PagoRegistrarModel
+
+<div class="row">
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                    <a asp-action="Clientes_Lista"
+                       asp-controller="Admin">
+                        Clientes
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item">
+                    <a asp-action="Clientes_Ver"
+                       asp-controller="Admin"
+                       asp-route-i="@Model.IdUsuario">
+                        Detalle del cliente
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    Registrar pago
+                </li>
+
+            </ol>
+        </nav>
+
+        <div class="mb-4">
+            <h2>Registrar pago</h2>
+
+            <p class="mb-0">
+                Registro del pago correspondiente a la membresía
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <form asp-action="Pagos_Registrar"
+              asp-controller="Admin"
+              method="post"
+              id="PagoRegistrarForm">
+
+            <input asp-for="IdUsuario"
+                   type="hidden" />
+
+            <input asp-for="IdMembresia"
+                   type="hidden" />
+
+            <input asp-for="NombreCliente"
+                   type="hidden" />
+
+            <input asp-for="NombrePlan"
+                   type="hidden" />
+
+            <input asp-for="Subtotal"
+                   type="hidden" />
+
+            <input asp-for="Impuesto"
+                   type="hidden" />
+
+            <input asp-for="Total"
+                   type="hidden" />
+
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Cliente
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.NombreCliente"
+                           readonly />
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Número de membresía
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.IdMembresia"
+                           readonly />
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Plan
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.NombrePlan"
+                           readonly />
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Subtotal
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="₡@Model.Subtotal.ToString("N2")"
+                           readonly />
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        IVA 13%
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="₡@Model.Impuesto.ToString("N2")"
+                           readonly />
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Total
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="₡@Model.Total.ToString("N2")"
+                           readonly />
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="MetodoPago"
+                           class="form-label">
+
+                        Método de pago
+
+                    </label>
+
+                    <select asp-for="MetodoPago"
+                            asp-items="ViewBag.MetodosPago"
+                            class="form-select"
+                            id="MetodoPago"
+                            required>
+
+                        <option value="">
+                            Seleccione un método
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="NumeroReferencia"
+                           class="form-label">
+
+                        Número de referencia
+
+                    </label>
+
+                    <input asp-for="NumeroReferencia"
+                           class="form-control"
+                           maxlength="100"
+                           id="NumeroReferencia" />
+
+                    <small class="text-secondary">
+                        En efectivo se genera automáticamente.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="d-flex justify-content-center gap-2">
+
+                <a asp-action="Clientes_Ver"
+                   asp-controller="Admin"
+                   asp-route-i="@Model.IdUsuario"
+                   class="btn btn-light">
+
+                    Cancelar
+
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Registrar pago
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const metodo =
+            document.getElementById("MetodoPago");
+
+        const referencia =
+            document.getElementById("NumeroReferencia");
+
+        function actualizarReferencia() {
+
+            if (metodo.value === "Efectivo") {
+
+                referencia.value = "";
+                referencia.required = false;
+                referencia.disabled = true;
+
+            } else {
+
+                referencia.disabled = false;
+                referencia.required =
+                    metodo.value !== "";
+            }
+        }
+
+        metodo.addEventListener(
+            "change",
+            actualizarReferencia);
+
+        actualizarReferencia();
+    });
+</script>

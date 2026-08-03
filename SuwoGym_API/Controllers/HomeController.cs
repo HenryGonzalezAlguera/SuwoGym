@@ -80,43 +80,63 @@ namespace SuwoGym_API.Controllers
         public IActionResult IniciarSesionAPI(
             UsuarioLoginModel model)
         {
-            using var context = new SqlConnection(
-                _databasekey[
-                    "ConnectionStringsApi:DefaultConnection"]);
-
-            var parameters = new DynamicParameters();
-
-            parameters.Add(
-                "@CorreoElectronico",
-                model.correoElectronico);
-
-            parameters.Add(
-                "@ContrasennaHash",
-                model.contrasenna);
-
-            var response =
-                context.QueryFirstOrDefault
-                <DatoUsuarioResponseModel>(
-                    "spIniciarSesionUsuario",
-                    parameters);
-
-            if (response != null &&
-                BCrypt.Net.BCrypt.Verify(
-                    model.contrasenna,
-                    response.ContrasennaHash))
+            try
             {
+                using var context =
+                    new SqlConnection(
+                        _databasekey[
+                            "ConnectionStringsApi:DefaultConnection"]);
+
+                var parameters =
+                    new DynamicParameters();
+
+                parameters.Add(
+                    "@CorreoElectronico",
+                    model.correoElectronico);
+
+            
+                var response =
+                    context.QueryFirstOrDefault
+                    <DatoUsuarioResponseModel>(
+                        "spIniciarSesionUsuario",
+                        parameters,
+                        commandType:
+                            CommandType.StoredProcedure);
+
+                if (response == null)
+                {
+                    return NotFound(
+                        "El correo o la contraseña son incorrectos.");
+                }
+
+                var contrasennaCorrecta =
+                    BCrypt.Net.BCrypt.Verify(
+                        model.contrasenna,
+                        response.ContrasennaHash);
+
+                if (!contrasennaCorrecta)
+                {
+                    return NotFound(
+                        "El correo o la contraseña son incorrectos.");
+                }
+
                 response.Token =
                     _utiles.GenerarToken(
-                        response.IdUsuario);
+                        response.IdUsuario,
+                        response.IdRol);
 
                 return Ok(response);
             }
-
-            return NotFound(
-                "La información no se pudo validar correctamente");
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    ex.Message);
+            }
         }
 
         #endregion
+
+
 
         #region Recuperar acceso API
 

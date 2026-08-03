@@ -1,0 +1,209 @@
+﻿@model List<RutinaMiembroListaModel>
+
+<div class="row">
+
+    <div class="col-12">
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Mis rutinas
+            </h2>
+
+            <p class="mb-0 text-secondary">
+                Rutinas activas asignadas por su entrenador
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-info"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row">
+
+                @foreach (var item in Model)
+                {
+                    <div class="col-lg-6 mb-4">
+
+                        <div class="card h-100 border">
+
+                            <div class="card-body">
+
+                                <div class="d-flex
+                                    justify-content-between
+                                    align-items-start
+                                    mb-3">
+
+                                    <div>
+
+                                        <h4 class="mb-1">
+                                            @item.NombreRutina
+                                        </h4>
+
+                                        <p class="mb-0 text-secondary">
+                                            Entrenador: @item.NombreEntrenador
+                                        </p>
+
+                                    </div>
+
+
+                                    @if (item.Nivel == "Principiante")
+                                    {
+                                        <span class="badge bg-info">
+                                            Principiante
+                                        </span>
+                                    }
+                                    else if (item.Nivel == "Intermedio")
+                                    {
+                                        <span class="badge bg-warning">
+                                            Intermedio
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+                                            Avanzado
+                                        </span>
+                                    }
+
+                                </div>
+
+
+                                <p class="mb-3">
+
+                                    @if (string.IsNullOrWhiteSpace(
+                                        item.Detalles))
+                                    {
+                                        <span class="text-secondary">
+                                            Sin descripción general.
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.Detalles
+                                    }
+
+                                </p>
+
+
+                                <div class="row mb-3">
+
+                                    <div class="col-6">
+
+                                        <small class="text-secondary">
+                                            Fecha de creación
+                                        </small>
+
+                                        <div>
+                                            @(item.FechaCreacion.ToString("dd/MM/yyyy"))
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-6">
+
+                                        <small class="text-secondary">
+                                            Ejercicios
+                                        </small>
+
+                                        <div>
+                                            @item.CantidadEjercicios
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="d-flex gap-2">
+
+                                    <a asp-action="Rutinas_Ver"
+                                       asp-controller="Miembro"
+                                       asp-route-i="@item.IdRutina"
+                                       class="btn btn-light">
+
+                                        <i class="ti ti-eye"></i>
+
+                                        Ver rutina
+
+                                    </a>
+
+
+                                    <a asp-action="Rutinas_Ejercicios"
+                                       asp-controller="Miembro"
+                                       asp-route-i="@item.IdRutina"
+                                       class="btn btn-primary">
+
+                                        <i class="ti ti-barbell"></i>
+
+                                        Ver ejercicios
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <i class="ti ti-activity"
+                   style="font-size: 48px;">
+                </i>
+
+                <h4 class="mt-3">
+                    No tiene rutinas activas
+                </h4>
+
+                <p class="text-secondary mb-0">
+
+                    Cuando su entrenador le asigne una rutina,
+                    aparecerá en esta sección.
+
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

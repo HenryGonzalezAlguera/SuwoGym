@@ -1,0 +1,347 @@
+﻿@model List<RutinaEjercicioMiembroModel>
+
+<div class="row">
+
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Rutinas_Lista"
+                       asp-controller="Miembro">
+
+                        Mis rutinas
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Rutinas_Ver"
+                       asp-controller="Miembro"
+                       asp-route-i="@ViewBag.IdRutina">
+
+                        @ViewBag.NombreRutina
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+
+                    Ejercicios
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Ejercicios de la rutina
+            </h2>
+
+            <p class="mb-0 text-secondary">
+
+                Rutina:
+
+                <strong>
+                    @ViewBag.NombreRutina
+                </strong>
+
+                · Nivel:
+
+                <strong>
+                    @ViewBag.Nivel
+                </strong>
+
+                · Entrenador:
+
+                <strong>
+                    @ViewBag.NombreEntrenador
+                </strong>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-info"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+@if (Model != null && Model.Any())
+{
+    var dias =
+        new[]
+        {
+            "Lunes",
+            "Martes",
+            "Miércoles",
+            "Jueves",
+            "Viernes",
+            "Sábado",
+            "Domingo"
+        };
+
+
+    @foreach (var dia in dias)
+    {
+        var ejerciciosDia =
+            Model
+                .Where(x => x.DiaSemana == dia)
+                .OrderBy(x => x.Orden)
+                .ToList();
+
+
+        if (ejerciciosDia.Any())
+        {
+            <div class="card mb-4">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex
+                        justify-content-between
+                        align-items-center
+                        mb-4">
+
+                        <h4 class="mb-0">
+                            @dia
+                        </h4>
+
+                        <span class="badge bg-primary">
+                            @ejerciciosDia.Count ejercicio(s)
+                        </span>
+
+                    </div>
+
+
+                    <div class="row">
+
+                        @foreach (var item in ejerciciosDia)
+                        {
+                            <div class="col-lg-6 mb-4">
+
+                                <div class="card h-100 border">
+
+                                    <div class="card-body">
+
+                                        <div class="d-flex
+                                            justify-content-between
+                                            align-items-start
+                                            mb-3">
+
+                                            <div>
+
+                                                <h5 class="mb-1">
+                                                    @item.Orden. @item.NombreEjercicio
+                                                </h5>
+
+                                                <span class="badge bg-info">
+                                                    @item.GrupoMuscular
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="row mb-3">
+
+                                            <div class="col-6 col-md-3 mb-2">
+
+                                                <small class="text-secondary">
+                                                    Series
+                                                </small>
+
+                                                <div>
+                                                    <strong>
+                                                        @item.Series
+                                                    </strong>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="col-6 col-md-3 mb-2">
+
+                                                <small class="text-secondary">
+                                                    Repeticiones
+                                                </small>
+
+                                                <div>
+                                                    <strong>
+                                                        @item.Repeticiones
+                                                    </strong>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="col-6 col-md-3 mb-2">
+
+                                                <small class="text-secondary">
+                                                    Peso
+                                                </small>
+
+                                                <div>
+
+                                                    <strong>
+
+                                                        @(item.PesoSugerido.HasValue
+                                                            ? item.PesoSugerido.Value.ToString("N2") + " kg"
+                                                            : "Libre")
+
+                                                    </strong>
+
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="col-6 col-md-3 mb-2">
+
+                                                <small class="text-secondary">
+                                                    Descanso
+                                                </small>
+
+                                                <div>
+
+                                                    <strong>
+
+                                                        @(item.DescansoSegundos.HasValue
+                                                            ? item.DescansoSegundos.Value + " s"
+                                                            : "No indicado")
+
+                                                    </strong>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="mb-3">
+
+                                            <small class="text-secondary">
+                                                Descripción
+                                            </small>
+
+                                            <p class="mb-0">
+
+                                                @(string.IsNullOrWhiteSpace(item.Descripcion)
+                                                    ? "Sin descripción."
+                                                    : item.Descripcion)
+
+                                            </p>
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <small class="text-secondary">
+                                                Observaciones del entrenador
+                                            </small>
+
+                                            <p class="mb-0">
+
+                                                @(string.IsNullOrWhiteSpace(item.Observacion)
+                                                    ? "Sin observaciones adicionales."
+                                                    : item.Observacion)
+
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+    }
+}
+else
+{
+    <div class="card">
+
+        <div class="card-body p-4">
+
+            <div class="text-center py-5">
+
+                <i class="ti ti-barbell"
+                   style="font-size: 48px;">
+                </i>
+
+                <h4 class="mt-3">
+                    La rutina no tiene ejercicios
+                </h4>
+
+                <p class="text-secondary mb-0">
+
+                    Su entrenador todavía no ha agregado ejercicios
+                    a esta rutina.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
+
+<div class="text-center mt-4">
+
+    <a asp-action="Rutinas_Ver"
+       asp-controller="Miembro"
+       asp-route-i="@ViewBag.IdRutina"
+       class="btn btn-light">
+
+        <i class="ti ti-arrow-left"></i>
+
+        Volver a la rutina
+
+    </a>
+
+</div>

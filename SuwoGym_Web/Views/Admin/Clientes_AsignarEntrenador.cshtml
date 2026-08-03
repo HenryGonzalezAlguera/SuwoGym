@@ -1,0 +1,166 @@
+﻿@model EntrenadorAsignarModel
+
+<div class="row">
+
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Clientes_Lista"
+                       asp-controller="Admin">
+
+                        Clientes
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Clientes_Ver"
+                       asp-controller="Admin"
+                       asp-route-i="@Model.IdCliente">
+
+                        Detalle del cliente
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+
+                    Asignar entrenador
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <div class="mb-4">
+
+            <h2>
+                Asignar entrenador
+            </h2>
+
+            <p class="mb-0">
+                Seleccione el entrenador responsable del cliente
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <form asp-action="Clientes_AsignarEntrenador"
+              asp-controller="Admin"
+              method="post">
+
+            <input asp-for="IdCliente"
+                   type="hidden" />
+
+            <input asp-for="NombreCliente"
+                   type="hidden" />
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Cliente
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.NombreCliente"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="IdEntrenador"
+                           class="form-label">
+
+                        Entrenador
+
+                    </label>
+
+                    <select asp-for="IdEntrenador"
+                            asp-items="ViewBag.Entrenadores"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccione un entrenador
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="alert alert-info"
+                 role="alert">
+
+                Si el cliente ya tiene un entrenador asignado,
+                la asignación anterior será reemplazada.
+
+            </div>
+
+
+            <div class="d-flex
+                justify-content-center
+                gap-2">
+
+                <a asp-action="Clientes_Ver"
+                   asp-controller="Admin"
+                   asp-route-i="@Model.IdCliente"
+                   class="btn btn-light">
+
+                    Cancelar
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Guardar asignación
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

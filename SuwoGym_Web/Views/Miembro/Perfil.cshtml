@@ -1,0 +1,476 @@
+﻿@model MiembroPerfilModel
+
+<div class="row">
+
+    <div class="col-12">
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Mi perfil
+            </h2>
+
+            <p class="mb-0 text-secondary">
+                Información personal, membresía y entrenador asignado
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<!-- INFORMACIÓN PERSONAL -->
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <div class="d-flex
+            justify-content-between
+            align-items-center
+            mb-4">
+
+            <div>
+
+                <h4 class="mb-1">
+                    Información personal
+                </h4>
+
+                <p class="mb-0 text-secondary">
+                    Datos registrados en el gimnasio
+                </p>
+
+            </div>
+
+
+            @if (Model.Estado)
+            {
+                <span class="badge bg-success">
+                    Usuario activo
+                </span>
+            }
+            else
+            {
+                <span class="badge bg-danger">
+                    Usuario inactivo
+                </span>
+            }
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Identificación
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(string.IsNullOrWhiteSpace(Model.Identificacion)
+                                           ? "No registrada"
+                                           : Model.Identificacion)"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Nombre
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.Nombre"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Apellido
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.Apellido"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Fecha de nacimiento
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(Model.FechaNac.HasValue
+                                           ? Model.FechaNac.Value.ToString("dd/MM/yyyy")
+                                       : "No registrada")"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Teléfono
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(string.IsNullOrWhiteSpace(Model.Telefono)
+                                           ? "No registrado"
+                                           : Model.Telefono)"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Correo electrónico
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.CorreoElectronico"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Dirección
+            </label>
+
+            <textarea class="form-control"
+                      rows="3"
+                      readonly>@(string.IsNullOrWhiteSpace(Model.Direccion)
+                          ? "No registrada"
+                          : Model.Direccion)</textarea>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MEMBRESÍA -->
+
+<div class="card mt-4">
+
+    <div class="card-body p-4">
+
+        <div class="d-flex
+            justify-content-between
+            align-items-center
+            mb-4">
+
+            <div>
+
+                <h4 class="mb-1">
+                    Mi membresía
+                </h4>
+
+                <p class="mb-0 text-secondary">
+                    Información del plan actual
+                </p>
+
+            </div>
+
+
+            @if (string.Equals(
+                Model.EstadoMembresia,
+                "Activa",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                <span class="badge bg-success">
+                    Activa
+                </span>
+            }
+            else if (string.Equals(
+                Model.EstadoMembresia,
+                "Vencida",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                <span class="badge bg-danger">
+                    Vencida
+                </span>
+            }
+            else if (!string.IsNullOrWhiteSpace(
+                Model.EstadoMembresia))
+            {
+                <span class="badge bg-secondary">
+                    @Model.EstadoMembresia
+                </span>
+            }
+
+        </div>
+
+
+        @if (Model.IdMembresia.HasValue)
+        {
+            <div class="row">
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label">
+                        Número de membresía
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.IdMembresia"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label">
+                        Plan
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.NombrePlan"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label">
+                        Precio
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@(Model.PrecioPlan.HasValue
+                                                   ? "₡" + Model.PrecioPlan.Value.ToString("N2")
+                                                   : "No disponible")"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-3 mb-3">
+
+                    <label class="form-label">
+                        Estado
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.EstadoMembresia"
+                           readonly />
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Fecha de inicio
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@(Model.FechaInicio.HasValue
+                                                   ? Model.FechaInicio.Value.ToString("dd/MM/yyyy")
+                                               : "No registrada")"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Fecha de vencimiento
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@(Model.FechaVencimiento.HasValue
+                                                   ? Model.FechaVencimiento.Value.ToString("dd/MM/yyyy")
+                                               : "No registrada")"
+                           readonly />
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning mb-0"
+                 role="alert">
+
+                No tiene una membresía asignada actualmente.
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<!-- ENTRENADOR -->
+
+<div class="card mt-4">
+
+    <div class="card-body p-4">
+
+        <div class="mb-4">
+
+            <h4 class="mb-1">
+                Mi entrenador
+            </h4>
+
+            <p class="mb-0 text-secondary">
+                Entrenador responsable de su seguimiento
+            </p>
+
+        </div>
+
+
+        @if (Model.IdEntrenador.HasValue)
+        {
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Nombre
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.NombreEntrenador"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Correo electrónico
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@(string.IsNullOrWhiteSpace(Model.CorreoEntrenador)
+                                                   ? "No registrado"
+                                                   : Model.CorreoEntrenador)"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Teléfono
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@(string.IsNullOrWhiteSpace(Model.TelefonoEntrenador)
+                                                   ? "No registrado"
+                                                   : Model.TelefonoEntrenador)"
+                           readonly />
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Fecha de asignación
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@(Model.FechaAsignacionEntrenador.HasValue
+                                                   ? Model.FechaAsignacionEntrenador.Value.ToString("dd/MM/yyyy")
+                                               : "No registrada")"
+                           readonly />
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info mb-0"
+                 role="alert">
+
+                Todavía no tiene un entrenador asignado.
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<div class="text-center mt-4">
+
+    <a asp-action="Rutinas_Lista"
+       asp-controller="Miembro"
+       class="btn btn-primary">
+
+        <i class="ti ti-activity"></i>
+
+        Ver mis rutinas
+
+    </a>
+
+</div>

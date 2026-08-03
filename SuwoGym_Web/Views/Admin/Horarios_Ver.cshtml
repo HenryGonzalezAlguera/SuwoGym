@@ -1,22 +1,364 @@
-﻿<!-- Header -->
+﻿@model ClaseProgramadaDetalleModel
+
 <div class="row">
+
     <div class="col-12">
-        <!-- Breadcrumb-->
-        <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-action="Horarios_Lista" asp-controller="Admin">Horarios</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Detalles del Horario</li>
-                </ol>
-            </nav>
-        </div>
-        <br />
-        <!-- Titulo -->
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Horarios_Lista"
+                       asp-controller="Admin">
+
+                        Horarios
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active">
+
+                    Detalle
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="">
-                <h2>Detalles del Horario</h2>
-                <p class="mb-0"> _ </p>
+
+            <div>
+
+                <h2 class="mb-1">
+                    @Model.NombreClase
+                </h2>
+
+                <p class="text-secondary mb-0">
+                    Clase programada #@Model.IdClaseProg
+                </p>
+
             </div>
+
+
+            @if (Model.Estado)
+            {
+                <span class="badge bg-success">
+                    Activa
+                </span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">
+                    Inactiva
+                </span>
+            }
+
         </div>
+
     </div>
+
+</div>
+
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["MensajeExito"]
+    </div>
+}
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["MensajeError"]
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <div class="mb-4">
+
+            <h4 class="mb-1">
+                Información de la clase
+            </h4>
+
+            <p class="text-secondary mb-0">
+                Datos generales de la actividad programada
+            </p>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Clase
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.NombreClase"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Fecha
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.FechaHoraInicio.ToString("dd/MM/yyyy")"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Horario
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.FechaHoraInicio.ToString("hh:mm tt") - @Model.FechaHoraFin.ToString("hh:mm tt")"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Descripción
+            </label>
+
+            <textarea class="form-control"
+                      rows="4"
+                      readonly>@(string.IsNullOrWhiteSpace(Model.DescripcionClase)
+                          ? "Sin descripción."
+                          : Model.DescripcionClase)</textarea>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card mt-4">
+
+    <div class="card-body p-4">
+
+        <div class="mb-4">
+
+            <h4 class="mb-1">
+                Entrenador asignado
+            </h4>
+
+            <p class="text-secondary mb-0">
+                Información del encargado de impartir la clase
+            </p>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Nombre
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.NombreEntrenador"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Correo electrónico
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.CorreoEntrenador"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Teléfono
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(string.IsNullOrWhiteSpace(Model.TelefonoEntrenador)
+                                           ? "No registrado"
+                                           : Model.TelefonoEntrenador)"
+                       readonly />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card mt-4">
+
+    <div class="card-body p-4">
+
+        <div class="mb-4">
+
+            <h4 class="mb-1">
+                Control de cupos
+            </h4>
+
+            <p class="text-secondary mb-0">
+                Capacidad actual de la clase
+            </p>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Cupo máximo
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.CupoMaximo"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Participantes actuales
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.CupoActual"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Cupos disponibles
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.CuposDisponibles"
+                       readonly />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="d-flex justify-content-between align-items-center mt-4">
+
+    <a asp-action="Horarios_Lista"
+       asp-controller="Admin"
+       class="btn btn-light">
+
+        <i class="ti ti-arrow-left"></i>
+        Volver
+
+    </a>
+
+
+    <div class="d-flex gap-2">
+
+        <form asp-action="Horarios_CambiarEstado"
+              asp-controller="Admin"
+              method="post">
+
+            <input type="hidden"
+                   name="IdClaseProg"
+                   value="@Model.IdClaseProg" />
+
+            <input type="hidden"
+                   name="Estado"
+                   value="@Model.Estado.ToString().ToLower()" />
+
+            @if (Model.Estado)
+            {
+                <button type="submit"
+                        class="btn btn-danger">
+
+                    <i class="ti ti-circle-x"></i>
+                    Desactivar
+
+                </button>
+            }
+            else
+            {
+                <button type="submit"
+                        class="btn btn-success">
+
+                    <i class="ti ti-circle-check"></i>
+                    Activar
+
+                </button>
+            }
+
+        </form>
+
+
+        <a asp-action="Horarios_Editar"
+           asp-controller="Admin"
+           asp-route-i="@Model.IdClaseProg"
+           class="btn btn-primary">
+
+            <i class="ti ti-edit"></i>
+            Editar
+
+        </a>
+
+    </div>
+
 </div>

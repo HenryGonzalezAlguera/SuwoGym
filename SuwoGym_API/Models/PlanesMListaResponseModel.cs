@@ -2,13 +2,15 @@
 {
     public class PlanesMListaResponseModel
     {
-        public string NombrePlan { get; set; } = string.Empty;
+        public int IdPlan { get; set; }
 
-        public string Descripcion { get; set; } = string.Empty;
+        public string NombrePlan { get; set; } =
+            string.Empty;
+
+        public string? Descripcion { get; set; }
 
         public int DuracionDias { get; set; }
-        
+
         public decimal Precio { get; set; }
-    
     }
 }

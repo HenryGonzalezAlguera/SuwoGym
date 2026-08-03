@@ -1,0 +1,191 @@
+﻿@model RutinaCrearModel
+
+<div class="row">
+
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Rutinas_Lista"
+                       asp-controller="Entrenador">
+
+                        Rutinas
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+
+                    Nueva rutina
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Registrar rutina
+            </h2>
+
+            <p class="mb-0 text-secondary">
+                Asigne una nueva rutina a uno de sus clientes
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <form asp-action="Rutinas_Agregar"
+              asp-controller="Entrenador"
+              method="post">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="IdCliente"
+                           class="form-label">
+
+                        Cliente
+
+                    </label>
+
+                    <select asp-for="IdCliente"
+                            asp-items="ViewBag.Clientes"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccione un cliente
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="Nivel"
+                           class="form-label">
+
+                        Nivel
+
+                    </label>
+
+                    <select asp-for="Nivel"
+                            asp-items="ViewBag.Niveles"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccione un nivel
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label asp-for="NombreRutina"
+                       class="form-label">
+
+                    Nombre de la rutina
+
+                </label>
+
+                <input asp-for="NombreRutina"
+                       class="form-control"
+                       maxlength="100"
+                       placeholder="Ejemplo: Rutina inicial de fuerza"
+                       required />
+
+            </div>
+
+
+            <div class="mb-4">
+
+                <label asp-for="Detalles"
+                       class="form-label">
+
+                    Detalles de la rutina
+
+                </label>
+
+                <textarea asp-for="Detalles"
+                          class="form-control"
+                          rows="8"
+                          placeholder="Describa los días, grupos musculares, objetivos y recomendaciones de la rutina."
+                          required></textarea>
+
+                <small class="text-secondary">
+
+                    En el siguiente módulo se podrán agregar ejercicios
+                    individuales a la rutina.
+
+                </small>
+
+            </div>
+
+
+            <div class="d-flex
+                justify-content-end
+                gap-2">
+
+                <a asp-action="Rutinas_Lista"
+                   asp-controller="Entrenador"
+                   class="btn btn-light">
+
+                    Cancelar
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="ti ti-device-floppy"></i>
+
+                    Guardar rutina
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

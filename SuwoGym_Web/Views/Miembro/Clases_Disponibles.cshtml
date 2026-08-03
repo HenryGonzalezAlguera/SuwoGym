@@ -1,0 +1,264 @@
+﻿@model List<ClaseDisponibleMiembroModel>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="mb-1">
+            Clases disponibles
+        </h2>
+
+        <p class="text-secondary mb-0">
+            Consulte las próximas clases y reserve un cupo
+        </p>
+
+    </div>
+
+    <a asp-action="Reservas_Lista"
+       asp-controller="Miembro"
+       class="btn btn-light">
+
+        <i class="ti ti-calendar-check"></i>
+        Mis reservas
+
+    </a>
+
+</div>
+
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success"
+         role="alert">
+
+        @TempData["MensajeExito"]
+
+    </div>
+}
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-info"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-6 col-xl-4 mb-4">
+
+                <div class="card h-100">
+
+                    <div class="card-body p-4">
+
+                        <div class="d-flex
+                            justify-content-between
+                            align-items-start
+                            mb-3">
+
+                            <div>
+
+                                <h4 class="mb-1">
+                                    @item.NombreClase
+                                </h4>
+
+                                <small class="text-secondary">
+                                    Clase #@item.IdClaseProg
+                                </small>
+
+                            </div>
+
+
+                            @if (item.CuposDisponibles > 5)
+                            {
+                                <span class="badge bg-success">
+
+                                    @item.CuposDisponibles cupos
+
+                                </span>
+                            }
+                            else if (item.CuposDisponibles > 0)
+                            {
+                                <span class="badge bg-warning">
+
+                                    Últimos @item.CuposDisponibles
+
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    Sin cupos
+                                </span>
+                            }
+
+                        </div>
+
+
+                        <p class="text-secondary">
+
+                            @(string.IsNullOrWhiteSpace(
+                                item.DescripcionClase)
+                                ? "La clase no tiene una descripción registrada."
+                                : item.DescripcionClase)
+
+                        </p>
+
+
+                        <hr />
+
+
+                        <div class="mb-3">
+
+                            <div class="d-flex align-items-center mb-2">
+
+                                <i class="ti ti-user me-2"></i>
+
+                                <span>
+                                    @item.NombreEntrenador
+                                </span>
+
+                            </div>
+
+
+                            <div class="d-flex align-items-center mb-2">
+
+                                <i class="ti ti-calendar me-2"></i>
+
+                                <span>
+                                    @item.FechaHoraInicio.ToString("dd/MM/yyyy")
+                                </span>
+
+                            </div>
+
+
+                            <div class="d-flex align-items-center mb-2">
+
+                                <i class="ti ti-clock me-2"></i>
+
+                                <span>
+
+                                    @item.FechaHoraInicio.ToString("hh:mm tt")
+
+                                    -
+
+                                    @item.FechaHoraFin.ToString("hh:mm tt")
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="d-flex align-items-center mb-2">
+
+                                <i class="ti ti-hourglass me-2"></i>
+
+                                <span>
+                                    @item.DuracionMinutos minutos
+                                </span>
+
+                            </div>
+
+
+                            <div class="d-flex align-items-center">
+
+                                <i class="ti ti-users me-2"></i>
+
+                                <span>
+
+                                    @item.CupoActual de @item.CupoMaximo participantes
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <form asp-action="Clases_Reservar"
+                              asp-controller="Miembro"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="IdClaseProg"
+                                   value="@item.IdClaseProg" />
+
+
+                            @if (item.CuposDisponibles > 0)
+                            {
+                                <button type="submit"
+                                        class="btn btn-primary w-100"
+                                        onclick="return confirm('¿Desea reservar un cupo en esta clase?');">
+
+                                    <i class="ti ti-calendar-plus"></i>
+                                    Reservar clase
+
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button"
+                                        class="btn btn-secondary w-100"
+                                        disabled>
+
+                                    Sin cupos disponibles
+
+                                </button>
+                            }
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+}
+else
+{
+    <div class="card">
+
+        <div class="card-body text-center py-5">
+
+            <i class="ti ti-calendar-off"
+               style="font-size: 48px;">
+            </i>
+
+            <h4 class="mt-3">
+                No hay clases disponibles
+            </h4>
+
+            <p class="text-secondary mb-0">
+
+                En este momento no existen clases futuras
+                con cupos disponibles.
+
+            </p>
+
+        </div>
+
+    </div>
+}

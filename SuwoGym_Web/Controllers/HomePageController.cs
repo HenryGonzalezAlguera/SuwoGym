@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SuwoGym_Web.Models;
+using SuwoGym_Web.Models.SuwoGym_Web.Models;
 using System.Collections.Generic;
 
 namespace HomePage.Controllers

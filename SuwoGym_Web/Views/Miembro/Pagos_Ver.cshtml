@@ -1,0 +1,492 @@
+﻿@model PagoMiembroDetalleModel
+
+<div class="row">
+
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Pagos_Lista"
+                       asp-controller="Miembro">
+
+                        Mis pagos
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+
+                    Detalle del pago
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <div class="d-flex
+            justify-content-between
+            align-items-center
+            mb-4">
+
+            <div>
+
+                <h2 class="mb-1">
+                    Pago #@Model.IdPago
+                </h2>
+
+                <p class="mb-0 text-secondary">
+                    Información detallada del pago de la membresía
+                </p>
+
+            </div>
+
+
+            <span class="badge bg-success">
+                Pago registrado
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+<!-- INFORMACIÓN DEL PAGO -->
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <div class="mb-4">
+
+            <h4 class="mb-1">
+                Información del pago
+            </h4>
+
+            <p class="mb-0 text-secondary">
+                Datos de la transacción registrada
+            </p>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Número de pago
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.IdPago"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Número de membresía
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.IdMembresia"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Fecha de emisión
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(Model.FechaEmision.ToString("dd/MM/yyyy"))"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Método de pago
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.MetodoPago"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Número de referencia
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(string.IsNullOrWhiteSpace(Model.NumeroReferencia)
+                                           ? "No aplica"
+                                           : Model.NumeroReferencia)"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Monto registrado
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="₡@Model.Monto.ToString("N2")"
+                       readonly />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- RESUMEN FINANCIERO -->
+
+<div class="card mt-4">
+
+    <div class="card-body p-4">
+
+        <div class="mb-4">
+
+            <h4 class="mb-1">
+                Resumen financiero
+            </h4>
+
+            <p class="mb-0 text-secondary">
+                Desglose del monto pagado
+            </p>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Subtotal
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="₡@Model.Subtotal.ToString("N2")"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    IVA
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="₡@Model.Impuesto.ToString("N2")"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Total pagado
+                </label>
+
+                <input type="text"
+                       class="form-control fw-bold"
+                       value="₡@Model.Total.ToString("N2")"
+                       readonly />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- INFORMACIÓN DEL PLAN -->
+
+<div class="card mt-4">
+
+    <div class="card-body p-4">
+
+        <div class="d-flex
+            justify-content-between
+            align-items-center
+            mb-4">
+
+            <div>
+
+                <h4 class="mb-1">
+                    Plan de membresía
+                </h4>
+
+                <p class="mb-0 text-secondary">
+                    Plan relacionado con este pago
+                </p>
+
+            </div>
+
+
+            @if (string.Equals(
+                Model.EstadoMembresia,
+                "Activa",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                <span class="badge bg-success">
+                    Activa
+                </span>
+            }
+            else if (string.Equals(
+                Model.EstadoMembresia,
+                "Vencida",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                <span class="badge bg-danger">
+                    Vencida
+                </span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">
+                    @Model.EstadoMembresia
+                </span>
+            }
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Plan
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.NombrePlan"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Duración
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.DuracionDias días"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Estado de la membresía
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.EstadoMembresia"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Fecha de inicio
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(Model.FechaInicio.ToString("dd/MM/yyyy"))"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Fecha de vencimiento
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(Model.FechaVencimiento.ToString("dd/MM/yyyy"))"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Descripción del plan
+            </label>
+
+            <textarea class="form-control"
+                      rows="4"
+                      readonly>@(string.IsNullOrWhiteSpace(Model.DescripcionPlan)
+                          ? "Sin descripción."
+                          : Model.DescripcionPlan)</textarea>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- INFORMACIÓN DEL MIEMBRO -->
+
+<div class="card mt-4">
+
+    <div class="card-body p-4">
+
+        <div class="mb-4">
+
+            <h4 class="mb-1">
+                Información del miembro
+            </h4>
+
+            <p class="mb-0 text-secondary">
+                Usuario relacionado con el pago
+            </p>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Identificación
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(string.IsNullOrWhiteSpace(Model.Identificacion)
+                                           ? "No registrada"
+                                           : Model.Identificacion)"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Nombre
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.NombreMiembro"
+                       readonly />
+
+            </div>
+
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Correo electrónico
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.CorreoElectronico"
+                       readonly />
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="text-center mt-4">
+
+    <a asp-action="Pagos_Lista"
+       asp-controller="Miembro"
+       class="btn btn-light">
+
+        <i class="ti ti-arrow-left"></i>
+
+        Volver a mis pagos
+
+    </a>
+
+</div>

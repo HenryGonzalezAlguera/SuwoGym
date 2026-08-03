@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SuwoGym_Web.Models;
 using System.Net;
+using SuwoGym_Web.Filters;
 
 namespace SuwoGym_Web.Controllers
 {
@@ -103,8 +104,14 @@ namespace SuwoGym_Web.Controllers
                 return View();
             }
 
+            var detalleError =
+      response.Content
+          .ReadAsStringAsync()
+          .Result;
+
             throw new Exception(
-                "Ocurrió un error al intentar iniciar sesión.");
+                $"La API respondió {(int)response.StatusCode} " +
+                $"({response.StatusCode}): {detalleError}");
         }
 
         #endregion

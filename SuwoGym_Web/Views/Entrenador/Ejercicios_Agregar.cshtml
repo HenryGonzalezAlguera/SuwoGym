@@ -1,0 +1,200 @@
+﻿@model EjercicioCrearModel
+
+<div class="row">
+
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Ejercicios_Lista"
+                       asp-controller="Entrenador">
+
+                        Ejercicios
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+
+                    Nuevo ejercicio
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Registrar ejercicio
+            </h2>
+
+            <p class="mb-0 text-secondary">
+                Agregue un ejercicio al catálogo del entrenador
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <form asp-action="Ejercicios_Agregar"
+              asp-controller="Entrenador"
+              method="post">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="NombreEjercicio"
+                           class="form-label">
+
+                        Nombre del ejercicio
+
+                    </label>
+
+                    <input asp-for="NombreEjercicio"
+                           class="form-control"
+                           maxlength="120"
+                           placeholder="Ejemplo: Press de banca"
+                           required />
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="GrupoMuscular"
+                           class="form-label">
+
+                        Grupo muscular
+
+                    </label>
+
+                    <select asp-for="GrupoMuscular"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccione un grupo muscular
+                        </option>
+
+                        <option value="Pecho">
+                            Pecho
+                        </option>
+
+                        <option value="Espalda">
+                            Espalda
+                        </option>
+
+                        <option value="Hombros">
+                            Hombros
+                        </option>
+
+                        <option value="Bíceps">
+                            Bíceps
+                        </option>
+
+                        <option value="Tríceps">
+                            Tríceps
+                        </option>
+
+                        <option value="Piernas">
+                            Piernas
+                        </option>
+
+                        <option value="Glúteos">
+                            Glúteos
+                        </option>
+
+                        <option value="Abdomen">
+                            Abdomen
+                        </option>
+
+                        <option value="Cardio">
+                            Cardio
+                        </option>
+
+                        <option value="Cuerpo completo">
+                            Cuerpo completo
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="mb-4">
+
+                <label asp-for="Descripcion"
+                       class="form-label">
+
+                    Descripción
+
+                </label>
+
+                <textarea asp-for="Descripcion"
+                          class="form-control"
+                          rows="5"
+                          maxlength="300"
+                          placeholder="Describa brevemente el ejercicio y su objetivo."></textarea>
+
+                <small class="text-secondary">
+                    La descripción es opcional y puede tener hasta
+                    300 caracteres.
+                </small>
+
+            </div>
+
+            <div class="d-flex
+                justify-content-end
+                gap-2">
+
+                <a asp-action="Ejercicios_Lista"
+                   asp-controller="Entrenador"
+                   class="btn btn-light">
+
+                    Cancelar
+
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="ti ti-device-floppy"></i>
+
+                    Guardar ejercicio
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

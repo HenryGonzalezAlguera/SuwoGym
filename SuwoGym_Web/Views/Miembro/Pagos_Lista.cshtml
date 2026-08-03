@@ -1,0 +1,277 @@
+﻿@model List<PagoMiembroListaModel>
+
+<div class="row">
+
+    <div class="col-12">
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Mis pagos
+            </h2>
+
+            <p class="mb-0 text-secondary">
+                Historial de pagos relacionados con sus membresías
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-info"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+
+                <table class="table
+                    table-hover
+                    align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Pago
+                            </th>
+
+                            <th>
+                                Plan
+                            </th>
+
+                            <th>
+                                Fecha
+                            </th>
+
+                            <th>
+                                Método
+                            </th>
+
+                            <th>
+                                Referencia
+                            </th>
+
+                            <th>
+                                Subtotal
+                            </th>
+
+                            <th>
+                                IVA
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th class="text-center">
+                                Acciones
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        #@item.IdPago
+                                    </strong>
+
+                                    <div>
+
+                                        <small class="text-secondary">
+                                            Membresía #@item.IdMembresia
+                                        </small>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        @item.NombrePlan
+                                    </strong>
+
+                                    <div>
+
+                                        <small class="text-secondary">
+
+                                            @item.FechaInicio.ToString("dd/MM/yyyy")
+                                            -
+                                            @item.FechaVencimiento.ToString("dd/MM/yyyy")
+
+                                        </small>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    @(item.FechaEmision.ToString("dd/MM/yyyy"))
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.MetodoPago == "Efectivo")
+                                    {
+                                        <span class="badge bg-success">
+                                            Efectivo
+                                        </span>
+                                    }
+                                    else if (item.MetodoPago == "Tarjeta")
+                                    {
+                                        <span class="badge bg-primary">
+                                            Tarjeta
+                                        </span>
+                                    }
+                                    else if (item.MetodoPago == "SINPE Móvil")
+                                    {
+                                        <span class="badge bg-info">
+                                            SINPE Móvil
+                                        </span>
+                                    }
+                                    else if (item.MetodoPago == "Transferencia")
+                                    {
+                                        <span class="badge bg-warning">
+                                            Transferencia
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            @item.MetodoPago
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (string.IsNullOrWhiteSpace(
+                                        item.NumeroReferencia))
+                                    {
+                                        <span class="text-secondary">
+                                            No aplica
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.NumeroReferencia
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    ₡@item.Subtotal.ToString("N2")
+
+                                </td>
+
+
+                                <td>
+
+                                    ₡@item.Impuesto.ToString("N2")
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        ₡@item.Total.ToString("N2")
+                                    </strong>
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    <a asp-action="Pagos_Ver"
+                                       asp-controller="Miembro"
+                                       asp-route-i="@item.IdPago"
+                                       class="btn btn-sm btn-light"
+                                       title="Ver pago">
+
+                                        <i class="ti ti-eye"></i>
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <i class="ti ti-receipt"
+                   style="font-size: 48px;">
+                </i>
+
+                <h4 class="mt-3">
+                    No tiene pagos registrados
+                </h4>
+
+                <p class="text-secondary mb-0">
+
+                    Los pagos de sus membresías aparecerán
+                    en esta sección.
+
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

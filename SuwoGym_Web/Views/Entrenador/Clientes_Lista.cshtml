@@ -1,0 +1,210 @@
+﻿@model IEnumerable<EntrenadorClienteModel>
+
+<div class="row">
+
+    <div class="col-12">
+
+        <div class="mb-4">
+
+            <h2>
+                Clientes asignados
+            </h2>
+
+            <p class="mb-0">
+                Clientes bajo su seguimiento como entrenador
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-warning"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card table-responsive p-2">
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table
+            table-hover
+            text-nowrap
+            mb-0">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Cliente
+                    </th>
+
+                    <th>
+                        Identificación
+                    </th>
+
+                    <th>
+                        Contacto
+                    </th>
+
+                    <th>
+                        Plan
+                    </th>
+
+                    <th>
+                        Estado de membresía
+                    </th>
+
+                    <th>
+                        Vencimiento
+                    </th>
+
+                    <th>
+                        Fecha de asignación
+                    </th>
+                    <th class="text-center">
+                        Acciones
+                    </th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr class="align-middle">
+
+                        <td>
+                            @item.Nombre @item.Apellido
+                        </td>
+
+
+                        <td>
+                            @(string.IsNullOrWhiteSpace(
+                                item.Identificacion)
+                                ? "No registrada"
+                                : item.Identificacion)
+                        </td>
+
+
+                        <td>
+
+                            <div>
+                                @item.CorreoElectronico
+                            </div>
+
+                            <small class="text-secondary">
+
+                                @(string.IsNullOrWhiteSpace(
+                                    item.Telefono)
+                                    ? "Sin teléfono"
+                                    : item.Telefono)
+
+                            </small>
+
+                        </td>
+
+
+                        <td>
+                            @(string.IsNullOrWhiteSpace(
+                                item.NombrePlan)
+                                ? "Sin membresía"
+                                : item.NombrePlan)
+                        </td>
+
+
+                        <td>
+
+                            @if (string.Equals(
+                                item.EstadoMembresia,
+                                "Activa",
+                                StringComparison.OrdinalIgnoreCase))
+                            {
+                                <span class="badge bg-success">
+                                    Activa
+                                </span>
+                            }
+                            else if (string.IsNullOrWhiteSpace(
+                                item.EstadoMembresia))
+                            {
+                                <span class="badge bg-secondary">
+                                    Sin membresía
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">
+                                    @item.EstadoMembresia
+                                </span>
+                            }
+
+                        </td>
+
+
+                        <td>
+
+                            @(item.FechaVencimiento.HasValue
+                                ? item.FechaVencimiento.Value
+                                    .ToString("dd/MM/yyyy")
+                                : "No aplica")
+
+                        </td>
+
+
+                        <td>
+
+                            @(item.FechaAsignacion.ToString("dd/MM/yyyy"))
+
+                        </td>
+                        <td class="text-center">
+
+                            <a asp-action="Clientes_Ver"
+                               asp-controller="Entrenador"
+                               asp-route-i="@item.IdUsuario"
+                               class="btn btn-sm btn-light"
+                               title="Ver cliente">
+
+                                <i class="ti ti-eye"></i>
+
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    }
+    else
+    {
+        <div class="text-center p-4">
+
+            <p class="mb-0">
+                No tiene clientes asignados.
+            </p>
+
+        </div>
+    }
+
+</div>

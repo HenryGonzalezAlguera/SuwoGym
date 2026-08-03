@@ -1,0 +1,276 @@
+﻿@model PagoDetalleModel
+
+<div class="row">
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                    <a asp-action="Clientes_Ver"
+                       asp-controller="Admin"
+                       asp-route-i="@Model.IdUsuario">
+                        Cliente
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item">
+                    <a asp-action="Clientes_Pagos"
+                       asp-controller="Admin"
+                       asp-route-i="@Model.IdUsuario">
+                        Historial de pagos
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item active">
+                    Detalle del pago
+                </li>
+
+            </ol>
+        </nav>
+
+        <div class="mb-4">
+
+            <h2>
+                Detalle del pago #@Model.IdPago
+            </h2>
+
+            <p class="mb-0">
+                Información del pago de la membresía
+            </p>
+
+        </div>
+
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <h4 class="mb-3">
+            Cliente
+        </h4>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Nombre
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.NombreCliente"
+                       readonly />
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Identificación
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(string.IsNullOrWhiteSpace(Model.Identificacion)
+                                           ? "No registrada"
+                                           : Model.Identificacion)"
+                       readonly />
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Correo electrónico
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.CorreoElectronico"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <hr />
+
+
+        <h4 class="mb-3">
+            Membresía
+        </h4>
+
+        <div class="row">
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Número
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.IdMembresia"
+                       readonly />
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Plan
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.NombrePlan"
+                       readonly />
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Duración
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.DuracionDias días"
+                       readonly />
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Estado
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.EstadoMembresia"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <hr />
+
+
+        <h4 class="mb-3">
+            Pago
+        </h4>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Método
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.MetodoPago"
+                       readonly />
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Fecha de emisión
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@Model.FechaEmision.ToString("dd/MM/yyyy HH:mm")"
+                       readonly />
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Referencia
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="@(string.IsNullOrWhiteSpace(Model.NumeroReferencia)
+                                           ? "Sin referencia"
+                                           : Model.NumeroReferencia)"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Subtotal
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="₡@Model.Subtotal.ToString("N2")"
+                       readonly />
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    IVA 13%
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="₡@Model.Impuesto.ToString("N2")"
+                       readonly />
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Total
+                </label>
+
+                <input type="text"
+                       class="form-control"
+                       value="₡@Model.Total.ToString("N2")"
+                       readonly />
+
+            </div>
+
+        </div>
+
+
+        <div class="text-center mt-3">
+
+            <a asp-action="Clientes_Pagos"
+               asp-controller="Admin"
+               asp-route-i="@Model.IdUsuario"
+               class="btn btn-light">
+
+                Volver al historial
+
+            </a>
+
+        </div>
+
+    </div>
+</div>

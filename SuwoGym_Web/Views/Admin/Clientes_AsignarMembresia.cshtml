@@ -1,0 +1,167 @@
+﻿@model MembresiaAsignarModel
+
+<div class="row">
+
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Clientes_Lista"
+                       asp-controller="Admin">
+
+                        Clientes
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Clientes_Ver"
+                       asp-controller="Admin"
+                       asp-route-i="@Model.IdUsuario">
+
+                        Detalle del cliente
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+
+                    Asignar membresía
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <div class="mb-4">
+
+            <h2>
+                Asignar membresía
+            </h2>
+
+            <p class="mb-0">
+                Seleccione el plan que se asignará al cliente
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <form asp-action="Clientes_AsignarMembresia"
+              asp-controller="Admin"
+              method="post">
+
+            <input asp-for="IdUsuario"
+                   type="hidden" />
+
+            <input asp-for="NombreCliente"
+                   type="hidden" />
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Cliente
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.NombreCliente"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="IdPlan"
+                           class="form-label">
+
+                        Plan de membresía
+
+                    </label>
+
+                    <select asp-for="IdPlan"
+                            asp-items="ViewBag.Planes"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccione un plan
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="alert alert-info"
+                 role="alert">
+
+                La fecha de inicio será la fecha actual.
+                La fecha de vencimiento se calculará
+                automáticamente según la duración del plan.
+
+            </div>
+
+
+            <div class="d-flex
+                justify-content-center
+                gap-2">
+
+                <a asp-action="Clientes_Ver"
+                   asp-controller="Admin"
+                   asp-route-i="@Model.IdUsuario"
+                   class="btn btn-light">
+
+                    Cancelar
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Asignar membresía
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

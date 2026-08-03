@@ -9,17 +9,19 @@
 <head>
 
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
 
     <!-- Pestaña -->
     <link href="~/images/logoSuwo_icon.png"
           rel="icon"
-          type="image/x-icon">
+          type="image/x-icon" />
 
     <title>Suwo Gym</title>
 
     <link rel="manifest"
-          href="~/images/site.webmanifest">
+          href="~/images/site.webmanifest" />
 
     <!-- Archivos principales -->
     <script type="module"
@@ -32,17 +34,17 @@
     <link rel="stylesheet"
           crossorigin=""
           href="~/css/main.css"
-          asp-append-version="true">
+          asp-append-version="true" />
 
     <link rel="stylesheet"
           crossorigin=""
           href="~/css/apexcharts.css"
-          asp-append-version="true">
+          asp-append-version="true" />
 
     <link rel="stylesheet"
           crossorigin=""
           href="~/css/colores.css"
-          asp-append-version="true">
+          asp-append-version="true" />
 
     <!-- jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"
@@ -62,11 +64,14 @@
          class="overlay">
     </div>
 
+
     <!-- TOPBAR -->
+
     <nav id="topbar"
          class="navbar bg-white border-bottom fixed-top topbar px-3">
 
-        <!-- TOGGLE BUTTON PARA COMPUTADORA -->
+        <!-- TOGGLE PARA COMPUTADORA -->
+
         <button id="toggleBtn"
                 class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm">
 
@@ -74,7 +79,9 @@
 
         </button>
 
-        <!-- TOGGLE BUTTON PARA MÓVIL -->
+
+        <!-- TOGGLE PARA MÓVIL -->
+
         <button id="mobileBtn"
                 class="btn btn-light btn-icon btn-sm d-lg-none me-2">
 
@@ -82,7 +89,9 @@
 
         </button>
 
-        <!-- Navegación superior -->
+
+        <!-- NAVEGACIÓN SUPERIOR -->
+
         <div>
 
             <ul class="list-unstyled d-flex align-items-center mb-0 gap-2">
@@ -101,11 +110,13 @@
                             font-size: 20px;">
 
                             <i class="ti ti-user-circle"></i>
+
                             <i class="ti ti-chevron-down"></i>
 
                         </div>
 
                     </a>
+
 
                     <div class="dropdown-menu dropdown-menu-end p-0"
                          style="min-width: 200px;">
@@ -121,7 +132,11 @@
                                 <div>
 
                                     <h4 class="mb-0 small">
-                                        <b>@nombre</b>
+
+                                        <b>
+                                            @nombre
+                                        </b>
+
                                     </h4>
 
                                     <p class="mb-0 small">
@@ -132,6 +147,7 @@
 
                             </div>
 
+
                             <div class="p-3
                                 d-flex
                                 flex-column
@@ -140,8 +156,7 @@
                                 lh-lg">
 
                                 <a asp-action="Configuracion"
-                                   asp-controller="Usuario"
-                                   class="">
+                                   asp-controller="Usuario">
 
                                     <i class="ti ti-settings"></i>
 
@@ -151,9 +166,9 @@
 
                                 </a>
 
+
                                 <a asp-action="Logout"
-                                   asp-controller="Home"
-                                   class="">
+                                   asp-controller="Home">
 
                                     <i class="ti ti-door-exit"></i>
 
@@ -177,11 +192,14 @@
 
     </nav>
 
+
     <!-- SIDEBAR -->
+
     <aside id="sidebar"
            class="sidebar">
 
         <!-- LOGO -->
+
         <div class="logo-area">
 
             <a asp-action="Principal"
@@ -191,14 +209,14 @@
                 <img src="~/images/logoSuwo_icon.png"
                      alt="Logo SUWÓ"
                      width="32"
-                     height="32">
+                     height="32" />
 
                 <span class="logo-text ms-2">
 
                     <img src="~/images/logoSuwo_logotype.png"
                          alt="SUWÓ Gym"
                          height="24"
-                         class="mt-1">
+                         class="mt-1" />
 
                 </span>
 
@@ -206,10 +224,13 @@
 
         </div>
 
+
         <!-- NAVEGACIÓN -->
+
         <ul class="nav flex-column mt-2">
 
-            <!-- Página principal para todos -->
+            <!-- OPCIÓN DISPONIBLE PARA TODOS -->
+
             <li>
 
                 <a class="nav-link"
@@ -225,6 +246,7 @@
                 </a>
 
             </li>
+        </ul>
 
             @if (rol == "Administrador")
             {
@@ -246,6 +268,7 @@
 
                 </li>
 
+
                 <li>
 
                     <a class="nav-link"
@@ -261,6 +284,7 @@
                     </a>
 
                 </li>
+
 
                 <li>
 
@@ -278,6 +302,7 @@
 
                 </li>
 
+
                 <li>
 
                     <a class="nav-link"
@@ -293,6 +318,7 @@
                     </a>
 
                 </li>
+
 
                 <li>
 
@@ -310,29 +336,40 @@
 
                 </li>
 
+
+            <li>
+
+                <a class="nav-link"
+                   asp-action="Horarios_Lista"
+                   asp-controller="Admin">
+
+                    <i class="ti ti-calendar-event"></i>
+
+                    <span class="nav-text">
+                        Horarios
+                    </span>
+
+                </a>
+
+            </li>
+
+
                 <li>
 
                     <a class="nav-link"
-                       asp-action="Horarios_Lista"
+                       asp-action="Prueba_Lista"
                        asp-controller="Admin">
 
-                        <i class="ti ti-calendar"></i>
+                        <i class="ti ti-layout-dashboard"></i>
 
                         <span class="nav-text">
-                            Horarios
-                        </span>
-
-                    </a>
-
-                </li>
-
-                <li>
-                    <a class="nav-link" asp-action="Prueba_Lista" asp-controller="Admin">
-                        <i class="ti ti-calendar"></i> <span class="nav-text">
                             Prueba
                         </span>
+
                     </a>
+                
                 </li>
+               
             }
             else if (rol == "Entrenador")
             {
@@ -341,8 +378,8 @@
                 <li>
 
                     <a class="nav-link"
-                       asp-action="Index"
-                       asp-controller="Home">
+                       asp-action="Clientes_Lista"
+                       asp-controller="Entrenador">
 
                         <i class="ti ti-user"></i>
 
@@ -354,49 +391,14 @@
 
                 </li>
 
-                <li>
-
-                    <a class="nav-link"
-                       asp-action="Index"
-                       asp-controller="Home">
-
-                        <i class="ti ti-calendar"></i>
-
-                        <span class="nav-text">
-                            Cronograma
-                        </span>
-
-                    </a>
-
-                </li>
 
                 <li>
 
                     <a class="nav-link"
-                       asp-action="Index"
-                       asp-controller="Home">
+                       asp-action="Rutinas_Lista"
+                       asp-controller="Entrenador">
 
-                        <i class="ti ti-layers-intersect"></i>
-
-                        <span class="nav-text">
-                            Ejercicios
-                        </span>
-
-                    </a>
-
-                </li>
-            }
-            else
-            {
-                <!-- MENÚ DEL MIEMBRO -->
-
-                <li>
-
-                    <a class="nav-link"
-                       asp-action="Index"
-                       asp-controller="Home">
-
-                        <i class="ti ti-user"></i>
+                        <i class="ti ti-activity"></i>
 
                         <span class="nav-text">
                             Rutinas
@@ -405,52 +407,140 @@
                     </a>
 
                 </li>
-
                 <li>
 
                     <a class="nav-link"
-                       asp-action="Index"
-                       asp-controller="Home">
+                       asp-action="Ejercicios_Lista"
+                       asp-controller="Entrenador">
 
-                        <i class="ti ti-calendar"></i>
+                        <i class="ti ti-barbell"></i>
 
                         <span class="nav-text">
-                            Cronograma
+                            Ejercicios
                         </span>
 
                     </a>
 
                 </li>
+            <li>
 
-                <li>
+                <a class="nav-link"
+                   asp-action="Horarios_Lista"
+                   asp-controller="Entrenador">
 
-                    <a class="nav-link"
-                       asp-action="Index"
-                       asp-controller="Home">
+                    <i class="ti ti-calendar-event"></i>
 
-                        <i class="ti ti-graph"></i>
+                    <span class="nav-text">
+                        Mi cronograma
+                    </span>
 
-                        <span class="nav-text">
-                            Desempeño
-                        </span>
+                </a>
 
-                    </a>
-
-                </li>
+            </li>
             }
+            else if (rol == "Miembro")
+            {
+                <!-- MENÚ DEL MIEMBRO -->
 
-        </ul>
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Perfil"
+                       asp-controller="Miembro">
+
+                        <i class="ti ti-user-circle"></i>
+
+                        <span class="nav-text">
+                            Mi perfil
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Rutinas_Lista"
+                       asp-controller="Miembro">
+
+                        <i class="ti ti-activity"></i>
+
+                        <span class="nav-text">
+                            Mis rutinas
+                        </span>
+
+                    </a>
+
+                </li>
+
+
+                <li>
+
+                    <a class="nav-link"
+                       asp-action="Pagos_Lista"
+                       asp-controller="Miembro">
+
+                        <i class="ti ti-receipt"></i>
+
+                        <span class="nav-text">
+                            Mis pagos
+                        </span>
+
+                    </a>
+
+                </li>
+            <li>
+
+                <a class="nav-link"
+                   asp-action="Clases_Disponibles"
+                   asp-controller="Miembro">
+
+                    <i class="ti ti-calendar-event"></i>
+
+                    <span class="nav-text">
+                        Clases disponibles
+                    </span>
+
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a class="nav-link"
+                   asp-action="Reservas_Lista"
+                   asp-controller="Miembro">
+
+                    <i class="ti ti-calendar-check"></i>
+
+                    <span class="nav-text">
+                        Mis reservas
+                    </span>
+
+                </a>
+
+            </li>
+            }
 
     </aside>
 
+
     <!-- CONTENIDO PRINCIPAL -->
-    <main id="content" class="content py-10">
+
+    <main id="content"
+          class="content py-10">
+
         <div class="container-fluid">
 
             <!-- Contenido de cada vista -->
             @RenderBody()
 
-            <!-- Footer -->
+
+            <!-- FOOTER -->
+
             <div class="row">
 
                 <footer class="py-2 mt-6 text-secondary">
@@ -464,6 +554,7 @@
                             </p>
 
                         </div>
+
 
                         <div class="col-6 text-end">
 
@@ -491,9 +582,12 @@
             </div>
 
         </div>
+
     </main>
 
+
     <!-- Bootstrap y scripts principales -->
+
     <script src="~/js/main.js"
             type="module"
             asp-append-version="true">

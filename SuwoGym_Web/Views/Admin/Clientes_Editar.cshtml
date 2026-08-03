@@ -1,0 +1,222 @@
+﻿@model ClienteModel
+
+<div class="row">
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                    <a asp-action="Clientes_Lista"
+                       asp-controller="Admin">
+                        Clientes
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item">
+                    <a asp-action="Clientes_Ver"
+                       asp-controller="Admin"
+                       asp-route-i="@Model.IdUsuario">
+                        Detalle
+                    </a>
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+                    Editar cliente
+                </li>
+
+            </ol>
+        </nav>
+
+        <div class="mb-4">
+            <h2>Editar cliente</h2>
+
+            <p class="mb-0">
+                Modificar la información registrada del cliente
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger
+        alert-dismissible fade show"
+         role="alert">
+
+        <strong>No se pudo actualizar el cliente.</strong>
+
+        <div>
+            @ViewBag.MensajeError
+        </div>
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Cerrar">
+        </button>
+
+    </div>
+}
+
+
+<div class="card">
+    <div class="card-body p-4">
+
+        <form asp-action="Clientes_Editar"
+              asp-controller="Admin"
+              method="post">
+
+            <input asp-for="IdUsuario"
+                   type="hidden" />
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="Identificacion"
+                           class="form-label">
+                        Identificación
+                    </label>
+
+                    <input asp-for="Identificacion"
+                           class="form-control"
+                           readonly />
+
+                    <small class="text-muted">
+                        La identificación no se puede modificar.
+                    </small>
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="FechaNac"
+                           class="form-label">
+                        Fecha de nacimiento
+                    </label>
+
+                    <input asp-for="FechaNac"
+                           type="date"
+                           class="form-control"
+                           value="@(Model.FechaNac?.ToString("yyyy-MM-dd"))" />
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="Nombre"
+                           class="form-label">
+                        Nombre
+                    </label>
+
+                    <input asp-for="Nombre"
+                           class="form-control"
+                           maxlength="80"
+                           required />
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="Apellido"
+                           class="form-label">
+                        Apellido
+                    </label>
+
+                    <input asp-for="Apellido"
+                           class="form-control"
+                           maxlength="80"
+                           required />
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="CorreoElectronico"
+                           class="form-label">
+                        Correo electrónico
+                    </label>
+
+                    <input asp-for="CorreoElectronico"
+                           type="email"
+                           class="form-control"
+                           maxlength="150"
+                           required />
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label asp-for="Telefono"
+                           class="form-label">
+                        Teléfono
+                    </label>
+
+                    <input asp-for="Telefono"
+                           class="form-control"
+                           maxlength="30" />
+
+                </div>
+
+            </div>
+
+
+            <div class="mb-4">
+
+                <label asp-for="Direccion"
+                       class="form-label">
+                    Dirección
+                </label>
+
+                <textarea asp-for="Direccion"
+                          class="form-control"
+                          rows="4"
+                          maxlength="200">
+                </textarea>
+
+            </div>
+
+
+            <div class="d-flex justify-content-center gap-2">
+
+                <a asp-action="Clientes_Ver"
+                   asp-controller="Admin"
+                   asp-route-i="@Model.IdUsuario"
+                   class="btn btn-light">
+
+                    Cancelar
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Guardar cambios
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>

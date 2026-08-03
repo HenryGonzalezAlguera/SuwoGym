@@ -1,90 +1,140 @@
-﻿
+﻿@model IEnumerable<ClienteModel>
 
-@model IEnumerable<ClienteModel>
-
-<!-- Header -->
 <div class="row">
     <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="">
+
+        <div class="d-flex justify-content-between
+            align-items-center mb-4">
+
+            <div>
                 <h1>Clientes</h1>
-                <p class="mb-0">Listado de miembros inscritos al gimansio SUWÓ</p>
+
+                <p class="mb-0">
+                    Listado de miembros inscritos al gimnasio SUWÓ
+                </p>
             </div>
+
         </div>
+
     </div>
 </div>
 
 
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-warning"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
 <div class="col-md-12">
 
-    <!-- Botones -->
-    <!-- <div class="row">
-
-            <div class="col-12">
-                <div class="d-flex gap-2 mb-3 flex-wrap justify-content-between">
-                    <input type="text" class="form-control" placeholder="Search products..." style="max-width: 250px;">
-                    <div class="d-flex gap-2">
-
-                        <button class="btn btn-outline-secondary">
-                            <i class="ti ti-filter"></i> Filter
-                        </button>
-                        <button class="btn btn-outline-secondary">
-                            <i class="ti ti-file-excel"></i> Excel
-                        </button>
-                        <button class="btn btn-outline-secondary">
-                            <i class="ti ti-file-pdf"></i> PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-    <!-- Lista de rutinas -->
     <div class="card table-responsive p-2">
 
-        <table class="table mb-0 text-nowrap table-hover">
-            <thead class="border-light">
-                <tr>
-                    <th><b>Nombre Completo</b></th>
-                    <th><b>Correo Electrónico</b></th>
-                    <th><b>Estado</b></th>
-                    <th><b>Plan</b></th>
-                    <th><b>Estado Membresia</b></th>
-                    <th><b>Vencimiento</b></th>
-                    <th><b>Acciones</b></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr class="align-middle">
-                        <td>@item.Apellido @item.Nombre</td>
-                        <td>@item.CorreoElectronico</td>
-                        <td>
-                            @if (@item.Estado)
-                            {
-                                <span class="badge bg-success-subtle text-success">Activo</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger-subtle text-success">Inactivo</span>
-                            }
-                        </td>
-                        <td>Básico</td>
-                        <td>Vigente</td>
-                        <td>@DateTime.Now.AddDays(4).ToString("dd/MM/yyyy")</td>
-                        @* <td>@item.NombrePlan</td>
-                        <td>@item.EstadoMembresia</td>
-                        <td>@item.FechaVencimiento.ToString("dd/MM/yyyy")</td> *@
-                        <td class="">
-                            <!-- <a href="#" class=""><i class="ti ti-edit ms-1"></i></a> -->
-                            <a href="#" class=""><i class="ti ti-eye ms-1"></i></a>
-                            <!-- <a href="#" class="link-danger"><i class="ti ti-trash ms-1"></i></a> -->
-                        </td>
-                    </tr>
-                }
-            </tbody>
+        @if (Model != null && Model.Any())
+        {
+            <table class="table mb-0
+                text-nowrap
+                table-hover">
 
-        </table>
+                <thead class="border-light">
+                    <tr>
+                        <th>
+                            <b>Nombre completo</b>
+                        </th>
+
+                        <th>
+                            <b>Correo electrónico</b>
+                        </th>
+
+                        <th>
+                            <b>Estado</b>
+                        </th>
+
+                        <th>
+                            <b>Acciones</b>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr class="align-middle">
+
+                            <td>
+                                @item.Apellido @item.Nombre
+                            </td>
+
+                            <td>
+                                @item.CorreoElectronico
+                            </td>
+
+                            <td>
+                                @if (item.Estado)
+                                {
+                                    <span class="badge
+                                        bg-success-subtle
+                                        text-success">
+                                        Activo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge
+                                        bg-danger-subtle
+                                        text-danger">
+                                        Inactivo
+                                    </span>
+                                }
+                            </td>
+
+                            <td>
+                                <a asp-action="Clientes_Ver"
+                                   asp-controller="Admin"
+                                   asp-route-i="@item.IdUsuario"
+                                   class="btn btn-sm btn-light"
+                                   title="Ver cliente">
+
+                                    <i class="ti ti-eye"></i>
+
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        }
+        else
+        {
+            <div class="text-center p-4">
+
+                <p class="mb-0">
+                    No hay clientes registrados.
+                </p>
+
+            </div>
+        }
+
     </div>
+
 </div>

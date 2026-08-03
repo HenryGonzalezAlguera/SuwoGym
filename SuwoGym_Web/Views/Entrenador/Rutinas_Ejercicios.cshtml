@@ -1,0 +1,384 @@
+﻿@model List<RutinaEjercicioListaModel>
+
+<div class="row">
+
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Rutinas_Lista"
+                       asp-controller="Entrenador">
+
+                        Rutinas
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Rutinas_Ver"
+                       asp-controller="Entrenador"
+                       asp-route-i="@ViewBag.IdRutina">
+
+                        @ViewBag.NombreRutina
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+
+                    Ejercicios
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <div class="d-flex
+            justify-content-between
+            align-items-center
+            mb-4">
+
+            <div>
+
+                <h2 class="mb-1">
+                    Ejercicios de la rutina
+                </h2>
+
+                <p class="mb-0 text-secondary">
+
+                    Rutina:
+
+                    <strong>
+                        @ViewBag.NombreRutina
+                    </strong>
+
+                    · Cliente:
+
+                    <strong>
+                        @ViewBag.NombreCliente
+                    </strong>
+
+                </p>
+
+            </div>
+
+
+            <a asp-action="Rutinas_EjercicioAgregar"
+               asp-controller="Entrenador"
+               asp-route-i="@ViewBag.IdRutina"
+               class="btn btn-primary">
+
+                <i class="ti ti-plus"></i>
+
+                Agregar ejercicio
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success"
+         role="alert">
+
+        @TempData["MensajeExito"]
+
+    </div>
+}
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-info"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+
+                <table class="table
+                    table-hover
+                    align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Orden
+                            </th>
+
+                            <th>
+                                Día
+                            </th>
+
+                            <th>
+                                Ejercicio
+                            </th>
+
+                            <th>
+                                Grupo muscular
+                            </th>
+
+                            <th>
+                                Series
+                            </th>
+
+                            <th>
+                                Repeticiones
+                            </th>
+
+                            <th>
+                                Peso
+                            </th>
+
+                            <th>
+                                Descanso
+                            </th>
+
+                            <th class="text-center">
+                                Acciones
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    @item.Orden
+                                </td>
+
+
+                                <td>
+
+                                    <span class="badge bg-primary">
+                                        @item.DiaSemana
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        @item.NombreEjercicio
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+                                    @item.GrupoMuscular
+                                </td>
+
+
+                                <td>
+                                    @item.Series
+                                </td>
+
+
+                                <td>
+                                    @item.Repeticiones
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.PesoSugerido.HasValue)
+                                    {
+                                        <span>
+                                            @item.PesoSugerido.Value.ToString("N2") kg
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-secondary">
+                                            No indicado
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.DescansoSegundos.HasValue)
+                                    {
+                                        <span>
+                                            @item.DescansoSegundos segundos
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-secondary">
+                                            No indicado
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    <!-- VER EJERCICIO -->
+
+                                    <a asp-action="Rutinas_EjercicioVer"
+                                       asp-controller="Entrenador"
+                                       asp-route-i="@item.IdRutinaEjercicio"
+                                       class="btn btn-sm btn-light"
+                                       title="Ver ejercicio">
+
+                                        <i class="ti ti-eye"></i>
+
+                                    </a>
+
+
+                                    <!-- MODIFICAR EJERCICIO -->
+
+                                    <a asp-action="Rutinas_EjercicioEditar"
+                                       asp-controller="Entrenador"
+                                       asp-route-i="@item.IdRutinaEjercicio"
+                                       class="btn btn-sm btn-light"
+                                       title="Modificar ejercicio">
+
+                                        <i class="ti ti-pencil"></i>
+
+                                    </a>
+
+
+                                    <!-- RETIRAR EJERCICIO -->
+
+                                    <form asp-action="Rutinas_EjercicioQuitar"
+                                          asp-controller="Entrenador"
+                                          method="post"
+                                          class="d-inline">
+
+                                        <input type="hidden"
+                                               name="IdRutinaEjercicio"
+                                               value="@item.IdRutinaEjercicio" />
+
+                                        <input type="hidden"
+                                               name="IdRutina"
+                                               value="@item.IdRutina" />
+
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-danger"
+                                                title="Retirar ejercicio"
+                                                onclick="return confirm('¿Desea retirar este ejercicio de la rutina?');">
+
+                                            <i class="ti ti-trash"></i>
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <i class="ti ti-barbell"
+                   style="font-size: 48px;">
+                </i>
+
+
+                <h4 class="mt-3">
+                    La rutina no tiene ejercicios
+                </h4>
+
+
+                <p class="text-secondary">
+
+                    Agregue ejercicios y configure sus series,
+                    repeticiones y días de entrenamiento.
+
+                </p>
+
+
+                <a asp-action="Rutinas_EjercicioAgregar"
+                   asp-controller="Entrenador"
+                   asp-route-i="@ViewBag.IdRutina"
+                   class="btn btn-primary">
+
+                    <i class="ti ti-plus"></i>
+
+                    Agregar ejercicio
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<div class="text-center mt-4">
+
+    <a asp-action="Rutinas_Ver"
+       asp-controller="Entrenador"
+       asp-route-i="@ViewBag.IdRutina"
+       class="btn btn-light">
+
+        <i class="ti ti-arrow-left"></i>
+
+        Volver a la rutina
+
+    </a>
+
+</div>

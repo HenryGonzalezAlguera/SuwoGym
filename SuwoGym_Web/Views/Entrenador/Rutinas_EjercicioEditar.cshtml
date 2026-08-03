@@ -1,0 +1,328 @@
+﻿@model RutinaEjercicioEditarModel
+
+<div class="row">
+
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Rutinas_Lista"
+                       asp-controller="Entrenador">
+
+                        Rutinas
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Rutinas_Ejercicios"
+                       asp-controller="Entrenador"
+                       asp-route-i="@Model.IdRutina">
+
+                        Ejercicios
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Rutinas_EjercicioVer"
+                       asp-controller="Entrenador"
+                       asp-route-i="@Model.IdRutinaEjercicio">
+
+                        Detalle
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+
+                    Modificar
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <div class="mb-4">
+
+            <h2 class="mb-1">
+                Modificar ejercicio
+            </h2>
+
+            <p class="mb-0 text-secondary">
+                Actualice la configuración del ejercicio dentro de la rutina
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <form asp-action="Rutinas_EjercicioEditar"
+              asp-controller="Entrenador"
+              method="post">
+
+            <input asp-for="IdRutinaEjercicio"
+                   type="hidden" />
+
+            <input asp-for="IdRutina"
+                   type="hidden" />
+
+
+            <div class="row">
+
+                <div class="col-md-8 mb-3">
+
+                    <label class="form-label">
+                        Ejercicio
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.NombreEjercicio"
+                           readonly />
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label class="form-label">
+                        Grupo muscular
+                    </label>
+
+                    <input type="text"
+                           class="form-control"
+                           value="@Model.GrupoMuscular"
+                           readonly />
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label asp-for="DiaSemana"
+                           class="form-label">
+
+                        Día de la semana
+
+                    </label>
+
+                    <select asp-for="DiaSemana"
+                            asp-items="ViewBag.Dias"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccione un día
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label asp-for="Series"
+                           class="form-label">
+
+                        Series
+
+                    </label>
+
+                    <input asp-for="Series"
+                           type="number"
+                           class="form-control"
+                           min="1"
+                           max="100"
+                           required />
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label asp-for="Repeticiones"
+                           class="form-label">
+
+                        Repeticiones
+
+                    </label>
+
+                    <input asp-for="Repeticiones"
+                           type="number"
+                           class="form-control"
+                           min="1"
+                           max="1000"
+                           required />
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+
+                    <label asp-for="PesoSugerido"
+                           class="form-label">
+
+                        Peso sugerido
+
+                    </label>
+
+                    <div class="input-group">
+
+                        <input asp-for="PesoSugerido"
+                               type="number"
+                               class="form-control"
+                               min="0"
+                               step="0.01"
+                               placeholder="Opcional" />
+
+                        <span class="input-group-text">
+                            kg
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label asp-for="DescansoSegundos"
+                           class="form-label">
+
+                        Descanso
+
+                    </label>
+
+                    <div class="input-group">
+
+                        <input asp-for="DescansoSegundos"
+                               type="number"
+                               class="form-control"
+                               min="0"
+                               placeholder="Opcional" />
+
+                        <span class="input-group-text">
+                            segundos
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4 mb-3">
+
+                    <label asp-for="Orden"
+                           class="form-label">
+
+                        Orden
+
+                    </label>
+
+                    <input asp-for="Orden"
+                           type="number"
+                           class="form-control"
+                           min="1"
+                           required />
+
+                    <small class="text-secondary">
+                        Posición del ejercicio dentro del día.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="mb-4">
+
+                <label asp-for="Observacion"
+                       class="form-label">
+
+                    Observaciones
+
+                </label>
+
+                <textarea asp-for="Observacion"
+                          class="form-control"
+                          rows="5"
+                          maxlength="250"
+                          placeholder="Indicaciones técnicas, recomendaciones o precauciones."></textarea>
+
+                <small class="text-secondary">
+                    Máximo 250 caracteres.
+                </small>
+
+            </div>
+
+
+            <div class="d-flex
+                justify-content-end
+                gap-2">
+
+                <a asp-action="Rutinas_EjercicioVer"
+                   asp-controller="Entrenador"
+                   asp-route-i="@Model.IdRutinaEjercicio"
+                   class="btn btn-light">
+
+                    Cancelar
+
+                </a>
+
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    <i class="ti ti-device-floppy"></i>
+
+                    Guardar cambios
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

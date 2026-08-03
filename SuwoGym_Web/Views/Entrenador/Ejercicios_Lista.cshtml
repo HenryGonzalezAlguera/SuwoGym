@@ -1,0 +1,216 @@
+﻿@model List<EjercicioListaModel>
+
+<div class="row">
+
+    <div class="col-12">
+
+        <div class="d-flex
+            justify-content-between
+            align-items-center
+            mb-4">
+
+            <div>
+
+                <h2 class="mb-1">
+                    Catálogo de ejercicios
+                </h2>
+
+                <p class="mb-0 text-secondary">
+                    Ejercicios disponibles para agregar a las rutinas
+                </p>
+
+            </div>
+
+            <a asp-action="Ejercicios_Agregar"
+               asp-controller="Entrenador"
+               class="btn btn-primary">
+
+                <i class="ti ti-plus"></i>
+
+                Nuevo ejercicio
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success"
+         role="alert">
+
+        @TempData["MensajeExito"]
+
+    </div>
+}
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-info"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+
+                <table class="table
+                    table-hover
+                    align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Ejercicio
+                            </th>
+
+                            <th>
+                                Grupo muscular
+                            </th>
+
+                            <th>
+                                Descripción
+                            </th>
+
+                            <th>
+                                Fecha de creación
+                            </th>
+
+                            <th>
+                                Estado
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        @item.NombreEjercicio
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="badge bg-info">
+                                        @item.GrupoMuscular
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    @if (string.IsNullOrWhiteSpace(
+                                        item.Descripcion))
+                                    {
+                                        <span class="text-secondary">
+                                            Sin descripción
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.Descripcion
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @(item.FechaCreacion.ToString("dd/MM/yyyy"))
+
+                                </td>
+
+                                <td>
+
+                                    @if (item.Estado)
+                                    {
+                                        <span class="badge bg-success">
+                                            Activo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            Inactivo
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <i class="ti ti-barbell"
+                   style="font-size: 48px;">
+                </i>
+
+                <h4 class="mt-3">
+                    No hay ejercicios registrados
+                </h4>
+
+                <p class="text-secondary">
+                    Registre ejercicios para agregarlos posteriormente
+                    a las rutinas de sus clientes.
+                </p>
+
+                <a asp-action="Ejercicios_Agregar"
+                   asp-controller="Entrenador"
+                   class="btn btn-primary">
+
+                    <i class="ti ti-plus"></i>
+
+                    Registrar ejercicio
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

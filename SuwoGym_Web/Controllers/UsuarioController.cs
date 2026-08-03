@@ -16,8 +16,9 @@ namespace SuwoGym_Web.Controllers
         [HttpGet]
         public IActionResult Configuracion()
         {
-            var idUsuario = HttpContext.Session
-                .GetInt32("IdUsuario")!.Value;
+            var urlApi =
+     _config["ConnectionStringsWeb:urlApi"]
+     + "/api/Usuario/ConsultarUsuarioAPI";
 
             using var client = _http.CreateClient();
 
@@ -29,11 +30,6 @@ namespace SuwoGym_Web.Controllers
                     "Bearer",
                     token);
 
-            var urlApi =
-                _config["ConnectionStringsWeb:urlApi"]
-                + "/api/Usuario/ConsultarUsuarioAPI"
-                + "?IdUsuario="
-                + idUsuario;
 
             var response = client
                 .GetAsync(urlApi)
@@ -81,8 +77,7 @@ namespace SuwoGym_Web.Controllers
                     model);
             }
 
-            model.IdUsuario = HttpContext.Session
-                .GetInt32("IdUsuario")!.Value;
+          
 
             model.contrasenna =
                 BCrypt.Net.BCrypt.HashPassword(

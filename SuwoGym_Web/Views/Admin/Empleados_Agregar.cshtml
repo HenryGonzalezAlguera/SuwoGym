@@ -1,85 +1,247 @@
-﻿
-@model UsuarioModel
+﻿@model UsuarioModel
 
-<!-- Header -->
+<!-- Encabezado -->
 <div class="row">
     <div class="col-12">
-        <!-- Breadcrumb-->
+
+        <!-- Breadcrumb -->
         <div>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a asp-action="Empleados_Lista" asp-controller="Admin">Empleados</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Agregar Empleado</li>
+
+                    <li class="breadcrumb-item">
+                        <a asp-action="Empleados_Lista"
+                           asp-controller="Admin">
+                            Empleados
+                        </a>
+                    </li>
+
+                    <li class="breadcrumb-item active"
+                        aria-current="page">
+                        Agregar empleado
+                    </li>
+
                 </ol>
             </nav>
         </div>
+
         <br />
-        <!-- Titulo -->
+
+        <!-- Título -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="">
-                <h2>Agregar Empleados</h2>
-                <p class="mb-0">Registrar los datos de un nuevo empleado</p>
+
+            <div>
+                <h2>Agregar empleado</h2>
+
+                <p class="mb-0">
+                    Registrar los datos de un nuevo empleado
+                </p>
             </div>
+
         </div>
+
     </div>
 </div>
 
 
 <div class="row">
     <div class="col-12">
+
         <div class="card">
             <div class="card-body p-4">
 
+                <!-- Mensaje de error enviado por el controlador -->
+                @if (ViewBag.MensajeError != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show"
+                         role="alert">
+
+                        <strong>No se pudo registrar el empleado.</strong>
+
+                        <div>
+                            @ViewBag.MensajeError
+                        </div>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Cerrar">
+                        </button>
+
+                    </div>
+                }
+
                 <!-- Formulario -->
-                <form id="EmpleadoAgregarForm" asp-action="Empleados_Agregar" asp-controller="Admin" method="post">
+                <form id="EmpleadoAgregarForm"
+                      asp-action="Empleados_Agregar"
+                      asp-controller="Admin"
+                      method="post">
+
+                    <!-- Nombre y apellido -->
                     <div class="row">
+
                         <div class="col-md-6 mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input asp-for="nombre" type="text" class="form-control" id="nombre"/>
+
+                            <label for="nombre"
+                                   class="form-label">
+                                Nombre
+                            </label>
+
+                            <input asp-for="nombre"
+                                   type="text"
+                                   class="form-control"
+                                   id="nombre"
+                                   maxlength="80" />
+
                         </div>
-                        <div class="col-md-6 mb-3 ">
-                            <label for="apellido" class="form-label">Apellido</label>
-                            <input asp-for="apellido" type="text" class="form-control" id="apellido">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="apellido"
+                                   class="form-label">
+                                Apellido
+                            </label>
+
+                            <input asp-for="apellido"
+                                   type="text"
+                                   class="form-control"
+                                   id="apellido"
+                                   maxlength="80" />
+
                         </div>
+
                     </div>
 
+
+                    <!-- Identificación y fecha de nacimiento -->
                     <div class="row">
+
                         <div class="col-md-6 mb-3">
-                            <label for="identificacion" class="form-label">Identificación</label>
-                            <input asp-for="identificacion" type="text" class="form-control" id="identificacion"/>
+
+                            <label for="identificacion"
+                                   class="form-label">
+                                Identificación
+                            </label>
+
+                            <input asp-for="identificacion"
+                                   type="text"
+                                   class="form-control"
+                                   id="identificacion"
+                                   maxlength="50" />
+
                         </div>
+
                         <div class="col-md-6 mb-3">
-                            <label for="fechaNac" class="form-label">Fecha de Nacimiento</label>
-                            <input asp-for="fechaNac" type="date" class="form-control" id="fechaNac">
+
+                            <label for="fechaNac"
+                                   class="form-label">
+                                Fecha de nacimiento
+                            </label>
+
+                            <input asp-for="fechaNac"
+                                   type="date"
+                                   class="form-control"
+                                   id="fechaNac" />
+
                         </div>
+
                     </div>
 
+
+                    <!-- Teléfono y correo -->
                     <div class="row">
+
                         <div class="col-md-6 mb-3">
-                            <label for="telefono" class="form-label">Teléfono</label>
-                            <input asp-for="telefono" type="text" class="form-control" id="telefono"/>
+
+                            <label for="telefono"
+                                   class="form-label">
+                                Teléfono
+                            </label>
+
+                            <input asp-for="telefono"
+                                   type="text"
+                                   class="form-control"
+                                   id="telefono"
+                                   maxlength="30" />
+
                         </div>
+
                         <div class="col-md-6 mb-3">
-                            <label for="correo" class="form-label">Correo Electrónico</label>
-                            <input asp-for="correoElectronico" type="email" class="form-control" id="correo" />
+
+                            <label for="correo"
+                                   class="form-label">
+                                Correo electrónico
+                            </label>
+
+                            <input asp-for="correoElectronico"
+                                   type="email"
+                                   class="form-control"
+                                   id="correo"
+                                   maxlength="150" />
+
                         </div>
+
                     </div>
-                    
+
+
+                    <!-- Rol -->
                     <div class="mb-3">
-                        <label for="rol" class="form-label">Rol</label>
-                        <select asp-for="IdRol" class="form-select" id="rol" asp-items="ViewBag.Roles">
-                            <option value=""> -- Seleccionar Rol -- </option>
+
+                        <label for="rol"
+                               class="form-label">
+                            Rol
+                        </label>
+
+                        <select asp-for="IdRol"
+                                asp-items="ViewBag.Roles"
+                                class="form-select"
+                                id="rol">
+
+                            <option value="">
+                                -- Seleccionar rol --
+                            </option>
+
                         </select>
+
                     </div>
 
+
+                    <!-- Dirección -->
                     <div class="mb-5">
-                        <label for="direccion" class="form-label">Dirección de Vivienda</label>
-                        <textarea asp-for="direccion" class="form-control" id="direccion" rows="4"></textarea>
+
+                        <label for="direccion"
+                               class="form-label">
+                            Dirección de vivienda
+                        </label>
+
+                        <textarea asp-for="direccion"
+                                  class="form-control"
+                                  id="direccion"
+                                  rows="4"
+                                  maxlength="200">
+                        </textarea>
+
                     </div>
 
+
+                    <!-- Botones -->
                     <div class="d-flex gap-2 justify-content-center">
-                        <a asp-action="Empleados_Lista" asp-controller="Admin" class="btn btn-light">Cancelar</a>
-                        <button type="submit" class="btn btn-primary">Agregar Empleado</button>
+
+                        <a asp-action="Empleados_Lista"
+                           asp-controller="Admin"
+                           class="btn btn-light">
+
+                            Cancelar
+
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            Agregar empleado
+
+                        </button>
+
                     </div>
 
                 </form>
@@ -88,8 +250,9 @@
         </div>
 
     </div>
-
 </div>
 
 
-<script src="~/js/empleadoAgregar.js"></script>
+<script src="~/js/empleadoAgregar.js"
+        asp-append-version="true">
+</script>

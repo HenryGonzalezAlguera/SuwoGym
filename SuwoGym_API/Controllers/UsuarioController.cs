@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using SuwoGym_API.Models;
+using SuwoGym_API.Services;
 
 namespace SuwoGym_API.Controllers
 {
@@ -10,23 +11,25 @@ namespace SuwoGym_API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class UsuarioController(
-        IConfiguration _databasekey) : ControllerBase
+        IConfiguration _databasekey,
+        IUtilesService _utiles) : ControllerBase
     {
-        #region Consultar Usuario
+        #region Consultar usuario
 
         [HttpGet("ConsultarUsuarioAPI")]
-        public IActionResult ConsultarUsuarioAPI(
-            int IdUsuario)
+        public IActionResult ConsultarUsuarioAPI()
         {
-            using var context = new SqlConnection(
-                _databasekey[
-                    "ConnectionStringsApi:DefaultConnection"]);
+            using var context =
+                new SqlConnection(
+                    _databasekey[
+                        "ConnectionStringsApi:DefaultConnection"]);
 
-            var parameters = new DynamicParameters();
+            var parameters =
+                new DynamicParameters();
 
             parameters.Add(
                 "@IdUsuario",
-                IdUsuario);
+                _utiles.ObtenerIdUsuarioToken());
 
             var response =
                 context.QueryFirstOrDefault
@@ -45,21 +48,23 @@ namespace SuwoGym_API.Controllers
 
         #endregion
 
-        #region Cambiar Contraseña
+        #region Cambiar contraseña
 
         [HttpPut("CambiarContrasennaAPI")]
         public IActionResult CambiarContrasennaAPI(
             CambiarAccesoRequestModel model)
         {
-            using var context = new SqlConnection(
-                _databasekey[
-                    "ConnectionStringsApi:DefaultConnection"]);
+            using var context =
+                new SqlConnection(
+                    _databasekey[
+                        "ConnectionStringsApi:DefaultConnection"]);
 
-            var parameters = new DynamicParameters();
+            var parameters =
+                new DynamicParameters();
 
             parameters.Add(
                 "@IdUsuario",
-                model.IdUsuario);
+                _utiles.ObtenerIdUsuarioToken());
 
             parameters.Add(
                 "@ContrasennaHash",
@@ -69,9 +74,10 @@ namespace SuwoGym_API.Controllers
                 "@DebeCambiarContrasenna",
                 false);
 
-            var actualizacion = context.Execute(
-                "spActualizarContrasenna",
-                parameters);
+            var actualizacion =
+                context.Execute(
+                    "spActualizarContrasenna",
+                    parameters);
 
             if (actualizacion > 0)
             {

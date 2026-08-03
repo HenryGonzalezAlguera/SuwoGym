@@ -4,27 +4,26 @@
     {
         public int IdUsuario { get; set; }
 
-        public string Nombre { get; set; } = string.Empty;
+        public string? Identificacion { get; set; }
 
-        public string Apellido { get; set; } = string.Empty;
+        public string Nombre { get; set; } =
+            string.Empty;
 
-        public string CorreoElectronico { get; set; } = string.Empty;
+        public string Apellido { get; set; } =
+            string.Empty;
 
-        public bool Estado { get; set; }
+        public DateTime? FechaNac { get; set; }
 
+        public string? Telefono { get; set; }
 
-        // CAMPOS OPCIONALES
-        public string FechaNac { get; set; } = string.Empty;
+        public string CorreoElectronico { get; set; } =
+            string.Empty;
 
-        public string Telefono { get; set; } = string.Empty;
-
-        public string Direccion { get; set; } = string.Empty;
+        public string? Direccion { get; set; }
 
         public DateTime FechaRegistro { get; set; }
 
-
-
-        // ROL DE USUARIO
+        public bool Estado { get; set; }
 
         public int IdRol { get; set; }
 
@@ -32,14 +31,20 @@
             string.Empty;
 
 
+        // Información de la membresía
 
-        // DATOS DEL PLAN
+        public int? IdMembresia { get; set; }
 
-        public string NombrePlan { get; set; } = string.Empty;
+        public int? IdPlan { get; set; }
 
-        public string EstadoMembresia { get; set; } = string.Empty;
+        public string? NombrePlan { get; set; }
 
-        public DateTime FechaVencimiento { get; set; }
+        public decimal? Precio { get; set; }
 
+        public DateTime? FechaInicio { get; set; }
+
+        public DateTime? FechaVencimiento { get; set; }
+
+        public string? EstadoMembresia { get; set; }
     }
 }
