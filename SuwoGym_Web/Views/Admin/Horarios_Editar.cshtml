@@ -31,7 +31,8 @@
 
                 </li>
 
-                <li class="breadcrumb-item active">
+                <li class="breadcrumb-item active"
+                    aria-current="page">
 
                     Editar
 
@@ -78,8 +79,9 @@
               asp-controller="Admin"
               method="post">
 
-            <input asp-for="IdClaseProg"
-                   type="hidden" />
+            <input type="hidden"
+                   name="IdClaseProg"
+                   value="@Model.IdClaseProg" />
 
 
             <div asp-validation-summary="ModelOnly"
@@ -91,19 +93,20 @@
 
                 <div class="col-md-6 mb-3">
 
-                    <label asp-for="IdClase"
+                    <label for="IdClase"
                            class="form-label">
 
                         Clase
 
                     </label>
 
-                    <select asp-for="IdClase"
+                    <select id="IdClase"
+                            name="IdClase"
                             asp-items="ViewBag.Clases"
                             class="form-select"
                             required>
 
-                        <option value="">
+                        <option value="0">
                             Seleccione una clase
                         </option>
 
@@ -118,19 +121,20 @@
 
                 <div class="col-md-6 mb-3">
 
-                    <label asp-for="IdEntrenador"
+                    <label for="IdEntrenador"
                            class="form-label">
 
                         Entrenador
 
                     </label>
 
-                    <select asp-for="IdEntrenador"
+                    <select id="IdEntrenador"
+                            name="IdEntrenador"
                             asp-items="ViewBag.Entrenadores"
                             class="form-select"
                             required>
 
-                        <option value="">
+                        <option value="0">
                             Seleccione un entrenador
                         </option>
 
@@ -149,16 +153,17 @@
 
                 <div class="col-md-6 mb-3">
 
-                    <label asp-for="FechaHoraInicio"
+                    <label for="FechaHoraInicio"
                            class="form-label">
 
                         Fecha y hora de inicio
 
                     </label>
 
-                    <input asp-for="FechaHoraInicio"
-                           type="datetime-local"
-                           asp-format="{0:yyyy-MM-ddTHH:mm}"
+                    <input type="datetime-local"
+                           id="FechaHoraInicio"
+                           name="FechaHoraInicio"
+                           value="@Model.FechaHoraInicio.ToString("yyyy-MM-ddTHH:mm")"
                            class="form-control"
                            required />
 
@@ -171,16 +176,17 @@
 
                 <div class="col-md-6 mb-3">
 
-                    <label asp-for="FechaHoraFin"
+                    <label for="FechaHoraFin"
                            class="form-label">
 
                         Fecha y hora de finalización
 
                     </label>
 
-                    <input asp-for="FechaHoraFin"
-                           type="datetime-local"
-                           asp-format="{0:yyyy-MM-ddTHH:mm}"
+                    <input type="datetime-local"
+                           id="FechaHoraFin"
+                           name="FechaHoraFin"
+                           value="@Model.FechaHoraFin.ToString("yyyy-MM-ddTHH:mm")"
                            class="form-control"
                            required />
 
@@ -197,15 +203,17 @@
 
                 <div class="col-md-6 mb-3">
 
-                    <label asp-for="CupoMaximo"
+                    <label for="CupoMaximo"
                            class="form-label">
 
                         Cupo máximo
 
                     </label>
 
-                    <input asp-for="CupoMaximo"
-                           type="number"
+                    <input type="number"
+                           id="CupoMaximo"
+                           name="CupoMaximo"
+                           value="@Model.CupoMaximo"
                            min="1"
                            class="form-control"
                            required />
@@ -219,7 +227,8 @@
             </div>
 
 
-            <div class="alert alert-warning">
+            <div class="alert alert-warning"
+                 role="alert">
 
                 <i class="ti ti-alert-triangle"></i>
 
@@ -236,9 +245,11 @@
                    asp-route-i="@Model.IdClaseProg"
                    class="btn btn-light">
 
+                    <i class="ti ti-arrow-left"></i>
                     Cancelar
 
                 </a>
+
 
                 <button type="submit"
                         class="btn btn-primary">
@@ -255,9 +266,3 @@
     </div>
 
 </div>
-
-
-@section Scripts
-{
-    <partial name="_ValidationScriptsPartial" />
-}
