@@ -1,0 +1,464 @@
+﻿@model List<HistorialAsistenciaMiembroModel>
+
+@{
+    var totalRegistros =
+        Model?.Count ?? 0;
+
+    var totalPresentes =
+        Model?
+            .Count(x =>
+                x.EstadoAsistencia == "Presente")
+        ?? 0;
+
+    var totalAusentes =
+        Model?
+            .Count(x =>
+                x.EstadoAsistencia == "Ausente")
+        ?? 0;
+
+    var totalPendientes =
+        Model?
+            .Count(x =>
+                x.EstadoAsistencia == "Pendiente")
+        ?? 0;
+}
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="mb-1">
+            Mi asistencia
+        </h2>
+
+        <p class="text-secondary mb-0">
+            Historial de asistencia a las clases reservadas
+        </p>
+
+    </div>
+
+
+    <a asp-action="Reservas_Lista"
+       asp-controller="Miembro"
+       class="btn btn-light">
+
+        <i class="ti ti-calendar-check"></i>
+        Mis reservas
+
+    </a>
+
+</div>
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-info"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="row mb-4">
+
+    <div class="col-md-3 mb-3">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1">
+                    @totalRegistros
+                </h3>
+
+                <span class="text-secondary">
+                    Clases registradas
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-3">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-success">
+                    @totalPresentes
+                </h3>
+
+                <span class="text-secondary">
+                    Presentes
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-3">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-danger">
+                    @totalAusentes
+                </h3>
+
+                <span class="text-secondary">
+                    Ausentes
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-3">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-warning">
+                    @totalPendientes
+                </h3>
+
+                <span class="text-secondary">
+                    Pendientes
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Clase
+                            </th>
+
+                            <th>
+                                Entrenador
+                            </th>
+
+                            <th>
+                                Fecha y horario
+                            </th>
+
+                            <th>
+                                Duración
+                            </th>
+
+                            <th>
+                                Estado
+                            </th>
+
+                            <th>
+                                Observación
+                            </th>
+
+                            <th>
+                                Registro
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        @item.NombreClase
+                                    </strong>
+
+                                    <div>
+
+                                        <small class="text-secondary">
+
+                                            Reserva #@item.IdReserva
+
+                                        </small>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        @item.NombreEntrenador
+                                    </strong>
+
+                                    <div>
+
+                                        <small class="text-secondary">
+                                            @item.CorreoEntrenador
+                                        </small>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+
+                                        @(item.FechaHoraInicio
+                                            .ToString("dd/MM/yyyy"))
+
+                                    </strong>
+
+                                    <div>
+
+                                        <small class="text-secondary">
+
+                                            @(item.FechaHoraInicio
+                                                .ToString("hh:mm tt"))
+
+                                            -
+
+                                            @(item.FechaHoraFin
+                                                .ToString("hh:mm tt"))
+
+                                        </small>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    @item.DuracionMinutos minutos
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.EstadoAsistencia == "Presente")
+                                    {
+                                        <span class="badge bg-success">
+                                            Presente
+                                        </span>
+                                    }
+                                    else if (item.EstadoAsistencia == "Ausente")
+                                    {
+                                        <span class="badge bg-danger">
+                                            Ausente
+                                        </span>
+                                    }
+                                    else if (item.EstadoAsistencia == "Pendiente")
+                                    {
+                                        <span class="badge bg-warning">
+                                            Pendiente
+                                        </span>
+                                    }
+                                    else if (item.EstadoAsistencia ==
+                                             "Reserva cancelada")
+                                    {
+                                        <span class="badge bg-secondary">
+                                            Reserva cancelada
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            @item.EstadoAsistencia
+                                        </span>
+                                    }
+
+
+                                    <div class="mt-1">
+
+                                        <small class="text-secondary">
+                                            @item.EstadoHorario
+                                        </small>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (string.IsNullOrWhiteSpace(
+                                        item.Observacion))
+                                    {
+                                        <span class="text-secondary">
+                                            Sin observación
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        @item.Observacion
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.FechaActualizacion.HasValue)
+                                    {
+                                        <span>
+                                            Actualizada
+                                        </span>
+
+                                        <div>
+
+                                            <small class="text-secondary">
+
+                                                @(item.FechaActualizacion.Value
+                                                    .ToString(
+                                                        "dd/MM/yyyy hh:mm tt"))
+
+                                            </small>
+
+                                        </div>
+                                    }
+                                    else if (item.FechaRegistro.HasValue)
+                                    {
+                                        <span>
+                                            Registrada
+                                        </span>
+
+                                        <div>
+
+                                            <small class="text-secondary">
+
+                                                @(item.FechaRegistro.Value
+                                                    .ToString(
+                                                        "dd/MM/yyyy hh:mm tt"))
+
+                                            </small>
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-secondary">
+                                            Sin registrar
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+
+
+                            @if (item.FechaCancelacion.HasValue)
+                            {
+                                <tr>
+
+                                    <td colspan="7"
+                                        class="bg-light">
+
+                                        <small class="text-secondary">
+
+                                            Reserva cancelada el
+
+                                            @(item.FechaCancelacion.Value
+                                                .ToString(
+                                                    "dd/MM/yyyy hh:mm tt"))
+
+                                        </small>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <i class="ti ti-clipboard-off"
+                   style="font-size: 48px;">
+                </i>
+
+                <h4 class="mt-3">
+                    No tiene registros de asistencia
+                </h4>
+
+                <p class="text-secondary mb-3">
+
+                    Su historial aparecerá después de reservar
+                    clases y registrar la asistencia.
+
+                </p>
+
+
+                <a asp-action="Clases_Disponibles"
+                   asp-controller="Miembro"
+                   class="btn btn-primary">
+
+                    <i class="ti ti-calendar-plus"></i>
+                    Ver clases disponibles
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>

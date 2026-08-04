@@ -1,2 +1,681 @@
-﻿
-<h1>Dashboard</h1>
+﻿@model DashboardModel
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="mb-1">
+            Dashboard administrativo
+        </h2>
+
+        <p class="text-secondary mb-0">
+            Resumen general de la operación del gimnasio
+        </p>
+
+    </div>
+
+    <span class="text-secondary">
+
+        <i class="ti ti-calendar"></i>
+
+        @(DateTime.Now.ToString("dd/MM/yyyy"))
+
+    </span>
+
+</div>
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<!-- INDICADORES PRINCIPALES -->
+
+<div class="row">
+
+    <!-- CLIENTES -->
+
+    <div class="col-md-6 col-xl-3 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <span class="text-secondary">
+                            Clientes registrados
+                        </span>
+
+                        <h2 class="mt-2 mb-1">
+                            @Model.Indicadores.TotalClientes
+                        </h2>
+
+                        <small class="text-success">
+                            @Model.Indicadores.ClientesActivos activos
+                        </small>
+
+                    </div>
+
+                    <div class="fs-2">
+
+                        <i class="ti ti-users"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ENTRENADORES -->
+
+    <div class="col-md-6 col-xl-3 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <span class="text-secondary">
+                            Entrenadores activos
+                        </span>
+
+                        <h2 class="mt-2 mb-1">
+                            @Model.Indicadores.EntrenadoresActivos
+                        </h2>
+
+                        <small class="text-secondary">
+                            Personal disponible
+                        </small>
+
+                    </div>
+
+                    <div class="fs-2">
+
+                        <i class="ti ti-barbell"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MEMBRESÍAS -->
+
+    <div class="col-md-6 col-xl-3 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <span class="text-secondary">
+                            Membresías activas
+                        </span>
+
+                        <h2 class="mt-2 mb-1">
+                            @Model.Indicadores.MembresiasActivas
+                        </h2>
+
+                        <small class="text-danger">
+                            @Model.Indicadores.MembresiasVencidas vencidas
+                        </small>
+
+                    </div>
+
+                    <div class="fs-2">
+
+                        <i class="ti ti-id-badge-2"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INGRESOS DEL MES -->
+
+    <div class="col-md-6 col-xl-3 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <span class="text-secondary">
+                            Ingresos del mes
+                        </span>
+
+                        <h2 class="mt-2 mb-1">
+                            ₡@(Model.Indicadores.IngresosMesActual.ToString("N2"))
+                        </h2>
+
+                        <small class="text-secondary">
+                            @Model.Indicadores.PagosMesActual pagos
+                        </small>
+
+                    </div>
+
+                    <div class="fs-2">
+
+                        <i class="ti ti-cash"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- INDICADORES SECUNDARIOS -->
+
+<div class="row">
+
+    <!-- CLASES PROGRAMADAS -->
+
+    <div class="col-md-4 col-xl-2 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-primary">
+                    @Model.Indicadores.ClasesProgramadas
+                </h3>
+
+                <span class="text-secondary">
+                    Próximas clases
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESERVAS -->
+
+    <div class="col-md-4 col-xl-2 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-primary">
+                    @Model.Indicadores.ReservasActivas
+                </h3>
+
+                <span class="text-secondary">
+                    Reservas activas
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PRESENTES -->
+
+    <div class="col-md-4 col-xl-2 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-success">
+                    @Model.Indicadores.TotalPresentes
+                </h3>
+
+                <span class="text-secondary">
+                    Asistencias
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AUSENTES -->
+
+    <div class="col-md-4 col-xl-2 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-danger">
+                    @Model.Indicadores.TotalAusentes
+                </h3>
+
+                <span class="text-secondary">
+                    Ausencias
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MEMBRESÍAS CANCELADAS -->
+
+    <div class="col-md-4 col-xl-2 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-warning">
+                    @Model.Indicadores.MembresiasCanceladas
+                </h3>
+
+                <span class="text-secondary">
+                    Canceladas
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INGRESOS TOTALES -->
+
+    <div class="col-md-4 col-xl-2 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1">
+                    ₡@(Model.Indicadores.IngresosTotales.ToString("N2"))
+                </h3>
+
+                <span class="text-secondary">
+                    Ingresos totales
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row">
+
+    <!-- PAGOS RECIENTES -->
+
+    <div class="col-xl-6 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+
+                        <h4 class="mb-1">
+                            Pagos recientes
+                        </h4>
+
+                        <p class="text-secondary mb-0">
+                            Últimos pagos registrados
+                        </p>
+
+                    </div>
+
+                    <a asp-action="Clientes_Lista"
+                       asp-controller="Admin"
+                       class="btn btn-sm btn-light">
+
+                        Ver clientes
+
+                    </a>
+
+                </div>
+
+
+                @if (Model.PagosRecientes != null &&
+                     Model.PagosRecientes.Any())
+                {
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Cliente
+                                    </th>
+
+                                    <th>
+                                        Plan
+                                    </th>
+
+                                    <th>
+                                        Fecha
+                                    </th>
+
+                                    <th>
+                                        Total
+                                    </th>
+
+                                    <th class="text-center">
+                                        Ver
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var pago in Model.PagosRecientes)
+                                {
+                                    <tr>
+
+                                        <td>
+
+                                            <strong>
+                                                @pago.NombreCliente
+                                            </strong>
+
+                                            <div>
+
+                                                <small class="text-secondary">
+                                                    @pago.MetodoPago
+                                                </small>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <td>
+                                            @pago.NombrePlan
+                                        </td>
+
+
+                                        <td>
+                                            @(pago.FechaEmision.ToString("dd/MM/yyyy"))
+                                        </td>
+
+
+                                        <td>
+
+                                            <strong>
+                                                ₡@(pago.Total.ToString("N2"))
+                                            </strong>
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            <a asp-action="Pagos_Ver"
+                                               asp-controller="Admin"
+                                               asp-route-i="@pago.IdPago"
+                                               class="btn btn-sm btn-light"
+                                               title="Ver pago">
+
+                                                <i class="ti ti-eye"></i>
+
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+
+                        <i class="ti ti-receipt-off"
+                           style="font-size: 40px;">
+                        </i>
+
+                        <p class="text-secondary mt-3 mb-0">
+                            No hay pagos registrados.
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PRÓXIMAS CLASES -->
+
+    <div class="col-xl-6 mb-4">
+
+        <div class="card h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+
+                    <div>
+
+                        <h4 class="mb-1">
+                            Próximas clases
+                        </h4>
+
+                        <p class="text-secondary mb-0">
+                            Actividades programadas próximamente
+                        </p>
+
+                    </div>
+
+                    <a asp-action="Horarios_Lista"
+                       asp-controller="Admin"
+                       class="btn btn-sm btn-light">
+
+                        Ver horarios
+
+                    </a>
+
+                </div>
+
+
+                @if (Model.ProximasClases != null &&
+                     Model.ProximasClases.Any())
+                {
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Clase
+                                    </th>
+
+                                    <th>
+                                        Entrenador
+                                    </th>
+
+                                    <th>
+                                        Fecha
+                                    </th>
+
+                                    <th>
+                                        Cupos
+                                    </th>
+
+                                    <th class="text-center">
+                                        Ver
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var clase in Model.ProximasClases)
+                                {
+                                    <tr>
+
+                                        <td>
+
+                                            <strong>
+                                                @clase.NombreClase
+                                            </strong>
+
+                                            <div>
+
+                                                <small class="text-secondary">
+
+                                                    @(clase.FechaHoraInicio.ToString("hh:mm tt"))
+
+                                                    -
+
+                                                    @(clase.FechaHoraFin.ToString("hh:mm tt"))
+
+                                                </small>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <td>
+                                            @clase.NombreEntrenador
+                                        </td>
+
+
+                                        <td>
+                                            @(clase.FechaHoraInicio.ToString("dd/MM/yyyy"))
+                                        </td>
+
+
+                                        <td>
+
+                                            @if (clase.CuposDisponibles > 0)
+                                            {
+                                                <span class="badge bg-success">
+
+                                                    @clase.CuposDisponibles disponibles
+
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">
+                                                    Sin cupos
+                                                </span>
+                                            }
+
+                                        </td>
+
+
+                                        <td class="text-center">
+
+                                            <a asp-action="Horarios_Ver"
+                                               asp-controller="Admin"
+                                               asp-route-i="@clase.IdClaseProg"
+                                               class="btn btn-sm btn-light"
+                                               title="Ver clase">
+
+                                                <i class="ti ti-eye"></i>
+
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+
+                        <i class="ti ti-calendar-off"
+                           style="font-size: 40px;">
+                        </i>
+
+                        <p class="text-secondary mt-3 mb-0">
+                            No hay próximas clases programadas.
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,6 @@
+# Archivos de base de datos que no deben subirse
+*.bak
+*.mdf
+*.ldf
+03_SuwoGym_AdministradorInicial_LOCAL.sql
+SuwoGym_Prueba_InstalacionCompleta.sql

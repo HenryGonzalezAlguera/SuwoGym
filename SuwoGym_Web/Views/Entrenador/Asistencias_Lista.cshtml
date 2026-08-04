@@ -1,0 +1,275 @@
+﻿@model List<AsistenciaClaseResumenModel>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+        <h2 class="mb-1">
+            Asistencia de clases
+        </h2>
+
+        <p class="text-secondary mb-0">
+            Consulte las clases asignadas y gestione la asistencia
+            de sus participantes.
+        </p>
+    </div>
+
+    <a asp-action="Horarios_Lista"
+       asp-controller="Entrenador"
+       class="btn btn-light">
+
+        <i class="ti ti-calendar-event"></i>
+        Mi cronograma
+
+    </a>
+
+</div>
+
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success"
+         role="alert">
+
+        @TempData["MensajeExito"]
+
+    </div>
+}
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (ViewBag.MensajeError != null)
+{
+    <div class="alert alert-info"
+         role="alert">
+
+        @ViewBag.MensajeError
+
+    </div>
+}
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Clase
+                            </th>
+
+                            <th>
+                                Fecha y horario
+                            </th>
+
+                            <th class="text-center">
+                                Participantes
+                            </th>
+
+                            <th class="text-center">
+                                Presentes
+                            </th>
+
+                            <th class="text-center">
+                                Ausentes
+                            </th>
+
+                            <th class="text-center">
+                                Pendientes
+                            </th>
+
+                            <th>
+                                Estado
+                            </th>
+
+                            <th class="text-center">
+                                Acción
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        @item.NombreClase
+                                    </strong>
+
+                                    <div>
+                                        <small class="text-secondary">
+                                            Clase #@item.IdClaseProg
+                                        </small>
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        @item.FechaHoraInicio.ToString("dd/MM/yyyy")
+                                    </strong>
+
+                                    <div>
+                                        <small class="text-secondary">
+
+                                            @item.FechaHoraInicio.ToString("hh:mm tt")
+                                            -
+                                            @item.FechaHoraFin.ToString("hh:mm tt")
+
+                                        </small>
+                                    </div>
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    <span class="badge bg-primary">
+                                        @item.TotalParticipantes
+                                    </span>
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    <span class="badge bg-success">
+                                        @item.TotalPresentes
+                                    </span>
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    <span class="badge bg-danger">
+                                        @item.TotalAusentes
+                                    </span>
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    @if (item.TotalPendientes > 0)
+                                    {
+                                        <span class="badge bg-warning">
+                                            @item.TotalPendientes
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            0
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.EstadoHorario == "Programada")
+                                    {
+                                        <span class="badge bg-success">
+                                            Programada
+                                        </span>
+                                    }
+                                    else if (item.EstadoHorario == "En curso")
+                                    {
+                                        <span class="badge bg-warning">
+                                            En curso
+                                        </span>
+                                    }
+                                    else if (item.EstadoHorario == "Finalizada")
+                                    {
+                                        <span class="badge bg-dark">
+                                            Finalizada
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            @item.EstadoHorario
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <td class="text-center">
+
+                                    <a asp-action="Asistencias_Participantes"
+                                       asp-controller="Entrenador"
+                                       asp-route-i="@item.IdClaseProg"
+                                       class="btn btn-sm btn-primary"
+                                       title="Ver participantes">
+
+                                        <i class="ti ti-users"></i>
+                                        Participantes
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <i class="ti ti-clipboard-off"
+                   style="font-size: 48px;">
+                </i>
+
+                <h4 class="mt-3">
+                    No hay clases para gestionar
+                </h4>
+
+                <p class="text-secondary mb-0">
+
+                    Las clases asignadas aparecerán en esta sección
+                    para registrar la asistencia.
+
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1210,5 +1210,250 @@ namespace SuwoGym_API.Controllers
         }
 
         #endregion
+        #region Asistencia de Clases
+
+        [HttpGet("AsistenciasListaAPI")]
+        public IActionResult AsistenciasListaAPI()
+        {
+            var idEntrenador =
+                _utiles.ObtenerIdUsuarioToken();
+
+            if (idEntrenador <= 0)
+            {
+                return Unauthorized(
+                    "No se pudo identificar al entrenador.");
+            }
+
+            using var context =
+                new SqlConnection(
+                    _databasekey[
+                        "ConnectionStringsApi:DefaultConnection"]);
+
+            var parameters =
+                new DynamicParameters();
+
+            parameters.Add(
+                "@IdEntrenador",
+                idEntrenador);
+
+            var response =
+                context.Query
+                <AsistenciaClaseResumenResponseModel>(
+                    "spListarAsistenciaClaseEntrenador",
+                    parameters,
+                    commandType:
+                        CommandType.StoredProcedure);
+
+            if (response.Any())
+            {
+                return Ok(response);
+            }
+
+            return NotFound(
+                "No tiene clases disponibles para gestionar asistencia.");
+        }
+
+
+        [HttpGet("ParticipantesClaseAPI/{idClaseProg}")]
+        public IActionResult ParticipantesClaseAPI(
+            int idClaseProg)
+        {
+            if (idClaseProg <= 0)
+            {
+                return BadRequest(
+                    "El identificador de la clase programada no es válido.");
+            }
+
+            var idEntrenador =
+                _utiles.ObtenerIdUsuarioToken();
+
+            if (idEntrenador <= 0)
+            {
+                return Unauthorized(
+                    "No se pudo identificar al entrenador.");
+            }
+
+            /*
+             * Primero verificamos que la clase exista
+             * y pertenezca al entrenador autenticado.
+             */
+
+            using var context =
+                new SqlConnection(
+                    _databasekey[
+                        "ConnectionStringsApi:DefaultConnection"]);
+
+            var parametrosClase =
+                new DynamicParameters();
+
+            parametrosClase.Add(
+                "@IdEntrenador",
+                idEntrenador);
+
+            parametrosClase.Add(
+                "@IdClaseProg",
+                idClaseProg);
+
+            var clase =
+                context.QueryFirstOrDefault
+                <ClaseEntrenadorDetalleResponseModel>(
+                    "spDetalleClaseEntrenador",
+                    parametrosClase,
+                    commandType:
+                        CommandType.StoredProcedure);
+
+            if (clase == null)
+            {
+                return NotFound(
+                    "La clase programada no existe o no pertenece a este entrenador.");
+            }
+
+            var parametrosParticipantes =
+                new DynamicParameters();
+
+            parametrosParticipantes.Add(
+                "@IdEntrenador",
+                idEntrenador);
+
+            parametrosParticipantes.Add(
+                "@IdClaseProg",
+                idClaseProg);
+
+            var participantes =
+                context.Query
+                <ParticipanteClaseEntrenadorResponseModel>(
+                    "spListarParticipantesClaseEntrenador",
+                    parametrosParticipantes,
+                    commandType:
+                        CommandType.StoredProcedure);
+
+            return Ok(new
+            {
+                Clase = clase,
+
+                Participantes =
+                    participantes.ToList()
+            });
+        }
+
+
+        [HttpPut("AsistenciaRegistrarAPI")]
+        public IActionResult AsistenciaRegistrarAPI(
+            AsistenciaClaseRegistrarRequestModel model)
+        {
+            if (model.IdReserva <= 0)
+            {
+                return BadRequest(
+                    "El identificador de la reserva no es válido.");
+            }
+
+            model.EstadoAsistencia =
+                model.EstadoAsistencia?
+                    .Trim()
+                ?? string.Empty;
+
+            if (!string.Equals(
+                    model.EstadoAsistencia,
+                    "Presente",
+                    StringComparison.OrdinalIgnoreCase)
+                &&
+                !string.Equals(
+                    model.EstadoAsistencia,
+                    "Ausente",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest(
+                    "El estado de asistencia debe ser Presente o Ausente.");
+            }
+
+            /*
+             * Normalizar el estado para enviarlo
+             * con el mismo formato utilizado en SQL.
+             */
+
+            model.EstadoAsistencia =
+                string.Equals(
+                    model.EstadoAsistencia,
+                    "Presente",
+                    StringComparison.OrdinalIgnoreCase)
+                    ? "Presente"
+                    : "Ausente";
+
+            if (!string.IsNullOrWhiteSpace(
+                model.Observacion))
+            {
+                model.Observacion =
+                    model.Observacion.Trim();
+
+                if (model.Observacion.Length > 300)
+                {
+                    return BadRequest(
+                        "La observación no puede superar los 300 caracteres.");
+                }
+            }
+            else
+            {
+                model.Observacion = null;
+            }
+
+            var idEntrenador =
+                _utiles.ObtenerIdUsuarioToken();
+
+            if (idEntrenador <= 0)
+            {
+                return Unauthorized(
+                    "No se pudo identificar al entrenador.");
+            }
+
+            try
+            {
+                using var context =
+                    new SqlConnection(
+                        _databasekey[
+                            "ConnectionStringsApi:DefaultConnection"]);
+
+                var parameters =
+                    new DynamicParameters();
+
+                parameters.Add(
+                    "@IdEntrenador",
+                    idEntrenador);
+
+                parameters.Add(
+                    "@IdReserva",
+                    model.IdReserva);
+
+                parameters.Add(
+                    "@EstadoAsistencia",
+                    model.EstadoAsistencia);
+
+                parameters.Add(
+                    "@Observacion",
+                    model.Observacion);
+
+                var response =
+                    context.Execute(
+                        "spRegistrarAsistenciaClaseEntrenador",
+                        parameters,
+                        commandType:
+                            CommandType.StoredProcedure);
+
+                if (response > 0)
+                {
+                    return Ok(
+                        "La asistencia se registró correctamente.");
+                }
+
+                return BadRequest(
+                    "No se pudo registrar la asistencia.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(
+                    ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

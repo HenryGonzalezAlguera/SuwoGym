@@ -1566,22 +1566,7 @@ namespace SuwoGym_Web.Controllers
 
         #endregion
 
-        #region Rutinas
-
-        [HttpGet]
-        public IActionResult Rutinas_Lista()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Rutinas_Agregar()
-        {
-            return View();
-        }
-
-        #endregion
-
+        
         #region Horarios
 
         [HttpGet]
@@ -2216,7 +2201,88 @@ namespace SuwoGym_Web.Controllers
         [HttpGet]
         public IActionResult Dashboard()
         {
-            return View();
+            using var client =
+                _http.CreateClient();
+
+            client.DefaultRequestHeaders.Add(
+                "Authorization",
+                "Bearer " +
+                HttpContext.Session.GetString("Token"));
+
+            var urlApi =
+                _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Admin/DashboardAPI";
+
+            var response =
+                client.GetAsync(urlApi).Result;
+
+            if (response.StatusCode ==
+                HttpStatusCode.OK)
+            {
+                var datos =
+                    response.Content
+                        .ReadFromJsonAsync<DashboardModel>()
+                        .Result;
+
+                if (datos == null)
+                {
+                    ViewBag.MensajeError =
+                        "No se pudo cargar la información del dashboard.";
+
+                    return View(
+                        new DashboardModel());
+                }
+
+                datos.PagosRecientes ??=
+                    new List<DashboardPagoRecienteModel>();
+
+                datos.ProximasClases ??=
+                    new List<DashboardProximaClaseModel>();
+
+                datos.Indicadores ??=
+                    new DashboardIndicadoresModel();
+
+                return View(datos);
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.NotFound)
+            {
+                ViewBag.MensajeError =
+                    response.Content
+                        .ReadAsStringAsync()
+                        .Result;
+
+                return View(
+                    new DashboardModel());
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction(
+                    "Logout",
+                    "Home");
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction(
+                    "Principal",
+                    "Home");
+            }
+
+            var detalleError =
+                response.Content
+                    .ReadAsStringAsync()
+                    .Result;
+
+            throw new Exception(
+                $"La API respondió " +
+                $"{(int)response.StatusCode} " +
+                $"({response.StatusCode}): " +
+                detalleError);
         }
 
         #endregion

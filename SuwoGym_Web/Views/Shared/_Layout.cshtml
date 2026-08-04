@@ -437,6 +437,21 @@
                 </a>
 
             </li>
+            <li>
+
+                <a class="nav-link"
+                   asp-action="Asistencias_Lista"
+                   asp-controller="Entrenador">
+
+                    <i class="ti ti-clipboard-check"></i>
+
+                    <span class="nav-text">
+                        Asistencias
+                    </span>
+
+                </a>
+
+            </li>
             }
             else if (rol == "Miembro")
             {
@@ -457,24 +472,7 @@
                     </a>
 
                 </li>
-
-
-                <li>
-
-                    <a class="nav-link"
-                       asp-action="Rutinas_Lista"
-                       asp-controller="Miembro">
-
-                        <i class="ti ti-activity"></i>
-
-                        <span class="nav-text">
-                            Mis rutinas
-                        </span>
-
-                    </a>
-
-                </li>
-
+                              
 
                 <li>
 
@@ -518,6 +516,21 @@
 
                     <span class="nav-text">
                         Mis reservas
+                    </span>
+
+                </a>
+
+            </li>
+            <li>
+
+                <a class="nav-link"
+                   asp-action="Historial_Asistencias"
+                   asp-controller="Miembro">
+
+                    <i class="ti ti-clipboard-check"></i>
+
+                    <span class="nav-text">
+                        Mi asistencia
                     </span>
 
                 </a>

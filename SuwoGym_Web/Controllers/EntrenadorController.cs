@@ -2167,5 +2167,335 @@ namespace SuwoGym_Web.Controllers
         }
 
         #endregion
+        #region Asistencia de Clases
+
+        [HttpGet]
+        public IActionResult Asistencias_Lista()
+        {
+            using var client =
+                _http.CreateClient();
+
+            client.DefaultRequestHeaders.Add(
+                "Authorization",
+                "Bearer " +
+                HttpContext.Session.GetString("Token"));
+
+            var urlApi =
+                _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Entrenador/AsistenciasListaAPI";
+
+            var response =
+                client.GetAsync(urlApi).Result;
+
+            if (response.StatusCode ==
+                HttpStatusCode.OK)
+            {
+                var datos =
+                    response.Content
+                        .ReadFromJsonAsync
+                        <List<AsistenciaClaseResumenModel>>()
+                        .Result;
+
+                return View(
+                    datos ??
+                    new List<AsistenciaClaseResumenModel>());
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.NotFound)
+            {
+                ViewBag.MensajeError =
+                    response.Content
+                        .ReadAsStringAsync()
+                        .Result;
+
+                return View(
+                    new List<AsistenciaClaseResumenModel>());
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction(
+                    "Logout",
+                    "Home");
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction(
+                    "Principal",
+                    "Home");
+            }
+
+            var detalleError =
+                response.Content
+                    .ReadAsStringAsync()
+                    .Result;
+
+            throw new Exception(
+                $"La API respondió " +
+                $"{(int)response.StatusCode} " +
+                $"({response.StatusCode}): " +
+                detalleError);
+        }
+
+
+        [HttpGet]
+        public IActionResult Asistencias_Participantes(int i)
+        {
+            if (i <= 0)
+            {
+                TempData["MensajeError"] =
+                    "El identificador de la clase programada no es válido.";
+
+                return RedirectToAction(
+                    "Asistencias_Lista",
+                    "Entrenador");
+            }
+
+            using var client =
+                _http.CreateClient();
+
+            client.DefaultRequestHeaders.Add(
+                "Authorization",
+                "Bearer " +
+                HttpContext.Session.GetString("Token"));
+
+            var urlApi =
+                _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Entrenador/ParticipantesClaseAPI/"
+                + i;
+
+            var response =
+                client.GetAsync(urlApi).Result;
+
+            if (response.StatusCode ==
+                HttpStatusCode.OK)
+            {
+                var datos =
+                    response.Content
+                        .ReadFromJsonAsync
+                        <ParticipantesClaseViewModel>()
+                        .Result;
+
+                if (datos == null)
+                {
+                    TempData["MensajeError"] =
+                        "No se pudo consultar la información de la clase.";
+
+                    return RedirectToAction(
+                        "Asistencias_Lista",
+                        "Entrenador");
+                }
+
+                datos.Participantes ??=
+                    new List<ParticipanteClaseEntrenadorModel>();
+
+                return View(datos);
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.NotFound
+                ||
+                response.StatusCode ==
+                HttpStatusCode.BadRequest)
+            {
+                TempData["MensajeError"] =
+                    response.Content
+                        .ReadAsStringAsync()
+                        .Result;
+
+                return RedirectToAction(
+                    "Asistencias_Lista",
+                    "Entrenador");
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction(
+                    "Logout",
+                    "Home");
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction(
+                    "Principal",
+                    "Home");
+            }
+
+            var detalleError =
+                response.Content
+                    .ReadAsStringAsync()
+                    .Result;
+
+            throw new Exception(
+                $"La API respondió " +
+                $"{(int)response.StatusCode} " +
+                $"({response.StatusCode}): " +
+                detalleError);
+        }
+
+
+        [HttpPost]
+        public IActionResult Asistencias_Registrar(
+            AsistenciaClaseRegistrarModel model)
+        {
+            if (model.IdReserva <= 0)
+            {
+                TempData["MensajeError"] =
+                    "El identificador de la reserva no es válido.";
+
+                return RedirectToAction(
+                    "Asistencias_Lista",
+                    "Entrenador");
+            }
+
+            if (model.IdClaseProg <= 0)
+            {
+                TempData["MensajeError"] =
+                    "El identificador de la clase programada no es válido.";
+
+                return RedirectToAction(
+                    "Asistencias_Lista",
+                    "Entrenador");
+            }
+
+            model.EstadoAsistencia =
+                model.EstadoAsistencia?
+                    .Trim()
+                ?? string.Empty;
+
+            if (!string.Equals(
+                    model.EstadoAsistencia,
+                    "Presente",
+                    StringComparison.OrdinalIgnoreCase)
+                &&
+                !string.Equals(
+                    model.EstadoAsistencia,
+                    "Ausente",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                TempData["MensajeError"] =
+                    "Debe seleccionar Presente o Ausente.";
+
+                return RedirectToAction(
+                    "Asistencias_Participantes",
+                    "Entrenador",
+                    new
+                    {
+                        i = model.IdClaseProg
+                    });
+            }
+
+            if (!string.IsNullOrWhiteSpace(
+                model.Observacion))
+            {
+                model.Observacion =
+                    model.Observacion.Trim();
+
+                if (model.Observacion.Length > 300)
+                {
+                    TempData["MensajeError"] =
+                        "La observación no puede superar los 300 caracteres.";
+
+                    return RedirectToAction(
+                        "Asistencias_Participantes",
+                        "Entrenador",
+                        new
+                        {
+                            i = model.IdClaseProg
+                        });
+                }
+            }
+            else
+            {
+                model.Observacion = null;
+            }
+
+            using var client =
+                _http.CreateClient();
+
+            client.DefaultRequestHeaders.Add(
+                "Authorization",
+                "Bearer " +
+                HttpContext.Session.GetString("Token"));
+
+            var urlApi =
+                _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Entrenador/AsistenciaRegistrarAPI";
+
+            var response =
+                client.PutAsJsonAsync(
+                    urlApi,
+                    model).Result;
+
+            if (response.StatusCode ==
+                HttpStatusCode.OK)
+            {
+                TempData["MensajeExito"] =
+                    response.Content
+                        .ReadAsStringAsync()
+                        .Result;
+
+                return RedirectToAction(
+                    "Asistencias_Participantes",
+                    "Entrenador",
+                    new
+                    {
+                        i = model.IdClaseProg
+                    });
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.BadRequest)
+            {
+                TempData["MensajeError"] =
+                    response.Content
+                        .ReadAsStringAsync()
+                        .Result;
+
+                return RedirectToAction(
+                    "Asistencias_Participantes",
+                    "Entrenador",
+                    new
+                    {
+                        i = model.IdClaseProg
+                    });
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction(
+                    "Logout",
+                    "Home");
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction(
+                    "Principal",
+                    "Home");
+            }
+
+            var detalleError =
+                response.Content
+                    .ReadAsStringAsync()
+                    .Result;
+
+            throw new Exception(
+                $"La API respondió " +
+                $"{(int)response.StatusCode} " +
+                $"({response.StatusCode}): " +
+                detalleError);
+        }
+
+        #endregion
     }
 }

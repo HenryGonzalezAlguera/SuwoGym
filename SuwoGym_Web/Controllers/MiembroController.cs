@@ -977,5 +977,80 @@ namespace SuwoGym_Web.Controllers
         }
 
         #endregion
+        #region Historial de Asistencia
+
+        [HttpGet]
+        public IActionResult Historial_Asistencias()
+        {
+            using var client =
+                _http.CreateClient();
+
+            client.DefaultRequestHeaders.Add(
+                "Authorization",
+                "Bearer " +
+                HttpContext.Session.GetString("Token"));
+
+            var urlApi =
+                _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Miembro/HistorialAsistenciasAPI";
+
+            var response =
+                client.GetAsync(urlApi).Result;
+
+            if (response.StatusCode ==
+                HttpStatusCode.OK)
+            {
+                var datos =
+                    response.Content
+                        .ReadFromJsonAsync
+                        <List<HistorialAsistenciaMiembroModel>>()
+                        .Result;
+
+                return View(
+                    datos ??
+                    new List<HistorialAsistenciaMiembroModel>());
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.NotFound)
+            {
+                ViewBag.MensajeError =
+                    response.Content
+                        .ReadAsStringAsync()
+                        .Result;
+
+                return View(
+                    new List<HistorialAsistenciaMiembroModel>());
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction(
+                    "Logout",
+                    "Home");
+            }
+
+            if (response.StatusCode ==
+                HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction(
+                    "Principal",
+                    "Home");
+            }
+
+            var detalleError =
+                response.Content
+                    .ReadAsStringAsync()
+                    .Result;
+
+            throw new Exception(
+                $"La API respondió " +
+                $"{(int)response.StatusCode} " +
+                $"({response.StatusCode}): " +
+                detalleError);
+        }
+
+        #endregion
     }
 }

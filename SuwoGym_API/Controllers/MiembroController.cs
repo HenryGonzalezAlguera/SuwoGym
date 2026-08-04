@@ -558,5 +558,49 @@ namespace SuwoGym_API.Controllers
         }
 
         #endregion
+        #region Historial de Asistencia
+
+        [HttpGet("HistorialAsistenciasAPI")]
+        public IActionResult HistorialAsistenciasAPI()
+        {
+            var idMiembro =
+                _utiles.ObtenerIdUsuarioToken();
+
+            if (idMiembro <= 0)
+            {
+                return Unauthorized(
+                    "No se pudo identificar al miembro.");
+            }
+
+            using var context =
+                new SqlConnection(
+                    _databasekey[
+                        "ConnectionStringsApi:DefaultConnection"]);
+
+            var parameters =
+                new DynamicParameters();
+
+            parameters.Add(
+                "@IdMiembro",
+                idMiembro);
+
+            var response =
+                context.Query
+                <HistorialAsistenciaMiembroResponseModel>(
+                    "spListarHistorialAsistenciaMiembro",
+                    parameters,
+                    commandType:
+                        CommandType.StoredProcedure);
+
+            if (response.Any())
+            {
+                return Ok(response);
+            }
+
+            return NotFound(
+                "No tiene registros de asistencia.");
+        }
+
+        #endregion
     }
 }

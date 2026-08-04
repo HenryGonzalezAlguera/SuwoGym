@@ -1,0 +1,553 @@
+﻿@model ParticipantesClaseViewModel
+
+@{
+    var totalParticipantes =
+        Model.Participantes?.Count ?? 0;
+
+    var totalPresentes =
+        Model.Participantes?
+            .Count(x => x.EstadoAsistencia == "Presente")
+        ?? 0;
+
+    var totalAusentes =
+        Model.Participantes?
+            .Count(x => x.EstadoAsistencia == "Ausente")
+        ?? 0;
+
+    var totalPendientes =
+        Model.Participantes?
+            .Count(x => x.EstadoAsistencia == "Pendiente")
+        ?? 0;
+
+    var claseIniciada =
+        DateTime.Now >= Model.Clase.FechaHoraInicio;
+}
+
+
+<div class="row">
+
+    <div class="col-12">
+
+        <nav aria-label="breadcrumb">
+
+            <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+
+                    <a asp-action="Asistencias_Lista"
+                       asp-controller="Entrenador">
+
+                        Asistencias
+
+                    </a>
+
+                </li>
+
+                <li class="breadcrumb-item active"
+                    aria-current="page">
+
+                    Participantes
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h2 class="mb-1">
+                    @Model.Clase.NombreClase
+                </h2>
+
+                <p class="text-secondary mb-0">
+
+                    @Model.Clase.FechaHoraInicio.ToString("dd/MM/yyyy")
+
+                    ·
+
+                    @Model.Clase.FechaHoraInicio.ToString("hh:mm tt")
+
+                    -
+
+                    @Model.Clase.FechaHoraFin.ToString("hh:mm tt")
+
+                </p>
+
+            </div>
+
+
+            @if (Model.Clase.EstadoHorario == "Programada")
+            {
+                <span class="badge bg-success">
+                    Programada
+                </span>
+            }
+            else if (Model.Clase.EstadoHorario == "En curso")
+            {
+                <span class="badge bg-warning">
+                    En curso
+                </span>
+            }
+            else if (Model.Clase.EstadoHorario == "Finalizada")
+            {
+                <span class="badge bg-dark">
+                    Finalizada
+                </span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">
+                    @Model.Clase.EstadoHorario
+                </span>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success"
+         role="alert">
+
+        @TempData["MensajeExito"]
+
+    </div>
+}
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+
+@if (!claseIniciada)
+{
+    <div class="alert alert-warning"
+         role="alert">
+
+        <i class="ti ti-clock"></i>
+
+        La asistencia podrá registrarse cuando la clase haya iniciado,
+        el
+
+        <strong>
+            @Model.Clase.FechaHoraInicio.ToString("dd/MM/yyyy hh:mm tt")
+        </strong>.
+
+    </div>
+}
+
+
+<div class="row mb-4">
+
+    <div class="col-md-3 mb-3">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1">
+                    @totalParticipantes
+                </h3>
+
+                <span class="text-secondary">
+                    Participantes
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-3">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-success">
+                    @totalPresentes
+                </h3>
+
+                <span class="text-secondary">
+                    Presentes
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-3">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-danger">
+                    @totalAusentes
+                </h3>
+
+                <span class="text-secondary">
+                    Ausentes
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3 mb-3">
+
+        <div class="card h-100">
+
+            <div class="card-body text-center">
+
+                <h3 class="mb-1 text-warning">
+                    @totalPendientes
+                </h3>
+
+                <span class="text-secondary">
+                    Pendientes
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="card-body p-4">
+
+        @if (Model.Participantes != null &&
+             Model.Participantes.Any())
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Miembro
+                            </th>
+
+                            <th>
+                                Contacto
+                            </th>
+
+                            <th>
+                                Fecha de reserva
+                            </th>
+
+                            <th>
+                                Estado actual
+                            </th>
+
+                            <th style="min-width: 170px;">
+                                Asistencia
+                            </th>
+
+                            <th style="min-width: 260px;">
+                                Observación
+                            </th>
+
+                            <th class="text-center">
+                                Guardar
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach (var item in Model.Participantes)
+                        {
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        @item.NombreMiembro
+                                    </strong>
+
+                                    <div>
+                                        <small class="text-secondary">
+
+                                            @(string.IsNullOrWhiteSpace(
+                                                item.Identificacion)
+                                                ? "Sin identificación"
+                                                : item.Identificacion)
+
+                                        </small>
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div>
+                                        @item.CorreoElectronico
+                                    </div>
+
+                                    <small class="text-secondary">
+
+                                        @(string.IsNullOrWhiteSpace(
+                                            item.Telefono)
+                                            ? "Sin teléfono"
+                                            : item.Telefono)
+
+                                    </small>
+
+                                </td>
+
+
+                                <td>
+
+                                    @item.FechaReserva.ToString("dd/MM/yyyy")
+
+                                    <div>
+                                        <small class="text-secondary">
+                                            @item.FechaReserva.ToString("hh:mm tt")
+                                        </small>
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    @if (item.EstadoAsistencia == "Presente")
+                                    {
+                                        <span class="badge bg-success">
+                                            Presente
+                                        </span>
+                                    }
+                                    else if (item.EstadoAsistencia == "Ausente")
+                                    {
+                                        <span class="badge bg-danger">
+                                            Ausente
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">
+                                            Pendiente
+                                        </span>
+                                    }
+
+                                    @if (item.FechaActualizacion.HasValue)
+                                    {
+                                        <div>
+                                            <small class="text-secondary">
+
+                                                Actualizada:
+
+                                                @(item.FechaActualizacion.Value
+                                                    .ToString("dd/MM/yyyy hh:mm tt"))
+
+                                            </small>
+                                        </div>
+                                    }
+                                    else if (item.FechaRegistro.HasValue)
+                                    {
+                                        <div>
+                                            <small class="text-secondary">
+
+                                                Registrada:
+
+                                                @(item.FechaRegistro.Value
+                                                    .ToString("dd/MM/yyyy hh:mm tt"))
+
+                                            </small>
+                                        </div>
+                                    }
+
+                                </td>
+
+
+                                <td colspan="3">
+
+                                    <form asp-action="Asistencias_Registrar"
+                                          asp-controller="Entrenador"
+                                          method="post">
+
+                                        <input type="hidden"
+                                               name="IdReserva"
+                                               value="@item.IdReserva" />
+
+                                        <input type="hidden"
+                                               name="IdClaseProg"
+                                               value="@Model.Clase.IdClaseProg" />
+
+
+                                        <div class="row align-items-center">
+
+                                            <div class="col-lg-3 mb-2">
+
+                                                <select name="EstadoAsistencia"
+                                                        class="form-select"
+                                                        required
+                                                        disabled="@(!claseIniciada)">
+
+                                                    @if (item.EstadoAsistencia ==
+                                                         "Pendiente")
+                                                    {
+                                                        <option value=""
+                                                                selected>
+                                                            Seleccione
+                                                        </option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="">
+                                                            Seleccione
+                                                        </option>
+                                                    }
+
+
+                                                    @if (item.EstadoAsistencia ==
+                                                         "Presente")
+                                                    {
+                                                        <option value="Presente"
+                                                                selected>
+                                                            Presente
+                                                        </option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="Presente">
+                                                            Presente
+                                                        </option>
+                                                    }
+
+
+                                                    @if (item.EstadoAsistencia ==
+                                                         "Ausente")
+                                                    {
+                                                        <option value="Ausente"
+                                                                selected>
+                                                            Ausente
+                                                        </option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="Ausente">
+                                                            Ausente
+                                                        </option>
+                                                    }
+
+                                                </select>
+
+                                            </div>
+
+
+                                            <div class="col-lg-7 mb-2">
+
+                                                <input type="text"
+                                                       name="Observacion"
+                                                       value="@item.Observacion"
+                                                       maxlength="300"
+                                                       class="form-control"
+                                                       placeholder="Observación opcional"
+                                                       disabled="@(!claseIniciada)" />
+
+                                            </div>
+
+
+                                            <div class="col-lg-2 mb-2 text-center">
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-primary"
+                                                        disabled="@(!claseIniciada)">
+
+                                                    <i class="ti ti-device-floppy"></i>
+                                                    Guardar
+
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <i class="ti ti-users-minus"
+                   style="font-size: 48px;">
+                </i>
+
+                <h4 class="mt-3">
+                    No hay participantes
+                </h4>
+
+                <p class="text-secondary mb-0">
+
+                    Esta clase todavía no tiene reservas activas.
+
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<div class="mt-4">
+
+    <a asp-action="Asistencias_Lista"
+       asp-controller="Entrenador"
+       class="btn btn-light">
+
+        <i class="ti ti-arrow-left"></i>
+        Volver a asistencias
+
+    </a>
+
+</div>

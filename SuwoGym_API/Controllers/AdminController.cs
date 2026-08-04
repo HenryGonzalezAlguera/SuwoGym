@@ -1279,5 +1279,79 @@ namespace SuwoGym_API.Controllers
         }
 
         #endregion
+        #region Dashboard Administrativo
+
+        [HttpGet("DashboardAPI")]
+        public IActionResult DashboardAPI()
+        {
+            using var context =
+                new SqlConnection(
+                    _databasekey[
+                        "ConnectionStringsApi:DefaultConnection"]);
+
+
+            /*
+             * Consultar los indicadores generales.
+             */
+
+            var indicadores =
+                context.QueryFirstOrDefault
+                <DashboardIndicadoresResponseModel>(
+                    "spDashboardAdministrador",
+                    commandType:
+                        CommandType.StoredProcedure);
+
+
+            if (indicadores == null)
+            {
+                return NotFound(
+                    "No se pudieron consultar los indicadores del dashboard.");
+            }
+
+
+            /*
+             * Consultar los cinco pagos más recientes.
+             */
+
+            var pagosRecientes =
+                context.Query
+                <DashboardPagoRecienteResponseModel>(
+                    "spDashboardPagosRecientes",
+                    commandType:
+                        CommandType.StoredProcedure)
+                .ToList();
+
+
+            /*
+             * Consultar las cinco próximas clases.
+             */
+
+            var proximasClases =
+                context.Query
+                <DashboardProximaClaseResponseModel>(
+                    "spDashboardProximasClases",
+                    commandType:
+                        CommandType.StoredProcedure)
+                .ToList();
+
+
+            var response =
+                new DashboardResponseModel
+                {
+                    Indicadores =
+                        indicadores,
+
+                    PagosRecientes =
+                        pagosRecientes,
+
+                    ProximasClases =
+                        proximasClases
+                };
+
+
+            return Ok(response);
+        }
+
+        #endregion
     }
 }
