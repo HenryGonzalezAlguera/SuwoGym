@@ -643,6 +643,7 @@ namespace SuwoGym_Web.Controllers
             throw new Exception(
                 "Ocurrió un error al consultar el cliente.");
         }
+
         [HttpGet]
         public IActionResult Clientes_AsignarMembresia(int i)
         {
@@ -852,9 +853,10 @@ namespace SuwoGym_Web.Controllers
             throw new Exception(
                 "Ocurrió un error al actualizar el cliente.");
         }
+
         [HttpPost]
         public IActionResult Clientes_AsignarMembresia(
-    MembresiaAsignarModel model)
+            MembresiaAsignarModel model)
         {
             using var client =
                 _http.CreateClient();
@@ -959,9 +961,10 @@ namespace SuwoGym_Web.Controllers
                 $"({response.StatusCode}): " +
                 detalleError);
         }
+
         [HttpPost]
         public IActionResult Clientes_CancelarMembresia(
-    MembresiaCancelarModel model)
+            MembresiaCancelarModel model)
         {
             using var client =
                 _http.CreateClient();
@@ -1041,6 +1044,7 @@ namespace SuwoGym_Web.Controllers
                 $"({response.StatusCode}): " +
                 detalleError);
         }
+
         [HttpGet]
         public IActionResult Clientes_AsignarEntrenador(int i)
         {
@@ -1186,9 +1190,10 @@ namespace SuwoGym_Web.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public IActionResult Clientes_AsignarEntrenador(
-    EntrenadorAsignarModel model)
+            EntrenadorAsignarModel model)
         {
             using var client =
                 _http.CreateClient();
@@ -1295,6 +1300,7 @@ namespace SuwoGym_Web.Controllers
                 $"({response.StatusCode}): " +
                 detalleError);
         }
+
         #endregion
 
         #region Planes
@@ -1566,7 +1572,6 @@ namespace SuwoGym_Web.Controllers
 
         #endregion
 
-        
         #region Horarios
 
         [HttpGet]
@@ -1676,6 +1681,7 @@ namespace SuwoGym_Web.Controllers
 
             return View(model);
         }
+
 
         [HttpPost]
         public IActionResult Horarios_Agregar(
@@ -2121,9 +2127,6 @@ namespace SuwoGym_Web.Controllers
                 });
         }
 
-        #endregion
-
-
         private void CargarListasHorario(
             HttpClient client,
             int? idClaseSeleccionada = null,
@@ -2195,6 +2198,8 @@ namespace SuwoGym_Web.Controllers
                         "NombreCompleto");
             }
         }
+
+        #endregion
 
         #region Dashboard
 
@@ -2287,107 +2292,6 @@ namespace SuwoGym_Web.Controllers
 
         #endregion
 
-        #region Prueba visual
-
-        [HttpGet]
-        public IActionResult Prueba_Lista()
-        {
-            using var client = _http.CreateClient();
-
-            client.DefaultRequestHeaders.Add(
-    "Authorization",
-    "Bearer " +
-    HttpContext.Session.GetString("Token"));
-
-            var urlApi =
-                _config["ConnectionStringsWeb:urlApi"]
-                + "/api/Admin/ListaEmpleadosAPI";
-
-            var response = client.GetAsync(urlApi).Result;
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var datos = response.Content
-                    .ReadFromJsonAsync<List<UsuarioModel>>()
-                    .Result;
-
-                return View(datos ?? new List<UsuarioModel>());
-            }
-            else if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                ViewBag.MensajeError = response.Content
-                    .ReadAsStringAsync()
-                    .Result;
-
-                return View(new List<UsuarioModel>());
-            }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                return RedirectToAction("Logout", "Home");
-            }
-            else if (response.StatusCode == HttpStatusCode.Forbidden)
-            {
-                return RedirectToAction("Principal", "Home");
-            }
-
-            throw new Exception(
-                "Ocurrió un error al consultar los empleados.");
-        }
-
-        [HttpGet]
-        public IActionResult Prueba_Agregar()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Prueba_Detalles(int i)
-        {
-            using var client = _http.CreateClient();
-
-            client.DefaultRequestHeaders.Add(
-                "Authorization",
-                "Bearer " + HttpContext.Session.GetString("Token"));
-
-            var urlApi =
-                _config["ConnectionStringsWeb:urlApi"]
-                + "/api/Admin/EmpleadoDetalles/"
-                + i;
-
-            var response = client.GetAsync(urlApi).Result;
-
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var datos = response.Content
-                    .ReadFromJsonAsync<UsuarioModel>()
-                    .Result;
-
-                return View(datos);
-            }
-            else if (response.StatusCode == HttpStatusCode.NotFound)
-            {
-                TempData["MensajeError"] = response.Content
-                    .ReadAsStringAsync()
-                    .Result;
-
-                return RedirectToAction(
-                    "Prueba_Lista",
-                    "Admin");
-            }
-            else if (response.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                return RedirectToAction("Logout", "Home");
-            }
-            else if (response.StatusCode == HttpStatusCode.Forbidden)
-            {
-                return RedirectToAction("Principal", "Home");
-            }
-
-            throw new Exception(
-                "Ocurrió un error al consultar el empleado.");
-        }
-
-        #endregion
         #region Pagos
 
         [HttpGet]
@@ -2863,6 +2767,108 @@ namespace SuwoGym_Web.Controllers
                 $"{(int)response.StatusCode} " +
                 $"({response.StatusCode}): " +
                 detalleError);
+        }
+
+        #endregion
+
+        #region Prueba visual
+
+        [HttpGet]
+        public IActionResult Prueba_Lista()
+        {
+            using var client = _http.CreateClient();
+
+            client.DefaultRequestHeaders.Add(
+    "Authorization",
+    "Bearer " +
+    HttpContext.Session.GetString("Token"));
+
+            var urlApi =
+                _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Admin/ListaEmpleadosAPI";
+
+            var response = client.GetAsync(urlApi).Result;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var datos = response.Content
+                    .ReadFromJsonAsync<List<UsuarioModel>>()
+                    .Result;
+
+                return View(datos ?? new List<UsuarioModel>());
+            }
+            else if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                ViewBag.MensajeError = response.Content
+                    .ReadAsStringAsync()
+                    .Result;
+
+                return View(new List<UsuarioModel>());
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+            else if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("Principal", "Home");
+            }
+
+            throw new Exception(
+                "Ocurrió un error al consultar los empleados.");
+        }
+
+        [HttpGet]
+        public IActionResult Prueba_Agregar()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Prueba_Detalles(int i)
+        {
+            using var client = _http.CreateClient();
+
+            client.DefaultRequestHeaders.Add(
+                "Authorization",
+                "Bearer " + HttpContext.Session.GetString("Token"));
+
+            var urlApi =
+                _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Admin/EmpleadoDetalles/"
+                + i;
+
+            var response = client.GetAsync(urlApi).Result;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var datos = response.Content
+                    .ReadFromJsonAsync<UsuarioModel>()
+                    .Result;
+
+                return View(datos);
+            }
+            else if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                TempData["MensajeError"] = response.Content
+                    .ReadAsStringAsync()
+                    .Result;
+
+                return RedirectToAction(
+                    "Prueba_Lista",
+                    "Admin");
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+            else if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("Principal", "Home");
+            }
+
+            throw new Exception(
+                "Ocurrió un error al consultar el empleado.");
         }
 
         #endregion

@@ -75,3 +75,18 @@
     .btnNav:hover {
         color: #007bff;
     }
+
+.bloque_info {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    border-left: 4px solid #007bff;
+    color: #293039;
+    font-weight: 600;
+    margin: 0;
+}
+
+.bloque_info_titulo {
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 500;
+}

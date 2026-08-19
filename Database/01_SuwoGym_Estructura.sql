@@ -12,11 +12,20 @@
 USE [master];
 GO
 
-IF DB_ID(N'SuwoGym') IS NULL
-BEGIN
-    EXEC(N'CREATE DATABASE [SuwoGym]');
-END
+/* Eliminar la base si ya existe */
+
+IF DB_ID(N'SuwoGym') IS NOT NULL
+    BEGIN
+        DROP DATABASE [SuwoGym];
+        CREATE DATABASE [SuwoGym]
+    END
+
+ELSE IF DB_ID(N'SuwoGym') IS NULL
+    BEGIN
+        EXEC(N'CREATE DATABASE [SuwoGym]');
+    END
 GO
+
 
 USE [SuwoGym];
 GO
@@ -57,6 +66,12 @@ CREATE TABLE [dbo].[Clase](
 	[IdClase] [int] NOT NULL,
 	[NombreClase] [nvarchar](50) NOT NULL,
 	[Descripcion] [nvarchar](200) NULL,
+	[Icono] [nvarchar](20) NULL,
+	[Color] [nvarchar](10) NULL,
+	[Beneficio1] [nvarchar](50) NULL,
+	[Beneficio2] [nvarchar](50) NULL,
+	[Beneficio3] [nvarchar](50) NULL,
+	[Beneficio4] [nvarchar](50) NULL,
  CONSTRAINT [PK_Clase] PRIMARY KEY CLUSTERED 
 (
 	[IdClase] ASC
@@ -190,11 +205,18 @@ CREATE TABLE [dbo].[PlanMembresia](
 	[Descripcion] [nvarchar](300) NULL,
 	[DuracionDias] [int] NOT NULL,
 	[Precio] [decimal](10, 2) NOT NULL,
+	[EsPopular] [bit] NULL,
+	[Color] [nvarchar](10) NULL,
+	[Beneficio1] [nvarchar](50) NULL,
+	[Beneficio2] [nvarchar](50) NULL,
+	[Beneficio3] [nvarchar](50) NULL,
+	[Beneficio4] [nvarchar](50) NULL,
  CONSTRAINT [PK_PlanMembresia] PRIMARY KEY CLUSTERED 
 (
 	[IdPlan] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
 GO
 /****** Objeto: Table [dbo].[ReservaClase] Fecha de script: 03/08/2026 19:28:08 ******/
 SET ANSI_NULLS ON
@@ -4461,6 +4483,101 @@ BEGIN
         R.IdRutina DESC;
 END
 GO
+
+
+/* ============================================================
+   HOMEPAGE: OBTENER EL DETALLE DE LAS CLASES PARA (METODOLOGÍAS)
+   ============================================================ */
+
+
+CREATE PROCEDURE [dbo].[spObtenerClasesDetalle]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        NombreClase,
+        Descripcion,
+        Icono,
+        Color,
+        Beneficio1,
+        Beneficio2,
+        Beneficio3,
+        Beneficio4
+    FROM dbo.Clase 
+END
+GO
+
+/* ============================================================
+   HOMEPAGE: OBTENER EL DETALLE DE LOS PLANES DE MEMBRESIA
+   ============================================================ */
+
+CREATE PROCEDURE [dbo].[spObtenerPlanMembresiaDetalle]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        NombrePlan AS 'Tipo',
+        Precio,
+        Descripcion,
+        DuracionDias,
+        EsPopular,
+        Color,
+        Beneficio1,
+        Beneficio2,
+        Beneficio3,
+        Beneficio4
+    FROM dbo.PlanMembresia
+END
+GO
+
+
+/* ============================================================
+   HOMEPAGE: OBTENER lISTA DE CLASES PARA LOS PRÓX. 7 DÍAS
+   ============================================================ */
+
+CREATE PROCEDURE [dbo].[spProximasClases]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        C.NombreClase,
+        
+        U.Nombre
+            + N' '
+            + U.Apellido
+            AS NombreEntrenador,
+        
+        CP.FechaHoraInicio,
+        CP.FechaHoraFin,
+
+        CP.CupoMaximo
+            - CP.CupoActual
+            AS CuposDisponibles,
+
+        C.Color AS 'ColorTag'
+
+    FROM dbo.ClaseProgramada AS CP
+
+    INNER JOIN dbo.Clase AS C
+        ON C.IdClase = CP.IdClase
+
+    INNER JOIN dbo.Usuario AS U
+        ON U.IdUsuario = CP.IdEntrenador
+    WHERE
+        CP.Estado = 1
+        AND CP.FechaHoraInicio > GETDATE()
+        AND CP.FechaHoraInicio < DATEADD(DAY, 7, GETDATE())
+    ORDER BY
+        CP.FechaHoraInicio DESC,
+        CP.IdClaseProg DESC
+END
+GO
+
+
+
 /****** Objeto: StoredProcedure [dbo].[spQuitarEjercicioRutinaEntrenador] Fecha de script: 03/08/2026 19:28:08 ******/
 SET ANSI_NULLS ON
 GO

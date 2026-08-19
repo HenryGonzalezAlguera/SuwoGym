@@ -627,8 +627,6 @@ namespace SuwoGym_API.Controllers
         #endregion
 
 
-
-
         #region Gestión de Planes de Membresía
 
         [HttpGet("ListaPlanesAPI")]
@@ -770,6 +768,8 @@ namespace SuwoGym_API.Controllers
         }
 
         #endregion
+
+
         #region Gestión de Pagos
 
         [HttpPost("PagoRegistrarAPI")]
@@ -923,6 +923,8 @@ namespace SuwoGym_API.Controllers
         }
 
         #endregion
+        
+        
         #region Gestión de Horarios y Clases
 
         [HttpGet("ClasesListaAPI")]
@@ -1279,6 +1281,8 @@ namespace SuwoGym_API.Controllers
         }
 
         #endregion
+        
+        
         #region Dashboard Administrativo
 
         [HttpGet("DashboardAPI")]

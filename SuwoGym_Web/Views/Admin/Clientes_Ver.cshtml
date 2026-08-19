@@ -182,18 +182,16 @@
 
         <div class="row">
 
-            <div class="col-md-6 mb-3">
+            <div class="col-md-6 mb-3 bloque_info">
 
-                <label class="form-label">
+                <label class="bloque_info_titulo">
                     Fecha de nacimiento
                 </label>
 
-                <input type="text"
-                       class="form-control"
-                       value="@(Model.FechaNac.HasValue
+                <p>@(Model.FechaNac.HasValue
                                            ? Model.FechaNac.Value.ToString("dd/MM/yyyy")
-                                       : "No registrada")"
-                       readonly />
+                                       : "No registrada")
+                </p>
 
             </div>
 

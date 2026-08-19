@@ -17,7 +17,7 @@ namespace SuwoGym_Web.Models
             public List<Membresia> Membresias { get; set; } =
                 new();
 
-            public CronogramaSemanal Horarios { get; set; } =
+            public List<CronogramaSemanal> Horarios { get; set; } =
                 new();
         }
     }
@@ -35,9 +35,7 @@ namespace SuwoGym_Web.Models
 
     public class MetodologiaEntrenamiento
     {
-        public int Id { get; set; }
-
-        public string Nombre { get; set; } =
+        public string NombreClase { get; set; } =
             string.Empty;
 
         public string Descripcion { get; set; } =
@@ -49,61 +47,59 @@ namespace SuwoGym_Web.Models
         public string Color { get; set; } =
             string.Empty;
 
-        public List<string> Beneficios { get; set; } =
-            new();
-
-        public string ImagenUrl { get; set; } =
+        public string Beneficio1 { get; set; } =
             string.Empty;
+
+        public string Beneficio2 { get; set; } =
+            string.Empty;
+
+        public string Beneficio3 { get; set; } =
+            string.Empty;
+
+        public string Beneficio4 { get; set; } =
+            string.Empty;
+
     }
 
     public class Membresia
     {
-        public int Id { get; set; }
-
         public string Tipo { get; set; } =
-            string.Empty;
+          string.Empty;
 
         public decimal Precio { get; set; }
 
         public string Descripcion { get; set; } =
             string.Empty;
 
-        public List<string> Beneficios { get; set; } =
-            new();
-
-        public string Duracion { get; set; } =
-            string.Empty;
+        public int DuracionDias { get; set; }
 
         public bool EsPopular { get; set; }
 
         public string Color { get; set; } =
             string.Empty;
+
+        public string Beneficio1 { get; set; } =
+           string.Empty;
+
+        public string Beneficio2 { get; set; } =
+            string.Empty;
+
+        public string Beneficio3 { get; set; } =
+            string.Empty;
+
+        public string Beneficio4 { get; set; } =
+            string.Empty;
+
     }
 
     public class CronogramaSemanal
     {
-        public List<DiaHorario> Dias { get; set; } =
-     new();
-    }
-
-    public class DiaHorario
-    {
-        public string Dia { get; set; } =
-            string.Empty;
-
-        public string DiaSemana { get; set; } =
-            string.Empty;
-
-        public List<Clase> Clases { get; set; } =
-            new();
-    }
-    public class Clase
-    {
-        public string HoraInicio { get; set; } = string.Empty;
-        public string HoraFin { get; set; } = string.Empty;
-        public string Actividad { get; set; } = string.Empty;
-        public string Instructor { get; set; } = string.Empty;
-        public string Nivel { get; set; } = string.Empty;
+        public string NombreClase { get; set; } = string.Empty;
+        public string NombreEntrenador { get; set; } = string.Empty;
+        public DateTime FechaHoraInicio { get; set; }
+        public DateTime FechaHoraFin { get; set; }
+        public string CuposDisponibles { get; set; } = string.Empty;
         public string ColorTag { get; set; } = string.Empty;
     }
+
 }

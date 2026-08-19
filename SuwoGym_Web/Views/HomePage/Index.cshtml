@@ -16,36 +16,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" crossorigin="" href="~/css/homepage.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" crossorigin="" href="~/css/homepage.css" asp-append-version="true">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" asp-append-version="true">
 </head>
 
 <body>
    
     <!-- ========== NAVBAR ========== -->
     <nav class="navbar">
-        <a href="#inicio" class="navbar-brand">
-            <i class="fas fa-dumbbell"></i>
-            SUWO<span>GYM</span>
-        </a>
-        <div class="menu-toggle" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
+        <div>
+            <a href="#inicio" class=" navbar-brand">
+                <img src="~/images/logoSuwo_icon.png"
+                     alt="Logo SUWÓ"
+                     width="32"
+                     height="32" />
+                <span class="logo-text ms-2">
+                    <img src="~/images/logoSuwo_logotype.png"
+                         alt="SUWÓ Gym"
+                         height="24"
+                         class="mt-1" />
+                </span>
+            </a>
         </div>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#info">Información</a></li>
-            <li><a href="#metodologias">Metodologías</a></li>
-            <li><a href="#membresias">Membresías</a></li>
-            <li><a href="#horarios">Horarios</a></li>
-            <li><button class="btn-primary"><a asp-action="Index" asp-controller="Home"><small>Iniciar Sesión</small></a></button></li>
-            <li></li>
-        </ul>
+        <div>
+       
+            <a class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </a>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#metodologias">Metodologías</a></li>
+                <li><a href="#membresias">Membresías</a></li>
+                <li><a href="#horarios">Horarios</a></li>
+                <li><a href="#info">Información</a></li>
+                <li><a asp-action="Index" asp-controller="Home" 
+                    class="btn-menu">
+                        <small>Iniciar Sesión</small>
+                    </a>
+                </li>
+            </ul>
+        </div>
+  
     </nav>
 
     <main>
+
     <!-- ========== HERO ========== -->
     <section class="hero" id="inicio">
         <div class="hero-content">
-            <h1>SUWO GYM</h1>
+            <img src="~/images/logoSuwo_icon.png"
+                     alt="Logo SUWÓ principal" /><br/>
+            <img src="~/images/logoSuwo_logotype.png"
+                    alt="SUWÓ Gym"
+                     style="padding-bottom:1rem;" />
             <p class="subtitle">Transforma tu cuerpo y mente con nuestras metodologías innovadoras</p>
             <div class="hero-buttons">
                 <a href="#membresias" class="btn-primary">Empieza Ahora</a>
@@ -54,34 +77,6 @@
         </div>
     </section>
 
-    <!-- ========== INFO GENERAL ========== -->
-    <section class="info-section" id="info">
-        <div class="container">
-            <h2 class="section-title">Información General</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <h3>Ubicación</h3>
-                    <p>@Model.InfoGeneral.Direccion</p>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-clock"></i>
-                    <h3>Horario de Atención</h3>
-                    <p>@Model.InfoGeneral.HorarioAtencion</p>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-phone"></i>
-                    <h3>Contacto</h3>
-                    <p>@Model.InfoGeneral.Telefono<br>@Model.InfoGeneral.Email</p>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-users"></i>
-                    <h3>Comunidad</h3>
-                    <p>+500 miembros activos<br>¡Únete a la familia SUWO!</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- ========== METODOLOGÍAS ========== -->
     <section class="metodologias-section" id="metodologias">
@@ -93,15 +88,15 @@
                     <div class="metodologia-card">
                         <div class="metodologia-header" style="background: linear-gradient(135deg, @metodologia.Color 33, @metodologia.Color 11);">
                             <i class="@metodologia.Icono" style="color: @metodologia.Color;"></i>
-                            <h3>@metodologia.Nombre</h3>
+                            <h3>@metodologia.NombreClase</h3>
                         </div>
                         <div class="metodologia-body">
                             <p>@metodologia.Descripcion</p>
                             <ul>
-                                @foreach (var beneficio in metodologia.Beneficios)
-                                {
-                                    <li>@beneficio</li>
-                                }
+                                <li>@metodologia.Beneficio1</li>
+                                <li>@metodologia.Beneficio2</li>
+                                <li>@metodologia.Beneficio3</li>
+                                <li>@metodologia.Beneficio4</li>
                             </ul>
                         </div>
                     </div>
@@ -113,28 +108,28 @@
     <!-- ========== MEMBRESÍAS ========== -->
     <section class="membresias-section" id="membresias">
         <div class="container">
-            <h2 class="section-title">Nuestras Membresías</h2>
+            <h2 class="section-title" style="margin-bottom:4rem;">Nuestras Membresías</h2>
             <div class="membresias-grid">
                 @foreach (var membresia in Model.Membresias)
                 {
                     <div class="membresia-card @(membresia.EsPopular ? "popular" : "")">
                         <span class="duracion">@membresia.Tipo</span>
                         <div class="precio">
-                            $@string.Format("{0:N0}", membresia.Precio)
-                            <small>/@membresia.Duracion</small>
+                                &#8353; @string.Format("{0:N0}", membresia.Precio)
+                            <small>/ @membresia.DuracionDias días</small>
                         </div>
                         <p class="descripcion">@membresia.Descripcion</p>
                         <ul>
-                            @foreach (var beneficio in membresia.Beneficios)
-                            {
-                                <li>@beneficio</li>
-                            }
+                                <li>@membresia.Beneficio1</li>
+                                <li>@membresia.Beneficio2</li>
+                                <li>@membresia.Beneficio3</li>
+                                <li>@membresia.Beneficio4</li>
                         </ul>
-                        <button class="btn-membresia @(membresia.EsPopular ? "primary" : "")">
-                            Elegir Plan
-                        </button>
                     </div>
                 }
+            </div>
+            <div style="text-align:center; margin-top:4rem;">
+                    <a asp-action="Registro" asp-controller="Home" class="btn-primary" style=" font-size:20px;">¡Comienza Hoy Mismo!</a>
             </div>
         </div>
     </section>
@@ -142,8 +137,52 @@
     <!-- ========== HORARIOS ========== -->
     <section class="horarios-section" id="horarios">
         <div class="container">
-            <h2 class="section-title">Cronograma Semanal</h2>
-            <div class="horario-tabs">
+            <h2 class="section-title">Próximas clases</h2>
+
+                    @if(ViewBag.CronoVacio != null)
+                    {
+                        <div class="info-card">
+                            <p>@ViewBag.CronoVacio</p>
+                        </div>
+                    }
+                    
+                <div style="text-align:center; margin-top:1rem; margin-bottom:2rem;">
+                    <a asp-action="Index" asp-controller="Home" 
+                    class="btn-secondary">
+                        ¡Registrarme a una clase!</a>
+                </div>
+                
+                <div class="horario-table-wrapper">
+
+                    <table class="horario-table">
+                        <thead>
+                            <tr>
+                                <th>Clase</th>
+                                <th>Entrenador</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Cupos Disponibles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var clase in Model.Horarios)
+                            {
+                                <tr>
+                                    <td>@clase.NombreClase</td>
+                                    <td>@clase.NombreEntrenador</td>
+                                    <td>@clase.FechaHoraInicio.ToString("dd-MM-yyyy")</td>
+                                    <td>@clase.FechaHoraInicio.ToString("hh:mm tt") - @clase.FechaHoraFin.ToString("hh:mm tt")</td>
+                                    <td>@clase.CuposDisponibles</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                
+                
+
+
+            @*<div class="horario-tabs">
                 @foreach (var dia in Model.Horarios.Dias)
                 {
                     <button class="horario-tab @(dia.DiaSemana == "lunes" ? "active" : "")"
@@ -152,7 +191,6 @@
                     </button>
                 }
             </div>
-
             @foreach (var dia in Model.Horarios.Dias)
             {
                 <div class="horario-content @(dia.DiaSemana == "lunes" ? "active" : "")"
@@ -186,6 +224,32 @@
                     </div>
                 </div>
             }
+*@
+        </div>
+    </section>
+
+    <!-- ========== INFO GENERAL ========== -->
+    <section class="info-section" id="info">
+        <div class="container">
+            <h2 class="section-title">Información General</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Ubicación</h3>
+                    <p>@Model.InfoGeneral.Direccion</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Horario de Atención</h3>
+                    <p>@Model.InfoGeneral.HorarioAtencion</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-phone"></i>
+                    <h3>Contacto</h3>
+                    <p>@Model.InfoGeneral.Telefono<br>@Model.InfoGeneral.Email</p>
+                </div>
+             
+            </div>
         </div>
     </section>
 
@@ -194,18 +258,14 @@
     <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; @DateTime.Now.Year SUWO GYM - Todos los derechos reservados</p>
-            <p>
-                <a href="#">Política de Privacidad</a> |
-                <a href="#">Términos y Condiciones</a>
-            </p>
             <div class="social-icons">
-                <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
-                <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/p/SUwo_stc-100077480113642/" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="mailto:suwo.fv@gmail.com" target="_blank"><i class="fas fa-envelope"></i></a>
+                <a href="https://wa.me/50688281766" target="_blank"><i class="fab fa-whatsapp"></i></a>
                 <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
                 <a href="#" target="_blank"><i class="fab fa-tiktok"></i></a>
-                <a href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
             </div>
+            <p style="margin-top: 20px;">&copy; @DateTime.Now.Year Gimansio SUWÓ - Todos los derechos reservados</p>
         </div>
     </footer>
 
@@ -215,80 +275,6 @@
     </a>
 
     <!-- ========== SCRIPTS ========== -->
-    <script>
-            // Toggle menú móvil
-            function toggleMenu() {
-                const navLinks = document.getElementById('navLinks');
-                navLinks.classList.toggle('open');
-            }
-
-            // Mostrar día del horario
-            function showDay(dayId) {
-                // Ocultar todos los contenidos
-                const contents = document.querySelectorAll('.horario-content');
-                contents.forEach(content => {
-                    content.classList.remove('active');
-                });
-
-                // Mostrar el contenido seleccionado
-                const selectedContent = document.getElementById(dayId);
-                if (selectedContent) {
-                    selectedContent.classList.add('active');
-                }
-
-                // Actualizar tabs activos
-                const tabs = document.querySelectorAll('.horario-tab');
-                tabs.forEach(tab => {
-                    tab.classList.remove('active');
-                    // Activar el tab correspondiente
-                    if (tab.textContent.trim().toLowerCase() ===
-                        document.querySelector(`#${dayId}`).parentElement
-                        .querySelector('.section-title')?.textContent.trim().toLowerCase() ||
-                        tab.getAttribute('onclick')?.includes(dayId)) {
-                        tab.classList.add('active');
-                    }
-                });
-
-                // Método alternativo: buscar por onclick
-                tabs.forEach(tab => {
-                    const onclickAttr = tab.getAttribute('onclick');
-                    if (onclickAttr && onclickAttr.includes(dayId)) {
-                        tab.classList.add('active');
-                    }
-                });
-            }
-
-            // Cerrar menú al hacer click en un enlace (móvil)
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    document.getElementById('navLinks').classList.remove('open');
-                });
-            });
-
-            // Cerrar menú al hacer scroll
-            let scrollTimeout;
-            window.addEventListener('scroll', () => {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    document.getElementById('navLinks').classList.remove('open');
-                }, 100);
-            });
-
-            // Smooth scroll para todos los enlaces internos
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        const navHeight = document.querySelector('.navbar').offsetHeight;
-                        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-    </script>
+    <script src="~/js/homepage.js" asp-append-version="true"></script>
 </body>
 </html>
