@@ -171,7 +171,7 @@ BEGIN
     (
         1,
         N'Mensual',
-        N'El pago se realiza cada mes; 12 pagos anuales',
+        N'Perfecto para comenzar tu transformación',
         30,
         10600.00,
         0, 
@@ -203,7 +203,7 @@ BEGIN
     (
         2,
         N'Trimestral',
-        N'El pago se realiza cada 3 meses; 4 pagos anuales',
+        N'¡La favorita de nuestros miembros!',
         90,
         30000.00,
         1, 
@@ -235,7 +235,7 @@ BEGIN
     (
         3,
         N'Anual',
-        N'El pago se realiza cada año; 1 pago anual',
+        N'El compromiso total con tu salud',
         365,
         117000.00,
         0, 

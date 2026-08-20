@@ -90,3 +90,48 @@
     font-size: 0.85rem;
     font-weight: 500;
 }
+
+
+/*
+    Cards de 
+*/
+
+.card-input-container {
+    display: grid;
+}
+
+.card-input-element {
+    display: none;
+}
+
+.card-input {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 0.4rem;
+    padding: 20px;
+    background-color: #fff;
+    border: 2px solid #e5e5e5;
+    text-align: center;
+    transition: border-color .45s ease-in-out,box-shadow .15s ease-in-out
+}
+
+    .card-input:hover {
+        cursor: pointer;
+        background-color: #e6623910;
+    }
+
+.card-input-element:checked + .card-input {
+    background-color: #e6623910;
+    box-shadow: 0 0 0 .10rem #e6623980
+}
+
+
+.white-on-white {
+    width: 100%;
+    height: 0px;
+    border-radius: 0px;
+    background-color: #fff;
+    border: 0px solid #fff;
+    color:white;
+    font-size:1px;
+}

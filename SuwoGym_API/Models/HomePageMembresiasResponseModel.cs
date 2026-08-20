@@ -2,7 +2,9 @@
 {
     public class HomePageMembresiasResponseModel
     {
-        public string Tipo { get; set; } =
+        public int IdPlan { get; set; }
+
+        public string NombrePlan { get; set; } =
            string.Empty;
 
         public decimal Precio { get; set; }

@@ -53,5 +53,9 @@ namespace SuwoGym_Web.Models
 
         public DateTime fechaRegistro { get; set; }
 
+
+        // Para asignar membresia
+        public int PlanMembresia { get; set; }
+
     }
 }

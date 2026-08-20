@@ -17,7 +17,7 @@
 
             contrasenna: {
                 required: true,
-                minlength: 5,
+                minlength: 6,
                 caracterEspecial: true
             },
 
@@ -32,7 +32,7 @@
 
             contrasenna: {
                 required: "Campo obligatorio",
-                minlength: "Mínimo 5 caracteres",
+                minlength: "Mínimo 6 caracteres",
                 caracterEspecial:
                     "Al menos 1 carácter especial"
             },

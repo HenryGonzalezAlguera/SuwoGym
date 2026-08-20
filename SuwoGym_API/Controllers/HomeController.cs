@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using SuwoGym_API.Models;
 using SuwoGym_API.Services;
 using System.Data;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace SuwoGym_API.Controllers
 {
@@ -15,7 +16,26 @@ namespace SuwoGym_API.Controllers
         IConfiguration _databasekey,
         IUtilesService _utiles) : ControllerBase
     {
+
         #region Registro API
+
+        [HttpGet("MembresiasAPI")]
+        public IActionResult ObtenerMembresiasAPI()
+        {
+            using var context = new SqlConnection(
+                    _databasekey[
+                        "ConnectionStringsApi:DefaultConnection"]);
+
+            var response =
+                context.Query<HomePageMembresiasResponseModel>(
+                    "spObtenerPlanMembresiaDetalle");
+
+            if (response.Any())
+                return Ok(response);
+
+            return NotFound("No hay membresías registradas");
+        }
+
 
         [HttpPost("RegistroAPI")]
         public IActionResult RegistroAPI(
@@ -48,6 +68,10 @@ namespace SuwoGym_API.Controllers
                 parameters.Add(
                     "@Identificacion",
                     model.identificacion);
+                
+                parameters.Add(
+                    "@PlanMembresia",
+                    model.PlanMembresia);
 
                 var response =
                     context.QueryFirstOrDefault
@@ -136,8 +160,6 @@ namespace SuwoGym_API.Controllers
 
         #endregion
 
-
-
         #region Recuperar acceso API
 
         [HttpPost("RecuperarAccesoAPI")]
@@ -225,5 +247,6 @@ namespace SuwoGym_API.Controllers
         }
 
         #endregion
+
     }
 }

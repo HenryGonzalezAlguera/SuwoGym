@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using SuwoGym_Web.Filters;
 using SuwoGym_Web.Models;
 using System.Net;
-using SuwoGym_Web.Filters;
 
 namespace SuwoGym_Web.Controllers
 {
@@ -9,6 +10,7 @@ namespace SuwoGym_Web.Controllers
         IHttpClientFactory _http,
         IConfiguration _config) : Controller
     {
+
         #region Iniciar sesión
 
         [HttpGet]
@@ -121,7 +123,28 @@ namespace SuwoGym_Web.Controllers
         [HttpGet]
         public IActionResult Registro()
         {
-            return View();
+            using var client = _http.CreateClient();
+            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Home/MembresiasAPI";
+            var membresias = client.GetAsync(urlApi).Result;
+            
+            if (membresias.StatusCode == HttpStatusCode.OK)
+            {
+                var datos = membresias.Content
+                        .ReadFromJsonAsync<List<PlanModel>>()
+                        .Result;
+                ViewBag.Membresias = datos;
+                return View();
+
+            }
+            else if(membresias.StatusCode == HttpStatusCode.BadRequest)
+            {
+                ViewBag.Mensaje =
+                   membresias.Content
+                       .ReadAsStringAsync()
+                       .Result;
+                return View();
+            }
+            throw new Exception("Ocurrió un error inesperado");
         }
 
         [HttpPost]
@@ -163,12 +186,14 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.BadRequest)
             {
-                ViewBag.Mensaje =
+                var respuesta =
                     response.Content
                         .ReadAsStringAsync()
                         .Result;
 
-                return View();
+                return RedirectToAction(
+                    "Registro",
+                    "Home");
             }
 
             throw new Exception(

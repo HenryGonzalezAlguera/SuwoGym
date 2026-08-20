@@ -13,18 +13,8 @@ USE [master];
 GO
 
 /* Eliminar la base si ya existe */
-
-IF DB_ID(N'SuwoGym') IS NOT NULL
-    BEGIN
-        DROP DATABASE [SuwoGym];
-        CREATE DATABASE [SuwoGym]
-    END
-
-ELSE IF DB_ID(N'SuwoGym') IS NULL
-    BEGIN
-        EXEC(N'CREATE DATABASE [SuwoGym]');
-    END
-GO
+DROP DATABASE IF EXISTS [SuwoGym];
+CREATE DATABASE [SuwoGym]
 
 
 USE [SuwoGym];
@@ -4518,7 +4508,8 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT
-        NombrePlan AS 'Tipo',
+        IdPlan,
+        NombrePlan,
         Precio,
         Descripcion,
         DuracionDias,
@@ -5718,7 +5709,8 @@ CREATE PROCEDURE [dbo].[spRegistrarUsuario]
     @Apellido NVARCHAR(80),
     @CorreoElectronico NVARCHAR(150),
     @ContrasennaHash NVARCHAR(300),
-    @Identificacion NVARCHAR(50)
+    @Identificacion NVARCHAR(50),
+    @PlanMembresia INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -5785,6 +5777,42 @@ BEGIN
         );
 
         DECLARE @IdUsuario INT = SCOPE_IDENTITY();
+
+        -- Aquí se agrega el plan -------------------
+
+        DECLARE @DuracionDias INT;
+
+        SELECT
+            @DuracionDias = DuracionDias
+        FROM dbo.PlanMembresia
+        WHERE IdPlan = @PlanMembresia;
+
+
+        DECLARE @FechaInicio DATETIME2(7);
+
+        SET @FechaInicio = GETDATE();
+
+
+        INSERT INTO dbo.MembresiaUsuario
+        (
+            IdUsuario,
+            IdPlan,
+            FechaRegistro,
+            EstadoMembresia,
+            FechaVencimiento
+        )
+        VALUES
+        (
+            @IdUsuario,
+            @PlanMembresia,
+            @FechaInicio,
+            N'Activa',
+            DATEADD(
+                DAY,
+                @DuracionDias,
+                @FechaInicio
+            )
+        );
 
         COMMIT TRANSACTION;
 

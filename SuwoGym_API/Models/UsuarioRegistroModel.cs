@@ -18,5 +18,7 @@ namespace SuwoGym_API.Models
 
         [Required]
         public string identificacion { get; set; } = string.Empty;
+
+        public int PlanMembresia { get; set; }
     }
 }

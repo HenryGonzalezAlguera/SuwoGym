@@ -113,7 +113,7 @@
                 @foreach (var membresia in Model.Membresias)
                 {
                     <div class="membresia-card @(membresia.EsPopular ? "popular" : "")">
-                        <span class="duracion">@membresia.Tipo</span>
+                        <span class="duracion">@membresia.NombrePlan</span>
                         <div class="precio">
                                 &#8353; @string.Format("{0:N0}", membresia.Precio)
                             <small>/ @membresia.DuracionDias días</small>

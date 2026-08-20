@@ -63,7 +63,7 @@ namespace SuwoGym_Web.Models
 
     public class Membresia
     {
-        public string Tipo { get; set; } =
+        public string NombrePlan { get; set; } =
           string.Empty;
 
         public decimal Precio { get; set; }
