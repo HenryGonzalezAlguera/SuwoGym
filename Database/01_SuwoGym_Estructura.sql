@@ -3708,7 +3708,7 @@ GO
 CREATE PROCEDURE [dbo].[spListarClientes]
 AS
 BEGIN
-  SET NOCOUNT ON;
+    SET NOCOUNT ON;
 
     SELECT
         U.IdUsuario,
@@ -3716,14 +3716,9 @@ BEGIN
         U.Apellido,
         U.CorreoElectronico,
         U.Estado,
-        P.NombrePlan,
-        M.EstadoMembresia,
-        M.FechaVencimiento
+        U.Identificacion,
+        U.FechaRegistro
     FROM dbo.Usuario AS U
-    INNER JOIN dbo.MembresiaUsuario as M
-          ON M.IdUsuario = U.IdUsuario
-    INNER JOIN dbo.PlanMembresia as P
-          ON P.IdPlan = M.IdPlan
     WHERE U.IdRol = 3
     ORDER BY U.Apellido ASC,
              U.Nombre ASC;

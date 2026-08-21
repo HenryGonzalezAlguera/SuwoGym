@@ -4,44 +4,12 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Clientes_Lista"
-                       asp-controller="Admin">
-
-                        Clientes
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Clientes_Ver"
-                       asp-controller="Admin"
-                       asp-route-i="@Model.IdCliente">
-
-                        Detalle del cliente
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Asignar entrenador
-
-                </li>
-
-            </ol>
-
-        </nav>
-
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Clientes_Ver" asp-controller="Admin" asp-route-i="@Model.IdCliente"
+               class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
+      
 
         <div class="mb-4">
 

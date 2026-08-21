@@ -55,6 +55,9 @@
                 <thead class="border-light">
                     <tr>
                         <th>
+                            <b>Identificación</b>
+                        </th>
+                        <th>
                             <b>Nombre completo</b>
                         </th>
 
@@ -63,14 +66,11 @@
                         </th>
 
                         <th>
-                            <b>Estado</b>
+                            <b>Fecha de Registro</b>
                         </th>
 
                         <th>
-                            <b>Plan de Membresia</b>
-                        </th>
-                        <th>
-                            <b>Estado Membresía</b>
+                            <b>Estado</b>
                         </th>
 
                         <th>
@@ -86,11 +86,17 @@
                         <tr class="align-middle">
 
                             <td>
+                                @item.Identificacion
+                            </td>
+                            <td>
                                 @item.Apellido @item.Nombre
                             </td>
 
                             <td>
                                 @item.CorreoElectronico
+                            </td>
+                            <td>
+                                @item.FechaRegistro.ToString("dd/MM/yyyy")
                             </td>
 
                             <td>
@@ -108,14 +114,6 @@
                                             text-danger-emphasis"
                                     >Inactivo</span>
                                 }
-                            </td>
-
-                            <td>
-                                @item.NombrePlan
-                            </td>
-
-                            <td>
-                                @item.EstadoMembresia
                             </td>
 
                             <td>

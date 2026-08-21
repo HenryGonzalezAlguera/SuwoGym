@@ -3,31 +3,15 @@
 <div class="row">
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-                    <a asp-action="Clientes_Ver"
-                       asp-controller="Admin"
-                       asp-route-i="@Model.IdUsuario">
-                        Cliente
-                    </a>
-                </li>
-
-                <li class="breadcrumb-item">
-                    <a asp-action="Clientes_Pagos"
-                       asp-controller="Admin"
-                       asp-route-i="@Model.IdUsuario">
-                        Historial de pagos
-                    </a>
-                </li>
-
-                <li class="breadcrumb-item active">
-                    Detalle del pago
-                </li>
-
-            </ol>
-        </nav>
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Clientes_Pagos" 
+            asp-controller="Admin" 
+            asp-route-i="@Model.IdUsuario"
+            class="btn btn-light">
+            <small><i class="ti ti-arrow-left"></i> 
+                Volver al historial</small></a>
+        </div> <br />
 
         <div class="mb-4">
 
@@ -48,229 +32,127 @@
 <div class="card">
     <div class="card-body p-4">
 
-        <h4 class="mb-3">
+        <h5 class="mb-3 fw-bold">
             Cliente
-        </h4>
-
+        </h5>
         <div class="row">
 
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Nombre
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.NombreCliente"
-                       readonly />
-
+            <div class="col-md-4 mb-2">
+                <!-- Nombre completo -->
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Nombre Completo</label>
+                    <p class="bip">@Model.NombreCliente</p>
+                </div>
             </div>
 
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Identificación
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(string.IsNullOrWhiteSpace(Model.Identificacion)
-                                           ? "No registrada"
-                                           : Model.Identificacion)"
-                       readonly />
-
+            <div class="col-md-4 mb-2">
+                <!-- Identificacion -->
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Identificación</label>
+                    <p class="bip">@Model.Identificacion</p>
+                </div>
             </div>
 
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Correo electrónico
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.CorreoElectronico"
-                       readonly />
-
+            <div class="col-md-4 mb-2">
+                <!-- Correo -->
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Correo Electrónico</label>
+                    <p class="bip">@Model.CorreoElectronico</p>
+                </div>
             </div>
+
+            
 
         </div>
 
+        <hr class="lineaGris"/>
 
-        <hr />
 
-
-        <h4 class="mb-3">
+        <h5 class="mb-3 fw-bold">
             Membresía
-        </h4>
-
+        </h5>
         <div class="row">
 
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Número
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.IdMembresia"
-                       readonly />
-
+            <div class="col-md-4 mb-2">
+                <!-- Nombre Plan -->
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Plan Actual</label>
+                    <p class="bip">@Model.NombrePlan</p>
+                </div>
             </div>
-
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Plan
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.NombrePlan"
-                       readonly />
-
+            <div class="col-md-4 mb-2">
+                <!-- Duración -->
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Duración</label>
+                    <p class="bip">@Model.DuracionDias días</p>
+                </div>
             </div>
-
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Duración
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.DuracionDias días"
-                       readonly />
-
+            <div class="col-md-4 mb-2">
+                <!-- Estado de Membresía -->
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Estado</label>
+                    <p class="bip">@Model.EstadoMembresia</p>
+                </div>
             </div>
-
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Estado
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.EstadoMembresia"
-                       readonly />
-
-            </div>
-
         </div>
 
 
-        <hr />
+        <hr xlass="lineaGris"/>
 
 
-        <h4 class="mb-3">
+        <h5 class="mb-3 fw-bold">
             Pago
-        </h4>
-
+        </h5>
         <div class="row">
 
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Método
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.MetodoPago"
-                       readonly />
-
+            <div class="col-md-4 mb-2">
+                <!-- Método -->
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Método de pago</label>
+                    <p class="bip">@Model.MetodoPago</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <!-- Emisión -->
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Fecha de Emisión</label>
+                    <p class="bip">@Model.FechaEmision.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-2">
+                <!-- Referencia -->
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">N° de Referencia</label>
+                    <p class="bip">@(Model.NumeroReferencia ?? "No registrada")</p>
+                </div>
             </div>
 
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Fecha de emisión
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.FechaEmision.ToString("dd/MM/yyyy HH:mm")"
-                       readonly />
-
+            <!-- Subtotal -->
+            <div class="col-md-4 mb-2">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Subtotal</label>
+                    <p class="bip">&#8353; @Model.Subtotal.ToString("N2")</p>
+                </div>
             </div>
 
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Referencia
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(string.IsNullOrWhiteSpace(Model.NumeroReferencia)
-                                           ? "Sin referencia"
-                                           : Model.NumeroReferencia)"
-                       readonly />
-
+            <!-- Impuesto-->
+            <div class="col-md-4 mb-2">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Impuesto</label>
+                    <p class="bip">&#8353; @Model.Impuesto.ToString("N2")</p>
+                </div>
             </div>
 
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Subtotal
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="₡@Model.Subtotal.ToString("N2")"
-                       readonly />
-
-            </div>
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    IVA 13%
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="₡@Model.Impuesto.ToString("N2")"
-                       readonly />
-
-            </div>
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Total
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="₡@Model.Total.ToString("N2")"
-                       readonly />
-
+            <!-- Total-->
+            <div class="col-md-4 mb-2">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">TOTAL</label>
+                    <p class="bip fs-4">&#8353; @Model.Total.ToString("N2")</p>
+                </div>
             </div>
 
         </div>
 
-
-        <div class="text-center mt-3">
-
-            <a asp-action="Clientes_Pagos"
-               asp-controller="Admin"
-               asp-route-i="@Model.IdUsuario"
-               class="btn btn-light">
-
-                Volver al historial
-
-            </a>
-
-        </div>
 
     </div>
 </div>
