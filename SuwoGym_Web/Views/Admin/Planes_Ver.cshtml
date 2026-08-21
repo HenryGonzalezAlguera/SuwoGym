@@ -3,41 +3,30 @@
 <div class="row">
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Planes_Lista"
-                       asp-controller="Admin">
-
-                        Planes de membresía
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Detalle del plan
-
-                </li>
-
-            </ol>
-
-        </nav>
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Planes_Lista" 
+            asp-controller="Admin" 
+            class="btn btn-light">
+            <small><i class="ti ti-arrow-left"></i> 
+                Volver</small></a>
+        </div> <br />
 
 
-        <div class="mb-4">
-
-            <h2>Detalle del plan</h2>
-
-            <p class="mb-0">
-                Información registrada del plan de membresía
-            </p>
-
+        <!-- Titulo -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="">
+                <h2>Detalles del plan</h2>
+            </div>
+            <div>
+                <a asp-action="Planes_Modificar" 
+                asp-controller="Admin" 
+                asp-route-i="@Model.IdPlan"
+                class="btn btn-outline-primary" >
+                    <i class="ti ti-edit"></i><span>
+                        Editar Plan</span>
+                </a>
+            </div>
         </div>
 
     </div>
@@ -59,104 +48,87 @@
 
     <div class="card-body p-4">
 
-        <div class="row">
+        <div class="row g-3">
 
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Identificador
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.IdPlan"
-                       readonly />
-
+            <div class="col-md-4">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Nombre del plan</label>
+                    <p class="bip">@Model.NombrePlan</p>
+                </div>
             </div>
 
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Nombre del plan
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.NombrePlan"
-                       readonly />
-
+            <div class="col-md-4">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Duración</label>
+                    <p class="bip">@Model.DuracionDias días</p>
+                </div>
             </div>
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Duración
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.DuracionDias días"
-                       readonly />
-
+           
+            <div class="col-md-4">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Precio</label>
+                    <p class="bip">&#8353; @Model.Precio.ToString("N2")</p>
+                </div>
             </div>
+            
+            <hr class="lineaGris"/>
 
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Precio
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="₡@Model.Precio.ToString("N2")"
-                       readonly />
-
-            </div>
-
-        </div>
-
-
-        <div class="mb-4">
-
-            <label class="form-label">
-                Descripción
-            </label>
-
-            <textarea class="form-control"
-                      rows="4"
-                      readonly>@(string.IsNullOrWhiteSpace(Model.Descripcion)
+            <div class="col-md-12 mb-2">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Descripción</label>
+                    <p class="bip">
+                        @(string.IsNullOrWhiteSpace(Model.Descripcion)
                           ? "Sin descripción"
-                          : Model.Descripcion)</textarea>
+                          : Model.Descripcion)
+                    </p>
+                </div>
+            </div>
 
-        </div>
+            <hr class="lineaGris"/>
+
+            <div class="col-md-6">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Beneficio 1</label>
+                    <p class="bip">
+                        @(string.IsNullOrWhiteSpace(Model.Beneficio1)
+                          ? "No definido"
+                          : Model.Beneficio1)
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Beneficio 2</label>
+                    <p class="bip">
+                        @(string.IsNullOrWhiteSpace(Model.Beneficio2)
+                          ? "No definido"
+                          : Model.Beneficio2)
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Beneficio 3</label>
+                    <p class="bip">
+                        @(string.IsNullOrWhiteSpace(Model.Beneficio3)
+                          ? "No definido"
+                          : Model.Beneficio3)
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bloque_info">
+                    <label class="bloque_info_titulo">Beneficio 4</label>
+                    <p class="bip">
+                        @(string.IsNullOrWhiteSpace(Model.Beneficio4)
+                          ? "No definido"
+                          : Model.Beneficio4)
+                    </p>
+                </div>
+            </div>
 
 
-        <div class="d-flex justify-content-center gap-2">
-
-            <a asp-action="Planes_Lista"
-               asp-controller="Admin"
-               class="btn btn-light">
-
-                Volver
-
-            </a>
-
-
-            <a asp-action="Planes_Modificar"
-               asp-controller="Admin"
-               asp-route-i="@Model.IdPlan"
-               class="btn btn-primary">
-
-                Modificar plan
-
-            </a>
 
         </div>
 

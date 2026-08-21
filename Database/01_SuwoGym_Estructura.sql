@@ -2206,7 +2206,7 @@ GO
    CONSULTAR DETALLE DE UN PLAN
    ============================================================ */
 
-CREATE   PROCEDURE [dbo].[spDetallePlanMembresia]
+CREATE PROCEDURE [dbo].[spDetallePlanMembresia]
     @IdPlan INT
 AS
 BEGIN
@@ -2217,7 +2217,11 @@ BEGIN
         NombrePlan,
         Descripcion,
         DuracionDias,
-        Precio
+        Precio,
+        Beneficio1,
+        Beneficio2,
+        Beneficio3,
+        Beneficio4
     FROM dbo.PlanMembresia
     WHERE IdPlan = @IdPlan;
 END
@@ -3075,12 +3079,16 @@ GO
    MODIFICAR PLAN DE MEMBRESÍA
    ============================================================ */
 
-CREATE   PROCEDURE [dbo].[spEditarPlanMembresia]
+CREATE PROCEDURE [dbo].[spEditarPlanMembresia]
     @IdPlan INT,
     @NombrePlan NVARCHAR(100),
     @Descripcion NVARCHAR(300),
     @DuracionDias INT,
-    @Precio DECIMAL(10,2)
+    @Precio DECIMAL(10,2),
+    @Beneficio1 NVARCHAR(50),
+    @Beneficio2 NVARCHAR(50),
+    @Beneficio3 NVARCHAR(50),
+    @Beneficio4 NVARCHAR(50)
 AS
 BEGIN
     BEGIN TRY
@@ -3155,7 +3163,11 @@ BEGIN
         SET NombrePlan = LTRIM(RTRIM(@NombrePlan)),
             Descripcion = @Descripcion,
             DuracionDias = @DuracionDias,
-            Precio = @Precio
+            Precio = @Precio,
+            Beneficio1 = @Beneficio1,
+            Beneficio2 = @Beneficio2,
+            Beneficio3 = @Beneficio3,
+            Beneficio4 = @Beneficio4
         WHERE IdPlan = @IdPlan;
 
     END TRY

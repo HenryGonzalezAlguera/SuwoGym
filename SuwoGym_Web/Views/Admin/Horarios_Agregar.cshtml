@@ -3,40 +3,17 @@
 <div class="row">
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Horarios_Lista"
-                       asp-controller="Admin">
-
-                        Horarios
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Programar clase
-
-                </li>
-
-            </ol>
-        </nav>
-
+            
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Horarios_Lista" asp-controller="Admin" class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
 
         <div class="mb-4">
 
             <h2 class="mb-1">
                 Programar clase
             </h2>
-
-            <p class="text-secondary mb-0">
-                Asigne una clase, un entrenador, un horario y un cupo.
-            </p>
 
         </div>
 
@@ -140,7 +117,7 @@
                     <input type="datetime-local"
                            id="FechaHoraInicio"
                            name="FechaHoraInicio"
-                           value="@Model.FechaHoraInicio.ToString("yyyy-MM-ddTHH:mm")"
+                           value= "@Model.FechaHoraInicio.ToString("yyyy-MM-ddTHH:mm")"
                            class="form-control"
                            required />
 
@@ -217,8 +194,6 @@
                 <a asp-action="Horarios_Lista"
                    asp-controller="Admin"
                    class="btn btn-light">
-
-                    <i class="ti ti-arrow-left"></i>
                     Cancelar
 
                 </a>
@@ -226,8 +201,6 @@
 
                 <button type="submit"
                         class="btn btn-primary">
-
-                    <i class="ti ti-device-floppy"></i>
                     Programar clase
 
                 </button>

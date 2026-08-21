@@ -818,6 +818,22 @@ namespace SuwoGym_API.Controllers
                     "@Precio",
                     model.Precio);
 
+                parameters.Add(
+                    "@Beneficio1",
+                    model.Beneficio1);
+
+                parameters.Add(
+                    "@Beneficio2",
+                    model.Beneficio2);
+
+                parameters.Add(
+                    "@Beneficio3",
+                    model.Beneficio3);
+
+                parameters.Add(
+                    "@Beneficio4",
+                    model.Beneficio4);
+                
                 var response =
                     context.Execute(
                         "spEditarPlanMembresia",

@@ -12,5 +12,10 @@
         public int DuracionDias { get; set; }
 
         public decimal Precio { get; set; }
+
+        public string Beneficio1 { get; set; } = string.Empty;
+        public string Beneficio2 { get; set; } = string.Empty;
+        public string Beneficio3 { get; set; } = string.Empty;
+        public string Beneficio4 { get; set; } = string.Empty;
     }
 }

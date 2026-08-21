@@ -4,61 +4,26 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Horarios_Ver" 
+            asp-controller="Admin" 
+            asp-route-i="@Model.IdClaseProg"
+            class="btn btn-light">
+                <small><i class="ti ti-arrow-left"></i> 
+                Volver</small></a>
+        </div> <br />
 
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Horarios_Lista"
-                       asp-controller="Admin">
-
-                        Horarios
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Horarios_Ver"
-                       asp-controller="Admin"
-                       asp-route-i="@Model.IdClaseProg">
-
-                        Detalle
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Editar
-
-                </li>
-
-            </ol>
-
-        </nav>
-
-
+        <!-- Titulo -->
         <div class="mb-4">
-
             <h2 class="mb-1">
                 Editar clase programada
             </h2>
-
-            <p class="text-secondary mb-0">
-                Modifique el entrenador, horario, clase o capacidad
-            </p>
-
         </div>
 
     </div>
 
 </div>
-
 
 @if (ViewBag.MensajeError != null)
 {
@@ -69,6 +34,7 @@
 
     </div>
 }
+
 
 
 <div class="card">
@@ -82,6 +48,14 @@
             <input type="hidden"
                    name="IdClaseProg"
                    value="@Model.IdClaseProg" />
+
+            <input type="hidden"
+                   name="Inicio"
+                   value="@Model.FechaHoraInicio" />
+            
+            <input type="hidden"
+                   name="Fin"
+                   value="@Model.FechaHoraFin" />
 
 
             <div asp-validation-summary="ModelOnly"
@@ -171,6 +145,8 @@
                           class="text-danger">
                     </span>
 
+
+
                 </div>
 
 
@@ -244,8 +220,6 @@
                    asp-controller="Admin"
                    asp-route-i="@Model.IdClaseProg"
                    class="btn btn-light">
-
-                    <i class="ti ti-arrow-left"></i>
                     Cancelar
 
                 </a>
@@ -253,9 +227,7 @@
 
                 <button type="submit"
                         class="btn btn-primary">
-
-                    <i class="ti ti-device-floppy"></i>
-                    Guardar cambios
+                    Guardar 
 
                 </button>
 

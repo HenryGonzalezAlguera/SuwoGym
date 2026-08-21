@@ -2,54 +2,30 @@
 
 <div class="row">
     <div class="col-12">
-
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Planes_Lista"
-                       asp-controller="Admin">
-
-                        Planes de membresía
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Planes_Ver"
-                       asp-controller="Admin"
-                       asp-route-i="@Model.IdPlan">
-
-                        Detalle
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Modificar plan
-
-                </li>
-
-            </ol>
-
-        </nav>
+<!-- Botón atrás -->
+        <div>
+            <a asp-action="Planes_Lista" 
+            asp-controller="Admin" 
+            class="btn btn-light">
+            <small><i class="ti ti-arrow-left"></i> 
+                Volver</small></a>
+        </div> <br />
 
 
-        <div class="mb-4">
-
-            <h2>Modificar plan</h2>
-
-            <p class="mb-0">
-                Actualizar la información del plan de membresía
-            </p>
-
+        <!-- Titulo -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="">
+                <h2>Modificar un plan</h2>
+            </div>
+            <div>
+                <a asp-action="Planes_Ver" 
+                asp-controller="Admin" 
+                asp-route-i="@Model.IdPlan"
+                class="btn btn-outline-primary" >
+                    <i class="ti ti-eye"></i><span>
+                        Ver Detalle del Plan</span>
+                </a>
+            </div>
         </div>
 
     </div>
@@ -91,25 +67,12 @@
 
             <input asp-for="IdPlan"
                    type="hidden" />
-
+         
 
             <div class="row">
 
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Identificador
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.IdPlan"
-                           readonly />
-
-                </div>
-
-
-                <div class="col-md-6 mb-3">
+              
+                <div class="col-md-4 mb-3">
 
                     <label asp-for="NombrePlan"
                            class="form-label">
@@ -124,12 +87,8 @@
 
                 </div>
 
-            </div>
 
-
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
 
                     <label asp-for="DuracionDias"
                            class="form-label">
@@ -146,7 +105,7 @@
                 </div>
 
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
 
                     <label asp-for="Precio"
                            class="form-label">
@@ -163,28 +122,82 @@
 
                 </div>
 
+                <div class="col-md-12 mb-4">
+
+                    <label asp-for="Descripcion"
+                           class="form-label">
+
+                        Descripción
+
+                    </label>
+
+                    <textarea asp-for="Descripcion"
+                              class="form-control"
+                              rows="1"
+                              maxlength="300">
+                    </textarea>
+
+                </div>
+
+
+                    <!-- Beneficio 1 -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="Beneficio1"
+                               class="form-label">
+                            Beneficio 1
+                        </label>
+
+                    <input asp-for="Beneficio1"
+                                value="@Model.Beneficio1"
+                                class="form-control"
+                                maxlength="50"/>
+                    </div>
+                    
+                    <!-- Beneficio 2 -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="Beneficio2"
+                               class="form-label">
+                            Beneficio 2
+                        </label>
+
+                    <input asp-for="Beneficio2"
+                                value="@Model.Beneficio2"
+                                class="form-control"
+                                maxlength="50"/>
+                    </div>
+                   
+                    <!-- Beneficio 3 -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="Beneficio3"
+                               class="form-label">
+                            Beneficio 3
+                        </label>
+
+                    <input asp-for="Beneficio3"
+                                value="@Model.Beneficio3"
+                                class="form-control"
+                                maxlength="50"/>
+                    </div>
+                   
+                    <!-- Beneficio 4 -->
+                    <div class="col-md-6 mb-4">
+                        <label asp-for="Beneficio4"
+                               class="form-label">
+                            Beneficio 4
+                        </label>
+
+                    <input asp-for="Beneficio4"
+                                value="@Model.Beneficio4"
+                                class="form-control"
+                                maxlength="50"/>
+                    </div>
+
+                
             </div>
 
 
-            <div class="mb-4">
 
-                <label asp-for="Descripcion"
-                       class="form-label">
-
-                    Descripción
-
-                </label>
-
-                <textarea asp-for="Descripcion"
-                          class="form-control"
-                          rows="4"
-                          maxlength="300">
-                </textarea>
-
-            </div>
-
-
-            <div class="d-flex justify-content-center gap-2">
+            <div class="d-flex justify-content-center gap-2 mt-3">
 
                 <a asp-action="Planes_Ver"
                    asp-controller="Admin"
@@ -213,8 +226,6 @@
 
 
 
-{
 <script src="~/js/planModificar.js"
         asp-append-version="true">
 </script>
-}
