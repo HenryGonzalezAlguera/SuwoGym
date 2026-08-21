@@ -285,22 +285,7 @@ CREATE TABLE [dbo].[Rutinas](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[SystemLog] Fecha de script: 03/08/2026 19:28:08 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[SystemLog](
-	[IdLog] [int] IDENTITY(1,1) NOT NULL,
-	[IdUsuario] [int] NULL,
-	[Accion] [nvarchar](100) NOT NULL,
-	[FechaHora] [datetime] NOT NULL,
- CONSTRAINT [PK_SystemLog] PRIMARY KEY CLUSTERED 
-(
-	[IdLog] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
+
 /****** Objeto: Table [dbo].[Usuario] Fecha de script: 03/08/2026 19:28:08 ******/
 SET ANSI_NULLS ON
 GO
@@ -478,11 +463,6 @@ ALTER TABLE [dbo].[Rutinas]  WITH CHECK ADD  CONSTRAINT [FK_Rutinas_Entrenador] 
 REFERENCES [dbo].[Usuario] ([IdUsuario])
 GO
 ALTER TABLE [dbo].[Rutinas] CHECK CONSTRAINT [FK_Rutinas_Entrenador]
-GO
-ALTER TABLE [dbo].[SystemLog]  WITH CHECK ADD  CONSTRAINT [FK_SystemLog_Usuario] FOREIGN KEY([IdUsuario])
-REFERENCES [dbo].[Usuario] ([IdUsuario])
-GO
-ALTER TABLE [dbo].[SystemLog] CHECK CONSTRAINT [FK_SystemLog_Usuario]
 GO
 ALTER TABLE [dbo].[Usuario]  WITH CHECK ADD  CONSTRAINT [FK_Usuario_Rol] FOREIGN KEY([IdRol])
 REFERENCES [dbo].[Rol] ([IdRol])
@@ -2968,6 +2948,99 @@ BEGIN
 END
 
 GO
+
+
+/* ============================================================
+   PROCEDIMIENTO: REGISTRAR DATOS PERSONALES DE EMPLEADO
+   ============================================================ */
+
+CREATE PROCEDURE [dbo].[spEditarEmpleadoDatosP]
+    @IdUser INT,
+    @Nombre NVARCHAR(80),
+    @Apellido NVARCHAR(80),
+    @Identificacion NVARCHAR(50),
+    @FechaNacimiento DATETIME2(7),
+    @Telefono NVARCHAR(30),
+    @CorreoElectronico NVARCHAR(150),
+    @Direccion NVARCHAR(200)
+AS
+BEGIN
+    BEGIN TRY
+        IF EXISTS
+        (
+
+            SELECT 1
+            FROM dbo.Usuario
+            WHERE CorreoElectronico = @CorreoElectronico
+            AND IdUsuario != @IdUser
+        )
+        BEGIN
+            RAISERROR(
+                'El correo electrónico ya está registrado.',
+                16,
+                1
+            );
+
+            RETURN;
+        END
+
+        IF EXISTS
+        (
+            SELECT 1
+            FROM dbo.Usuario
+            WHERE Identificacion = @Identificacion
+            AND IdUsuario != @IdUser
+        )
+        BEGIN
+            RAISERROR(
+                'La identificación ya está registrada en el sistema.',
+                16,
+                1
+            );
+
+            RETURN;
+        END
+
+        BEGIN TRANSACTION;
+
+        UPDATE dbo.Usuario
+        SET
+            Nombre = @Nombre,
+            Apellido = @Apellido,
+            CorreoElectronico = @CorreoElectronico,
+            Identificacion = @Identificacion,
+            Telefono = @Telefono,
+            FechaNacimiento = @FechaNacimiento,
+            Direccion = @Direccion
+        WHERE
+            IdUsuario = @IdUser
+
+        COMMIT TRANSACTION;
+
+    END TRY
+    BEGIN CATCH
+
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END
+
+        DECLARE @ErrorMessage NVARCHAR(4000) =
+            ERROR_MESSAGE();
+
+        RAISERROR(
+            @ErrorMessage,
+            16,
+            1
+        );
+
+    END CATCH
+END
+
+GO
+
+
+
 /****** Objeto: StoredProcedure [dbo].[spEditarEstadoCliente] Fecha de script: 03/08/2026 19:28:08 ******/
 SET ANSI_NULLS ON
 GO
@@ -3635,21 +3708,28 @@ GO
 CREATE PROCEDURE [dbo].[spListarClientes]
 AS
 BEGIN
-    SET NOCOUNT ON;
+  SET NOCOUNT ON;
 
     SELECT
         U.IdUsuario,
         U.Nombre,
         U.Apellido,
         U.CorreoElectronico,
-        U.Estado
+        U.Estado,
+        P.NombrePlan,
+        M.EstadoMembresia,
+        M.FechaVencimiento
     FROM dbo.Usuario AS U
+    INNER JOIN dbo.MembresiaUsuario as M
+          ON M.IdUsuario = U.IdUsuario
+    INNER JOIN dbo.PlanMembresia as P
+          ON P.IdPlan = M.IdPlan
     WHERE U.IdRol = 3
     ORDER BY U.Apellido ASC,
              U.Nombre ASC;
 END
-
 GO
+
 /****** Objeto: StoredProcedure [dbo].[spListarClientesEntrenador] Fecha de script: 03/08/2026 19:28:08 ******/
 SET ANSI_NULLS ON
 GO

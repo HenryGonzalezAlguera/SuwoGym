@@ -67,6 +67,13 @@
                         </th>
 
                         <th>
+                            <b>Plan de Membresia</b>
+                        </th>
+                        <th>
+                            <b>Estado Membresía</b>
+                        </th>
+
+                        <th>
                             <b>Acciones</b>
                         </th>
                     </tr>
@@ -87,22 +94,28 @@
                             </td>
 
                             <td>
-                                @if (item.Estado)
+                                @if (@item.Estado)
                                 {
-                                    <span class="badge
-                                        bg-success-subtle
-                                        text-success">
-                                        Activo
-                                    </span>
+                                    <span class="badge 
+                                            bg-success-subtle 
+                                            text-success-emphasis"
+                                    >Activo</span>
                                 }
                                 else
                                 {
-                                    <span class="badge
-                                        bg-danger-subtle
-                                        text-danger">
-                                        Inactivo
-                                    </span>
+                                    <span class="badge 
+                                            bg-danger-subtle 
+                                            text-danger-emphasis"
+                                    >Inactivo</span>
                                 }
+                            </td>
+
+                            <td>
+                                @item.NombrePlan
+                            </td>
+
+                            <td>
+                                @item.EstadoMembresia
                             </td>
 
                             <td>
@@ -111,9 +124,15 @@
                                    asp-route-i="@item.IdUsuario"
                                    class="btn btn-sm btn-light"
                                    title="Ver cliente">
-
                                     <i class="ti ti-eye"></i>
+                                </a>
 
+                                <a asp-action="Clientes_Editar"
+                                   asp-controller="Admin"
+                                   asp-route-i="@item.IdUsuario"
+                                   class="btn btn-sm btn-light"
+                                   title="Editar cliente">
+                                    <i class="ti ti-edit"></i>
                                 </a>
                             </td>
 

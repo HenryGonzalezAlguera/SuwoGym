@@ -4,23 +4,21 @@
 <!-- Header -->
 <div class="row">
     <div class="col-12">
-        <!-- Breadcrumb-->
+        
+        <!-- Botón atrás -->
         <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a asp-action="Empleados_Lista" asp-controller="Admin" class="link-primary">Empleados</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        <span>Detalles del Empleado</span>
-                    </li>
-                </ol>
-            </nav>
-        </div>
+            <a asp-action="Empleados_Lista" asp-controller="Admin" class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
+
         <!-- Titulo -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="">
-                <h4>Detalles del Empleado</h4>
+                <h2>Detalles del Empleado</h2>
+            </div>
+            <div>
+                <a asp-action="Empleados_Editar" asp-controller="Admin" class="btn btn-outline-primary" asp-route-i="@Model.IdUsuario">
+                    <i class="ti ti-edit"></i><span> Editar Empleado</span>
+                </a>
             </div>
         </div>
     </div>
@@ -33,7 +31,7 @@
             <!-- Nombre y Rol -->
             <div class="col-lg-8">
                 <div class="mt-2">
-                    <h2 class="mb-2"><b>@Model.nombre @Model.apellido</b></h2>
+                    <h3 class="mb-2"><b>@Model.nombre @Model.apellido</b></h3>
                     <p>
                         <span class="badge bg-info-subtle text-info-emphasis">
                             <i class="ti ti-user"></i> @Model.NombreRol
@@ -46,140 +44,122 @@
 </div>  
 <br />
 
-
-<!-- Tarjeta de información detallada -->
+<!-- Row de tarjetas-->
 <div class="row">
-    <div class="col-lg-12">
+
+    <!-- Tarjeta de información detallada -->
+    <div class="col-lg-6 mb-3">
         <div class="card">
             <div class="card-body p-4">
+                <h5 class="mb-4"><b>
+                        <i class="ti ti-user"></i>
+                        Personal
+                    </b></h5>
+                <div class="row g-3">
 
-                <!-- Botones de menu -->
-                <ul class="nav nav-tabs mb-4 justify-content-center" id="infoTabs" role="tablist" 
-                style="border-bottom: 2px solid #e0e0e0;">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link btnNav" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab">
-                            <i class="ti ti-user"></i>
-                            Personal
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                            <button class="nav-link btnNav" id="laboral-tab" data-bs-toggle="tab" data-bs-target="#laboral" type="button" role="tab">
-                            <i class="ti ti-briefcase-2"></i>
-                            Laboral
-                        </button>
-                    </li>
-                </ul>
-
-                <!-- Contenido de tabs -->
-                <div class="tab-content">
-
-                    <!-- Pestaña Personal -->
-                    <div class="tab-pane fade show active" id="personal" role="tabpanel">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="p-3 bloque_info">
-                                    <label class="bloque_info_titulo">Identificación</label>
-                                    <p>@Model.identificacion</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #007bff;">
-                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Fecha de Nacimiento</label>
-                                    <p style="color: #293039; font-weight: 600; margin: 0;">
-                                        <i class="fas fa-calendar-alt me-2" style="color: #007bff;"></i>
-                                        @Model.fechaNac
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #007bff;">
-                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Correo Electrónico</label>
-                                    <p style="color: #293039; font-weight: 600; margin: 0;">
-                                        <i class="fas fa-envelope me-2" style="color: #007bff;"></i>
-                                        @Model.correoElectronico
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #007bff;">
-                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Teléfono</label>
-                                    <p style="color: #293039; font-weight: 600; margin: 0;">
-                                        <i class="fas fa-phone me-2" style="color: #007bff;"></i>
-                                        @Model.telefono
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #293039;">
-                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Dirección de Vivienda</label>
-                                    <p style="color: #293039; font-weight: 500; margin: 0; font-size: 1.05rem;">
-                                        <i class="fas fa-map-pin me-2" style="color: #293039;"></i>
-                                        @Model.direccion
-                                    </p>
-                                </div>
-                            </div>
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Identificación</label>
+                            <p class="bip">@Model.identificacion</p>
                         </div>
                     </div>
-
-                    <!-- Pestaña Laboral -->
-                    <div class="tab-pane fade" id="laboral" role="tabpanel">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #ff5500;">
-                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Rol</label>
-                                    <p style="color: #293039; font-weight: 600; margin: 0;">
-                                        <i class="fas fa-user-tag me-2" style="color: #ff5500;"></i>
-                                        @Model.NombreRol
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #ff5500;">
-                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Estado</label>
-                                    <p style="color: #293039; font-weight: 600; margin: 0;">
-                                        @if (Model.Estado)
-                                        {
-                                            <span class="badge" style="background-color: #28a745; color: white; padding: 6px 14px; border-radius: 20px;">
-                                                <i class="fas fa-check-circle me-1"></i> Activo
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge" style="background-color: #dc3545; color: white; padding: 6px 14px; border-radius: 20px;">
-                                                <i class="fas fa-times-circle me-1"></i> Inactivo
-                                            </span>
-                                        }
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #ff5500;">
-                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Fecha de Ingreso</label>
-                                    <p style="color: #293039; font-weight: 600; margin: 0;">
-                                        <i class="fas fa-calendar-plus me-2" style="color: #ff5500;"></i>
-                                        @Model.fechaRegistro.ToString("dd/MM/yyyy")
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="p-3" style="background-color: #f8f9fa; border-radius: 12px; border-left: 4px solid #ff5500;">
-                                    <label style="color: #6c757d; font-size: 0.85rem; font-weight: 500;">Antigüedad</label>
-                                    <p style="color: #293039; font-weight: 600; margin: 0;">
-                                        <i class="fas fa-clock me-2" style="color: #ff5500;"></i>
-                                        Antiguedad
-                                    </p>
-                                </div>
-                            </div>
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Fecha de Nacimiento</label>
+                            <p class="bip">
+                                @(Model.fechaNac.ToString("dd/MM/yyyy") ?? "No registrada")
+                            </p>
                         </div>
                     </div>
-
-                
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Correo Electrónico</label>
+                            <p class="bip">@Model.correoElectronico</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Teléfono</label>
+                            <p class="bip">
+                                @(string.IsNullOrWhiteSpace(Model.telefono)
+                                           ? "No registrado"
+                                           : Model.telefono)
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Dirección</label>
+                            <p>@(string.IsNullOrWhiteSpace(Model.direccion)
+                                           ? "No registrada"
+                                           : Model.direccion) </p>
+                        </div>
+                    </div>
                 </div>
+               
             </div>
         </div>
     </div>
-    
+
+    <!-- Información Laboral -->
+    <div class="col-lg-6 mb-3">
+        <div class="card">
+
+
+
+
+            <div class="card-body p-4">
+
+                <!--Título-->
+                <h5 class="mb-4">
+                    <b>
+                        <i class="ti ti-briefcase-2"></i>
+                         Laboral
+                    </b>
+                </h5>
+                
+                <!--Informacion-->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Rol</label>
+                            <p class="bip">@Model.NombreRol</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Estado</label></br>
+                            @if (Model.Estado)
+                            {
+                                <p class=" badge bg-success-subtle text-success-emphasis bip">
+                                    <i class="ti ti-circle-filled me-1"></i> Activo
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="badge bg-danger-subtle text-danger-emphasis bip">
+                                    <i class="ti ti-circle-filled me-1"></i> Inactivo
+                                </p>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Fecha de Registro</label>
+                            <p class="bip">@Model.fechaRegistro.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+                    
+                </div>
+           
+        </div>
+    </div>
+    </div>
+
 </div>
+
+
+
 
 
 

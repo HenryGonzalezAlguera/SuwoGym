@@ -45,7 +45,7 @@ namespace SuwoGym_Web.Models
 
 
         // CAMPOS OPCIONALES
-        public string fechaNac { get; set; } = string.Empty;
+        public DateTime fechaNac { get; set; }
 
         public string telefono { get; set; } = string.Empty;
 

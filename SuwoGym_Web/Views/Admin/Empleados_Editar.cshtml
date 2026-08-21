@@ -4,69 +4,174 @@
 <!-- Header -->
 <div class="row">
     <div class="col-12">
-        <!-- Breadcrumb-->
+       
+        <!-- Botón atrás -->
         <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a asp-action="Empleados_Lista" asp-controller="Admin" class="link-primary">Empleados</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        <span>Editar Empleado</span>
-                    </li>
-                </ol>
-            </nav>
-        </div>
+            <a asp-action="Empleados_Lista" asp-controller="Admin" class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
+
         <!-- Titulo -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="">
-                <h4>Editar Empleado</h4>
+                <h2>Editar Empleado</h2>
+            </div>
+            <div>
+                <a asp-action="Empleados_Ver" asp-controller="Admin" class="btn btn-outline-primary" asp-route-i="@Model.IdUsuario">
+                    <i class="ti ti-eye"></i><span> Ver Empleado</span>
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-
-
 <div class="row">
     
     <!-- Datos Generales -->
     <div class="col-lg-6 mb-4">
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-body p-4">
-                <div class="mt-2">
-                    <h2 class="mb-2"><b>@Model.nombre @Model.apellido</b></h2>
-                </div>
-                <hr class="lineaGris"/>
-                <div class="">
-                    <small class="gris">Identificación</small>
-                    <p>
-                        <i class="ti ti-mail gris"></i>
-                        <span>@Model.identificacion</span>
-                    </p>
-                </div>
-                <div class="">
-                    <small class="gris">Correo Electrónico</small>
-                    <p>
-                        <i class="ti ti-mail gris"></i>
-                        <span>@Model.correoElectronico</span>
-                    </p>
-                </div>
+                <form id="editarEmpleadoDPForm" asp-action="Empleados_EditarDatos" asp-controller="Admin" method="post">
+                    <input type="hidden" asp-for="@Model.IdUsuario" />
+                        
+                    <h5 class="mb-4"><b>Datos personales</b></h5>
+               
+                    <!-- Nombre y apellido -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+
+                            <label for="nombre" class="form-label">
+                                Nombre
+                            </label>
+
+                            <input asp-for="nombre"
+                                    type="text"
+                                    class="form-control"
+                                    id="nombre"
+                                    value="@Model.nombre"
+                                    maxlength="80" />
+
+                        </div>
+                        <div class="col-md-6 mb-3">
+
+                            <label for="apellido"
+                                    class="form-label">
+                                Apellido
+                            </label>
+
+                            <input asp-for="apellido"
+                                    type="text"
+                                    class="form-control"
+                                    id="apellido"
+                                    value="@Model.apellido"
+                                    maxlength="80" />
+
+                        </div>
+                    </div>
+
+                    <!-- Correo y teléfono -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+
+                            <label for="identificacion"
+                                   class="form-label">
+                                Identificación
+                            </label>
+
+                            <input asp-for="identificacion"
+                                   type="text"
+                                   class="form-control"
+                                   id="identificacion"
+                                   value="@Model.identificacion"
+                                   maxlength="50" />
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="correo"
+                                   class="form-label">
+                                Correo electrónico
+                            </label>
+
+                            <input asp-for="correoElectronico"
+                                   type="email"
+                                   value="@Model.correoElectronico"
+                                   class="form-control"
+                                   id="correo"
+                                   maxlength="150" />
+
+                        </div>
+                    </div>
+
+                    <!-- Identificación y fecha de nacimiento -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+
+                            <label for="fechaNac"
+                                    class="form-label">
+                                Fecha de nacimiento
+                            </label>
+
+                            <input asp-for="fechaNac"
+                                    type="date"
+                                    class="form-control"
+                                    id="fechaNac" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+
+                            <label for="telefon     o"
+                                    class="form-label">
+                                Teléfono
+                            </label>
+
+                            <input asp-for="telefono"
+                                    type="text"
+                                    value="@Model.telefono"
+                                    class="form-control"
+                                    id="telefono"
+                                    maxlength="30" />
+
+                        </div>
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="mb-5">
+
+                        <label for="direccion"
+                                class="form-label">
+                            Dirección de vivienda
+                        </label>
+
+                        <textarea asp-for="direccion"
+                                    class="form-control"
+                                    id="direccion"
+                                    rows="4"
+                                    maxlength="200">
+                        </textarea>
+
+                    </div>
+
+                    <div class=" col-lg-12 align-content-center mb-3 text-end">
+                        <button type="submit" class="btn btn-primary">Cambiar</button>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Modificación Datos -->
+    <!-- Datos Laborales -->
     <div class="col-lg-6">
         <div class="card">
             <div class="card-body p-4">
+                
+                <h5 class="mb-4"><b>Datos laborales</b></h5>
 
                 <!-- Editar Rol -->
                 <form id="editarRolForm" asp-action="Empleados_EditarRol" asp-controller="Admin" method="post">
                     <input type="hidden" asp-for="@Model.IdUsuario" />
                     <input type="hidden" asp-for="@Model.Estado" />
 
-                    <h5 class="mb-4"><b>Cambiar Rol</b></h5>
                     <div class="row">
                         <div class="col-sm-3 align-content-center mb-1">
                             <p>Rol actual:  
@@ -93,7 +198,6 @@
                     <input type="hidden" asp-for="@Model.IdRol" />
                     <input type="hidden" asp-for="@Model.Estado" />
                     
-                    <h5 class="mb-4"><b>Cambiar Estado</b></h5>
                     <div class="row">
                         <div class="col-sm-3 align-content-center mb-1">
                             @if (Model.Estado)
@@ -126,6 +230,8 @@
 
 </div>
 
+
+<script src="~/js/empleadoeditar.js"></script>
 
 
 

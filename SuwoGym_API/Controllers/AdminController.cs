@@ -69,8 +69,7 @@ namespace SuwoGym_API.Controllers
 
 
         [HttpPost("EmpleadoAgregar")]
-        public async Task<IActionResult> EmpleadoAgregar(
-    EmpleadoCrearRequestModel model)
+        public async Task<IActionResult> EmpleadoAgregar( EmpleadoCrearRequestModel model)
         {
             if (model.IdRol != 1 &&
                 model.IdRol != 2)
@@ -212,8 +211,7 @@ namespace SuwoGym_API.Controllers
 
 
         [HttpPut("EmpleadoEditar")]
-        public IActionResult EmpleadoEditar(
-    EmpleadoEditarRequestModel model)
+        public IActionResult EmpleadoEditar( EmpleadoEditarRequestModel model)
         {
             var idUsuarioActual =
                 _utiles.ObtenerIdUsuarioToken();
@@ -278,6 +276,78 @@ namespace SuwoGym_API.Controllers
                     ex.Message);
             }
         }
+
+        [HttpPut("EmpleadoEditarDatosP")]
+        public IActionResult EmpleadoEditarDatosP ( EmpleadoEditarDPRequestModel model)
+        {
+            var idUsuarioActual =
+                _utiles.ObtenerIdUsuarioToken();
+           
+            using var context =
+                    new SqlConnection(
+                        _databasekey[
+                            "ConnectionStringsApi:DefaultConnection"]);
+
+            var parameters =
+                new DynamicParameters();
+
+            parameters.Add(
+                "@IdUser",
+                model.IdUsuario);
+
+            parameters.Add(
+                "@Nombre",
+                model.Nombre);
+
+            parameters.Add(
+                "@Apellido",
+                model.Apellido);
+
+            parameters.Add(
+                "@Identificacion",
+                model.Identificacion);
+
+            parameters.Add(
+                "@FechaNAcimiento",
+                model.FechaNac);
+
+            parameters.Add(
+                "@Telefono",
+                model.Telefono);
+
+            parameters.Add(
+                "@CorreoElectronico",
+                model.CorreoElectronico);
+
+            parameters.Add(
+                "@Direccion",
+                model.Direccion);
+
+            var response = 0;
+
+            try
+            {
+                response = context.Execute(
+                    "spEditarEmpleadoDatosP",
+                    parameters);
+            }
+            catch(Exception e)
+            {
+                return BadRequest("No se pudo realizar la actualización de cambios");
+            }
+                
+
+            if (response > 0)
+            {
+                return Ok(
+                    "La información del empleado se actualizó correctamente.");
+            }
+
+            return BadRequest("No se pudo realizar la actualización de cambios");
+            
+        }
+
+
         #endregion
 
 
@@ -373,7 +443,7 @@ namespace SuwoGym_API.Controllers
 
         [HttpPut("ClienteEditarAPI")]
         public IActionResult ClienteEditarAPI(
-    ClienteEditarRequestModel model)
+            ClienteEditarRequestModel model)
         {
             try
             {
@@ -434,9 +504,10 @@ namespace SuwoGym_API.Controllers
             }
 
         }
+
         [HttpPost("ClienteAsignarMembresiaAPI")]
         public IActionResult ClienteAsignarMembresiaAPI(
-    MembresiaAsignarRequestModel model)
+            MembresiaAsignarRequestModel model)
         {
             if (model.IdUsuario <= 0)
             {
@@ -490,9 +561,10 @@ namespace SuwoGym_API.Controllers
                     ex.Message);
             }
         }
+
         [HttpPut("ClienteCancelarMembresiaAPI")]
         public IActionResult ClienteCancelarMembresiaAPI(
-    MembresiaCancelarRequestModel model)
+        MembresiaCancelarRequestModel model)
         {
             if (model.IdMembresia <= 0)
             {
@@ -546,6 +618,7 @@ namespace SuwoGym_API.Controllers
                     ex.Message);
             }
         }
+
         [HttpGet("ListaEntrenadoresActivosAPI")]
         public IActionResult ListaEntrenadoresActivosAPI()
         {
@@ -568,9 +641,10 @@ namespace SuwoGym_API.Controllers
             return NotFound(
                 "No hay entrenadores activos disponibles.");
         }
+       
         [HttpPost("ClienteAsignarEntrenadorAPI")]
         public IActionResult ClienteAsignarEntrenadorAPI(
-    EntrenadorAsignarRequestModel model)
+            EntrenadorAsignarRequestModel model)
         {
             if (model.IdCliente <= 0)
             {

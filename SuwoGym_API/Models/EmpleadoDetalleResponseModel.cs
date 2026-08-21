@@ -10,7 +10,7 @@
 
         public string Identificacion { get; set; } = string.Empty;
 
-        public string FechaNac { get; set; } = string.Empty;
+        public DateTime FechaNac { get; set; }
 
         public string Telefono { get; set; } = string.Empty;
 

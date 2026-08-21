@@ -3,7 +3,9 @@
     ViewData["Title"] = "Panel Principal - SuwoGym";
 
     var nombre = Context.Session.GetString("Nombre");
+    var nombreCom = nombre + ' ' + Context.Session.GetString("Apellido");
     var rol = Context.Session.GetString("Rol");
+    var correo = Context.Session.GetString("CorreoElectronico");
 
 }
 
@@ -11,16 +13,9 @@
     <div class="row">
         <div class="col-12 col-md-6 order-md-1 order-last mb-2">
             <h1>
-                <span class="ti ti-home"></span> Bienvenido, @nombre
+                Bienvenido, @nombre
             </h1>
             <p class="text-subtitle text-muted">Panel principal de SUWÓ</p>
-        </div>
-        <div class="col-12 col-md-6 order-md-2 order-first">
-           <!--  <div class="float-end">
-                <a href="@Url.Action("Logout")" class="btn btn-danger btn-sm">
-                    <span class="ti ti-logout"></span> Cerrar Sesión
-                </a> 
-            </div> -->
         </div>
     </div>
 </div>
@@ -29,48 +24,65 @@
     <div class="row">
 
         <!-- Información del usuario -->
-        <div class="col-md-4 mb-3">
+        <div class="col-md-5 mb-3">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Información de Cuenta</h4>
-                </div>
                 <div class="card-body">
-                    <p><strong>Rol:</strong> <span class="badge bg-info">@rol</span></p>
-                    <hr />
-                    <small class="text-muted">Acceso desde hace poco</small>
+                    <div class="d-flex justify-content-between
+                        align-items-center mb-2">
+                        <div><h5 class="card-title"><b>Información de Cuenta</b></h5></div>
+                        <a class="btn btn-outline-primary" asp-action="Configuracion" asp-controller="Usuario"><i class="ti ti-edit"></i></a>
+                    </div>
+                    <p><strong>Nombre: </strong><br /> @nombreCom</p>
+                    <p><strong>Correo Electrónico: </strong><br /> @correo</p>
+                    <p><strong>Rol: </strong><br />@rol</p>
                 </div>
             </div>
+                    <small class="text-muted">Acceso desde hace poco</small>
         </div>
 
         @if (@rol == "Administrador")
         {
             <!-- Admin Panel -->
-            <div class="col-md-8 mb-3">
-                <div class="card border-primary">
-                    <div class="card-header bg-primary text-white">
-                        <h4 class="card-title mb-0">Panel de Administrador</h4>
-                    </div>
+            <div class="col-md-7 mb-3">
+                <div class="card">
                     <div class="card-body">
+                        <h5 class="card-title mb-1"><b>Panel de Administrador</b></h5>
                         <p>Tienes acceso a todas las funciones del sistema.</p>
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 rounded bg-light">
-                                    <span class="ti ti-users" style="font-size: 2rem; color: #0c63e4;"></span>
-                                    <h6 class="mt-2">Gestionar Usuarios</h6>
-                                </div>
+                        
+                        <div class="mt-3 row" style="display:flex;">
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                               <a asp-action="Empleados_Lista" asp-controller="Admin"> 
+                                   <div class="p-3 rounded btn-success" style="border:none; background-color:#e6623914; ">
+                                    <span class="ti ti-badges fs-2"></span>
+                                    <h6 class="mt-2">Empleados</h6>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 rounded bg-light">
-                                    <span class="ti ti-chart-bar" style="font-size: 2rem; color: #0c63e4;"></span>
-                                    <h6 class="mt-2">Reportes</h6>
-                                </div>
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Clientes_Lista" asp-controller="Admin">
+                                    <div class="p-3 rounded btn-success" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-users fs-2"></span>
+                                        <h6 class="mt-2">Clientes</h6>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 rounded bg-light">
-                                    <span class="ti ti-settings" style="font-size: 2rem; color: #0c63e4;"></span>
-                                    <h6 class="mt-2">Configuración</h6>
-                                </div>
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Horarios_Lista" asp-controller="Admin">
+                                    <div class="p-3 rounded btn-success" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-calendar fs-2"></span>
+                                        <h6 class="mt-2">Horarios</h6>
+                                    </div>
+                                </a>
                             </div>
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Dashboard" asp-controller="Admin">
+                                    <div class="p-3 rounded btn-success" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-chart-bar fs-2"></span>
+                                        <h6 class="mt-2">Reportes</h6>
+                                    </div>
+                                </a>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -79,32 +91,46 @@
         else if (@rol == "Entrenador")
         {
             <!-- Trainer Panel -->
-            <div class="col-md-8 mb-3">
+            <div class="col-md-7 mb-3">
                 <div class="card border-success">
-                    <div class="card-header bg-success text-white">
-                        <h4 class="card-title mb-0">Panel de Entrenador</h4>
-                    </div>
                     <div class="card-body">
+                        <h5 class="card-title mb-1"><b>Panel de Entrenador</b></h5>
                         <p>Puedes gestionar rutinas y entrenamientos de tus clientes.</p>
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 rounded bg-light">
-                                    <span class="ti ti-users" style="font-size: 2rem; color: #198754;"></span>
-                                    <h6 class="mt-2">Mis Clientes</h6>
-                                </div>
+                        
+                        <div class="mt-3 row" style="display:flex;">
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Clientes_Lista" asp-controller="Entrenador">
+                                    <div class="p-3 rounded btn-light" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-users fs-2"></span>
+                                        <h6 class="mt-2">Clientes</h6>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 rounded bg-light">
-                                    <span class="ti ti-dumbbell" style="font-size: 2rem; color: #198754;"></span>
-                                    <h6 class="mt-2">Rutinas</h6>
-                                </div>
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Rutinas_Lista" asp-controller="Entrenador">
+                                    <div class="p-3 rounded btn-success" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-activity fs-2"></span>
+                                        <h6 class="mt-2">Rutinas</h6>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 rounded bg-light">
-                                    <span class="ti ti-calendar" style="font-size: 2rem; color: #198754;"></span>
-                                    <h6 class="mt-2">Horarios</h6>
-                                </div>
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Horarios_Lista" asp-controller="Entrenador">
+                                    <div class="p-3 rounded btn nav-link" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-calendar fs-2"></span>
+                                        <h6 class="mt-2">Cronograma</h6>
+                                    </div>
+                                </a>
                             </div>
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Asistencias_Lista" asp-controller="Entrenador">
+                                    <div class="p-3 rounded btn nav-link" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-clipboard-check fs-2"></span>
+                                        <h6 class="mt-2">Asistencias</h6>
+                                    </div>
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -113,32 +139,47 @@
         else
         {
             <!-- Member Panel -->
-            <div class="col-md-8 mb-3">
+            <div class="col-md-7 mb-3">
                 <div class="card border-info">
-                    <div class="card-header bg-info text-white">
-                        <h4 class="card-title mb-0">Panel de Miembro</h4>
-                    </div>
                     <div class="card-body">
+                        <h5 class="card-title mb-1"><b>Panel de Miembro</b></h5>
                         <p>Accede a tus rutinas, entrenamientos y progreso.</p>
-                        <div class="row">
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 rounded bg-light">
-                                    <span class="ti ti-dumbbell" style="font-size: 2rem; color: #0dcaf0;"></span>
-                                    <h6 class="mt-2">Mis Rutinas</h6>
-                                </div>
+
+                        <div class="mt-3 row" style="display:flex;">
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Reservas_Lista" asp-controller="Miembro">
+                                    <div class="p-3 rounded btn-success" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-activity fs-2"></span>
+                                        <h6 class="mt-2">Rutinas</h6>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 rounded bg-light">
-                                    <span class="ti ti-chart-line" style="font-size: 2rem; color: #0dcaf0;"></span>
-                                    <h6 class="mt-2">Mi Progreso</h6>
-                                </div>
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Reservas_Lista" asp-controller="Miembro">
+                                    <div class="p-3 rounded btn-light" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-calendar-check fs-2"></span>
+                                        <h6 class="mt-2">Reservas</h6>
+                                    </div>
+                                </a>
                             </div>
-                            <div class="col-md-4 text-center">
-                                <div class="p-3 rounded bg-light">
-                                    <span class="ti ti-user-circle" style="font-size: 2rem; color: #0dcaf0;"></span>
-                                    <h6 class="mt-2">Mi Entrenador</h6>
-                                </div>
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Historial_Asistencias" asp-controller="Miembro">
+                                    <div class="p-3 rounded btn nav-link" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-clipboard-check fs-2"></span>
+                                        <h6 class="mt-2">Asistencia</h6>
+                                    </div>
+                                </a>
                             </div>
+                            
+                            <div class="col-md-3 mb-2 text-center pd-1">
+                                <a asp-action="Pagos_Lista" asp-controller="Miembro">
+                                    <div class="p-3 rounded btn nav-link" style="border:none; background-color:#e6623914; ">
+                                        <span class="ti ti-receipt fs-2"></span>
+                                        <h6 class="mt-2">Pagos</h6>
+                                    </div>
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                 </div>

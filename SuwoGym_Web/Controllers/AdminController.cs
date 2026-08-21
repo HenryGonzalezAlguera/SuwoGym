@@ -343,6 +343,58 @@ namespace SuwoGym_Web.Controllers
         }
 
         [HttpPost]
+        public IActionResult Empleados_EditarDatos(UsuarioModel model)
+        {
+            using var client = _http.CreateClient();
+
+            client.DefaultRequestHeaders.Add(
+                "Authorization",
+                "Bearer " + HttpContext.Session.GetString("Token"));
+
+            var urlApi =
+                _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Admin/EmpleadoEditarDatosP";
+
+            var response = client
+                .PutAsJsonAsync(urlApi, model)
+                .Result;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                TempData["MensajeExito"] = response.Content
+                    .ReadAsStringAsync()
+                    .Result;
+
+                return RedirectToAction(
+                    "Empleados_Ver",
+                    "Admin",
+                    new { i = model.IdUsuario });
+            }
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                TempData["MensajeError"] = response.Content
+                    .ReadAsStringAsync()
+                    .Result;
+
+                return RedirectToAction(
+                    "Empleados_Editar",
+                    "Admin",
+                    new { i = model.IdUsuario });
+            }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                return RedirectToAction("Logout", "Home");
+            }
+            else if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("Principal", "Home");
+            }
+
+            throw new Exception(
+                "Ocurrió un error al cambiar el rol del empleado.");
+        }
+
+        [HttpPost]
         public IActionResult Empleados_EditarRol(UsuarioModel model)
         {
             using var client = _http.CreateClient();
@@ -366,7 +418,7 @@ namespace SuwoGym_Web.Controllers
                     .Result;
 
                 return RedirectToAction(
-                    "Empleados_Editar",
+                    "Empleados_Ver",
                     "Admin",
                     new { i = model.IdUsuario });
             }
@@ -420,7 +472,7 @@ namespace SuwoGym_Web.Controllers
                     .Result;
 
                 return RedirectToAction(
-                    "Empleados_Editar",
+                    "Empleados_Ver",
                     "Admin",
                     new { i = model.IdUsuario });
             }

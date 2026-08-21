@@ -4,43 +4,17 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Clientes_Lista" asp-controller="Admin" class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
 
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Clientes_Lista"
-                       asp-controller="Admin">
-
-                        Clientes
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="">
+                <h2>
                     Detalle del cliente
-
-                </li>
-
-            </ol>
-
-        </nav>
-
-
-        <div class="mb-4">
-
-            <h2>
-                Detalle del cliente
-            </h2>
-
-            <p class="mb-0">
-                Información personal, membresía y pagos del cliente
-            </p>
-
+                </h2>
+            </div>
         </div>
 
     </div>
@@ -70,481 +44,336 @@
 }
 
 
-<!-- =====================================================
-     INFORMACIÓN PERSONAL
-     ===================================================== -->
+<div class="row">
+    <!-- =====================================================
+         INFORMACIÓN PERSONAL
+         ===================================================== -->
 
-<div class="card">
+    <div class="col-lg-6 mb-3">
+        <div class="card ">
 
-    <div class="card-body p-4">
+            <div class="card-body p-4">
 
-        <div class="d-flex
-            justify-content-between
-            align-items-center
-            mb-4">
+                <div class="d-flex
+                    justify-content-between
+                    align-items-center
+                    mb-4">
 
-            <div>
-
-                <h4 class="mb-1">
-                    Información personal
-                </h4>
-
-                <p class="mb-0 text-secondary">
-                    Datos registrados del cliente
-                </p>
-
-            </div>
+                    <div>
+                        <h5>
+                            <b>Información personal</b>
+                        </h5>
+                    </div>
 
 
-            @if (Model.Estado)
-            {
-                <span class="badge bg-success">
-                    Activo
-                </span>
-            }
-            else
-            {
-                <span class="badge bg-danger">
-                    Inactivo
-                </span>
-            }
+                    <a asp-action="Clientes_Editar"
+                       asp-controller="Admin"
+                       asp-route-i="@Model.IdUsuario"
+                       class="btn btn-outline-primary">
+                        <i class="ti ti-edit"></i>
+                        Editar
+                    </a>
+                </div>
 
-        </div>
+                <div class="row g-3 mb-3">
 
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Nombre Completo</label>
+                            <p class="bip">@Model.Nombre @Model.Apellido</p>
+                        </div>
+                    </div>
 
-        <div class="row">
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Identificación</label>
+                            <p class="bip">@Model.Identificacion</p>
+                        </div>
+                    </div>
 
-            <div class="col-md-6 mb-3">
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Correo Electrónico</label>
+                            <p class="bip">@Model.CorreoElectronico</p>
+                        </div>
+                    </div>
 
-                <label class="form-label">
-                    Identificación
-                </label>
+            
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Teléfono</label>
+                            <p class="bip">
+                                @(string.IsNullOrWhiteSpace(Model.Telefono)
+                                                   ? "No registrado"
+                                                   : Model.Telefono)
+                            </p>
+                        </div>
+                    </div>
 
-                <input type="text"
-                       class="form-control"
-                       value="@(string.IsNullOrWhiteSpace(Model.Identificacion)
-                                           ? "No registrada"
-                                           : Model.Identificacion)"
-                       readonly />
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Fecha de Nacimiento</label>
+                            <p class="bip">
+                                @(Model.FechaNac?.ToString("dd/MM/yyyy") ?? "No registrada")
+                            </p>
+                        </div>
+                    </div>
 
-            </div>
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Fecha de Registro</label>
+                            <p class="bip">
+                                @Model.FechaRegistro.ToString("dd/MM/yyyy")
+                            </p>
+                        </div>
+                    </div>
 
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Estado</label>
+                            <br />
+                            @if (Model.Estado)
+                            {
+                                <p class=" badge bg-success-subtle text-success-emphasis bip">
+                                    <i class="ti ti-circle-filled me-1"></i> Activo
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="badge bg-danger-subtle text-danger-emphasis bip">
+                                    <i class="ti ti-circle-filled me-1"></i> Inactivo
+                                </p>
+                            }
+                        </div>
+                    </div>
 
-            <div class="col-md-6 mb-3">
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Dirección</label>
+                            <p class="bip">
+                                @(Model.Direccion ?? "No registrada")
+                            </p>
+                        </div>
+                    </div>
 
-                <label class="form-label">
-                    Nombre completo
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.Nombre @Model.Apellido"
-                       readonly />
-
-            </div>
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Correo electrónico
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.CorreoElectronico"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Teléfono
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(string.IsNullOrWhiteSpace(Model.Telefono)
-                                           ? "No registrado"
-                                           : Model.Telefono)"
-                       readonly />
-
-            </div>
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3 bloque_info">
-
-                <label class="bloque_info_titulo">
-                    Fecha de nacimiento
-                </label>
-
-                <p>@(Model.FechaNac.HasValue
-                                           ? Model.FechaNac.Value.ToString("dd/MM/yyyy")
-                                       : "No registrada")
-                </p>
-
-            </div>
+                </div>
 
 
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Fecha de registro
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.FechaRegistro.ToString("dd/MM/yyyy")"
-                       readonly />
+           
 
             </div>
 
         </div>
-
-
-        <div class="mb-4">
-
-            <label class="form-label">
-                Dirección
-            </label>
-
-            <textarea class="form-control"
-                      rows="3"
-                      readonly>@(string.IsNullOrWhiteSpace(Model.Direccion)
-                          ? "No registrada"
-                          : Model.Direccion)</textarea>
-
-        </div>
-
-
-        <div class="d-flex
-            justify-content-center
-            gap-2">
-
-            <a asp-action="Clientes_Lista"
-               asp-controller="Admin"
-               class="btn btn-light">
-
-                Volver
-
-            </a>
-
-
-            <a asp-action="Clientes_Editar"
-               asp-controller="Admin"
-               asp-route-i="@Model.IdUsuario"
-               class="btn btn-primary">
-
-                Editar datos personales
-
-            </a>
-            <a asp-action="Clientes_AsignarEntrenador"
-               asp-controller="Admin"
-               asp-route-i="@Model.IdUsuario"
-               class="btn btn-primary">
-
-                Asignar entrenador
-
-            </a>
-
-
-            <form asp-action="Clientes_CambiarEstado"
-                  asp-controller="Admin"
-                  method="post"
-                  class="d-inline">
-
-                <input asp-for="IdUsuario"
-                       type="hidden" />
-
-                <input asp-for="Estado"
-                       type="hidden" />
-
-                @if (Model.Estado)
-                {
-                    <button type="submit"
-                            class="btn btn-danger"
-                            onclick="return confirm('¿Desea desactivar este cliente?');">
-
-                        Desactivar cliente
-
-                    </button>
-                }
-                else
-                {
-                    <button type="submit"
-                            class="btn btn-success"
-                            onclick="return confirm('¿Desea activar este cliente?');">
-
-                        Activar cliente
-
-                    </button>
-                }
-
-            </form>
-
-        </div>
-
     </div>
 
-</div>
+    <!-- =====================================================
+         INFORMACIÓN DE MEMBRESÍA
+         ===================================================== -->
+ 
+    <div class="col-lg-6 mb-3">
+        <div class="card">
 
+        <div class="card-body p-4">
 
-<!-- =====================================================
-     INFORMACIÓN DE MEMBRESÍA
-     ===================================================== -->
+            <div class="d-flex
+                justify-content-between
+                align-items-center
+                mb-4">
 
-<div class="card mt-4">
-
-    <div class="card-body p-4">
-
-        <div class="d-flex
-            justify-content-between
-            align-items-center
-            mb-4">
-
-            <div>
-
-                <h4 class="mb-1">
-                    Membresía
-                </h4>
-
-                <p class="mb-0 text-secondary">
-                    Información del plan asignado al cliente
-                </p>
+                <div>
+                    <h5>
+                        <b>Membresía</b>
+                    </h5>
+                </div>
 
             </div>
 
 
             @if (Model.IdMembresia.HasValue)
             {
-                @if (string.Equals(
-                    Model.EstadoMembresia,
-                    "Activa",
-                    StringComparison.OrdinalIgnoreCase))
-                {
-                    <span class="badge bg-success">
-                        Activa
-                    </span>
-                }
-                else if (string.Equals(
-                    Model.EstadoMembresia,
-                    "Vencida",
-                    StringComparison.OrdinalIgnoreCase))
-                {
-                    <span class="badge bg-danger">
-                        Vencida
-                    </span>
-                }
-                else if (string.Equals(
-                    Model.EstadoMembresia,
-                    "Cancelada",
-                    StringComparison.OrdinalIgnoreCase))
-                {
-                    <span class="badge bg-secondary">
-                        Cancelada
-                    </span>
-                }
-                else
-                {
-                    <span class="badge bg-secondary">
-                        @Model.EstadoMembresia
-                    </span>
-                }
-            }
+                <div class="row">
 
-        </div>
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Plan Seleccionado</label>
+                            <p class="bip">@Model.NombrePlan</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Precio</label>
+                                <p class="bip">&#8353; @(Model.Precio?.ToString("N2"))</p>
+                        </div>
+                    </div>
 
-
-        @if (Model.IdMembresia.HasValue)
-        {
-            <div class="row">
-
-                <div class="col-md-4 mb-3">
-
-                    <label class="form-label">
-                        Número de membresía
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.IdMembresia"
-                           readonly />
-
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Estado</label> <br />
+                                @if (string.Equals(
+                                    Model.EstadoMembresia,
+                                    "Activa",
+                                    StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-success-subtle text-success-emphasis">
+                                        Activa
+                                    </span>
+                                }
+                                else if (string.Equals(
+                                    Model.EstadoMembresia,
+                                    "Vencida",
+                                    StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-danger-subtle text-danger-emphasis">
+                                        Vencida
+                                    </span>
+                                }
+                                else if (string.Equals(
+                                    Model.EstadoMembresia,
+                                    "Cancelada",
+                                    StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary-emphasis">
+                                        Cancelada
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary-emphasis">
+                                        @Model.EstadoMembresia
+                                    </span>
+                                }
+                                
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Fecha de Vencimiento</label>
+                                <p class="bip">@(Model.FechaVencimiento?.ToString("dd/MM/yyyy") ?? "No registrada")</p>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Acciones de pagos -->
 
-                <div class="col-md-4 mb-3">
+                <div class="d-flex
+                    justify-content-center
+                    flex-wrap
+                    gap-2
+                    mt-2">
 
-                    <label class="form-label">
-                        Plan
-                    </label>
+                    @if (string.Equals(
+                        Model.EstadoMembresia,
+                        "Activa",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        <a asp-action="Pagos_Registrar"
+                           asp-controller="Admin"
+                           asp-route-i="@Model.IdUsuario"
+                           class="btn btn-primary">
 
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.NombrePlan"
-                           readonly />
+                            Registrar pago
 
-                </div>
-
-
-                <div class="col-md-4 mb-3">
-
-                    <label class="form-label">
-                        Precio base
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="₡@(Model.Precio?.ToString("N2"))"
-                           readonly />
-
-                </div>
-
-            </div>
+                        </a>
+                    }
 
 
-            <div class="row">
-
-                <div class="col-md-4 mb-3">
-
-                    <label class="form-label">
-                        Fecha de inicio
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@(Model.FechaInicio.HasValue
-                                                   ? Model.FechaInicio.Value.ToString("dd/MM/yyyy")
-                                               : "No registrada")"
-                           readonly />
-
-                </div>
-
-
-                <div class="col-md-4 mb-3">
-
-                    <label class="form-label">
-                        Fecha de vencimiento
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@(Model.FechaVencimiento.HasValue
-                                                   ? Model.FechaVencimiento.Value.ToString("dd/MM/yyyy")
-                                               : "No registrada")"
-                           readonly />
-
-                </div>
-
-
-                <div class="col-md-4 mb-3">
-
-                    <label class="form-label">
-                        Estado de la membresía
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.EstadoMembresia"
-                           readonly />
-
-                </div>
-
-            </div>
-
-
-            <!-- Acciones de pagos -->
-
-            <div class="d-flex
-                justify-content-center
-                flex-wrap
-                gap-2
-                mt-2">
-
-                @if (string.Equals(
-                    Model.EstadoMembresia,
-                    "Activa",
-                    StringComparison.OrdinalIgnoreCase))
-                {
-                    <a asp-action="Pagos_Registrar"
+                    <a asp-action="Clientes_Pagos"
                        asp-controller="Admin"
                        asp-route-i="@Model.IdUsuario"
-                       class="btn btn-primary">
+                       class="btn btn-light">
 
-                        Registrar pago
+                        Historial de pagos
 
                     </a>
-                }
 
 
-                <a asp-action="Clientes_Pagos"
-                   asp-controller="Admin"
-                   asp-route-i="@Model.IdUsuario"
-                   class="btn btn-light">
+                    @if (string.Equals(
+                        Model.EstadoMembresia,
+                        "Activa",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        <form asp-action="Clientes_CancelarMembresia"
+                              asp-controller="Admin"
+                              method="post"
+                              class="d-inline">
 
-                    Historial de pagos
+                            <input type="hidden"
+                                   name="IdUsuario"
+                                   value="@Model.IdUsuario" />
 
-                </a>
+                            <input type="hidden"
+                                   name="IdMembresia"
+                                   value="@Model.IdMembresia" />
+
+                            <button type="submit"
+                                    class="btn btn-danger"
+                                    onclick="return confirm('¿Está seguro de cancelar la membresía activa del cliente?');">
+
+                                Cancelar membresía
+
+                            </button>
+
+                        </form>
+                    }
+
+                </div>
 
 
-                @if (string.Equals(
-                    Model.EstadoMembresia,
-                    "Activa",
-                    StringComparison.OrdinalIgnoreCase))
+                <!-- Membresía vencida o cancelada -->
+                @if (!string.Equals(
+                                Model.EstadoMembresia,
+                                "Activa",
+                                StringComparison.OrdinalIgnoreCase))
                 {
-                    <form asp-action="Clientes_CancelarMembresia"
-                          asp-controller="Admin"
-                          method="post"
-                          class="d-inline">
+                    @if (Model.Estado)
+                    {
+                        <div class="text-center mt-3">
 
-                        <input type="hidden"
-                               name="IdUsuario"
-                               value="@Model.IdUsuario" />
+                            <a asp-action="Clientes_AsignarMembresia"
+                               asp-controller="Admin"
+                               asp-route-i="@Model.IdUsuario"
+                               class="btn btn-primary">
 
-                        <input type="hidden"
-                               name="IdMembresia"
-                               value="@Model.IdMembresia" />
+                                Asignar nueva membresía
 
-                        <button type="submit"
-                                class="btn btn-danger"
-                                onclick="return confirm('¿Está seguro de cancelar la membresía activa del cliente?');">
+                            </a>
 
-                            Cancelar membresía
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger mb-0 mt-3"
+                             role="alert">
 
-                        </button>
+                            Debe activar al cliente antes de asignarle
+                            una nueva membresía.
 
-                    </form>
+                        </div>
+                    }
                 }
-
-            </div>
-
-
-            <!-- Membresía vencida o cancelada -->
-            @if (!string.Equals(
-                            Model.EstadoMembresia,
-                            "Activa",
-                            StringComparison.OrdinalIgnoreCase))
+            }
+            else
             {
+                <div class="alert alert-warning"
+                     role="alert">
+
+                    Este cliente todavía no tiene una membresía asignada.
+
+                </div>
+
+
                 @if (Model.Estado)
                 {
-                    <div class="text-center mt-3">
+                    <div class="text-center">
 
                         <a asp-action="Clientes_AsignarMembresia"
                            asp-controller="Admin"
                            asp-route-i="@Model.IdUsuario"
                            class="btn btn-primary">
 
-                            Asignar nueva membresía
+                            Asignar membresía
 
                         </a>
 
@@ -552,53 +381,77 @@
                 }
                 else
                 {
-                    <div class="alert alert-danger mb-0 mt-3"
+                    <div class="alert alert-danger mb-0"
                          role="alert">
 
                         Debe activar al cliente antes de asignarle
-                        una nueva membresía.
+                        una membresía.
 
                     </div>
                 }
             }
-        }
-        else
-        {
-            <div class="alert alert-warning"
-                 role="alert">
 
-                Este cliente todavía no tiene una membresía asignada.
+        </div>
 
-            </div>
+    </div>
+    </div>
 
+    <!-- =====================================================
+         ASIGNACION DE ENTRENADOR PERSONAL
+         ===================================================== -->
 
-            @if (Model.Estado)
-            {
-                <div class="text-center">
+    <div class="col-lg-6 mb-3">
+        <div class="card">
 
-                    <a asp-action="Clientes_AsignarMembresia"
+            <div class="card-body p-4">
+                <div class="d-flex
+                    justify-content-end
+                    gap-2 mt-4">
+
+                    <a asp-action="Clientes_AsignarEntrenador"
                        asp-controller="Admin"
                        asp-route-i="@Model.IdUsuario"
                        class="btn btn-primary">
-
-                        Asignar membresía
-
+                        Asignar entrenador
                     </a>
 
+                    <form asp-action="Clientes_CambiarEstado"
+                          asp-controller="Admin"
+                          method="post"
+                          class="d-inline">
+
+                        <input asp-for="IdUsuario"
+                               type="hidden" />
+
+                        <input asp-for="Estado"
+                               type="hidden" />
+
+                        @if (Model.Estado)
+                        {
+                            <button type="submit"
+                                    class="btn btn-danger"
+                                    onclick="return confirm('¿Desea desactivar este cliente?');">
+
+                                Desactivar cliente
+
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    onclick="return confirm('¿Desea activar este cliente?');">
+
+                                Activar cliente
+
+                            </button>
+                        }
+
+                    </form>
+
                 </div>
-            }
-            else
-            {
-                <div class="alert alert-danger mb-0"
-                     role="alert">
-
-                    Debe activar al cliente antes de asignarle
-                    una membresía.
-
-                </div>
-            }
-        }
-
+            </div>
+        </div>
     </div>
 
 </div>

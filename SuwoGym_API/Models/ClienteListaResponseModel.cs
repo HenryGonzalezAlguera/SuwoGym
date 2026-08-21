@@ -14,5 +14,12 @@
             string.Empty;
 
         public bool Estado { get; set; }
+
+        public string NombrePlan { get; set; } = string.Empty;
+        
+        public string EstadoMembresia { get; set; } = string.Empty;
+
+        public DateTime FechaVencimiento { get; set; }
+
     }
 }

@@ -62,7 +62,6 @@
     margin-bottom:8px; 
 }
 
-
 .btnNav {
     color: #293039;
     font-weight: 500;
@@ -76,13 +75,16 @@
         color: #007bff;
     }
 
+/* 
+    Datos de información(ej: detalles de empleado) -----------
+*/
+
 .bloque_info {
-    background-color: #f8f9fa;
-    border-radius: 12px;
-    border-left: 4px solid #007bff;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 4px;
     color: #293039;
     font-weight: 600;
-    margin: 0;
 }
 
 .bloque_info_titulo {
@@ -91,9 +93,14 @@
     font-weight: 500;
 }
 
+.bip { /*para párrafos*/
+    margin:0;
+}
+
+
 
 /*
-    Cards de 
+    Cards de registro ------------------------------
 */
 
 .card-input-container {
@@ -124,7 +131,6 @@
     background-color: #e6623910;
     box-shadow: 0 0 0 .10rem #e6623980
 }
-
 
 .white-on-white {
     width: 100%;
