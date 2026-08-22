@@ -4,43 +4,15 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Clientes_Lista"
-                       asp-controller="Entrenador">
-
-                        Clientes asignados
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Detalle del cliente
-
-                </li>
-
-            </ol>
-
-        </nav>
-
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Clientes_Lista" asp-controller="Entrenador" class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
 
         <div class="mb-4">
-
             <h2>
                 Detalle del cliente
             </h2>
-
-            <p class="mb-0">
-                Información del cliente bajo su seguimiento
-            </p>
-
         </div>
 
     </div>
@@ -48,326 +20,227 @@
 </div>
 
 
-<!-- INFORMACIÓN PERSONAL -->
+<div class="row">
 
-<div class="card">
+   <!-- INFORMACIÓN PERSONAL -->
+    <div class="col-lg-6 mb-3">
+        <div class="card">
 
-    <div class="card-body p-4">
+            <div class="card-body p-4">
 
+                <!-- Información personal -->
+                <div class="d-flex
+                    justify-content-between
+                    align-items-center
+                    mb-4">
+
+                    <div>
+                        <h5>
+                            <b>Información personal</b>
+                        </h5>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+
+                        <!-- Nombre completo -->
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Nombre Completo</label>
+                            <p class="bip">@Model.Nombre @Model.Apellido</p>
+                        </div>
+                    </div>
+
+                        <!-- Identificacion -->
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Identificación</label>
+                            <p class="bip">@Model.Identificacion</p>
+                        </div>
+                    </div>
+
+                        <!-- Correo -->
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Correo Electrónico</label>
+                            <p class="bip">@Model.CorreoElectronico</p>
+                        </div>
+                    </div>
+
+                        <!-- Telefono -->
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Teléfono</label>
+                            <p class="bip">
+                                @(string.IsNullOrWhiteSpace(Model.Telefono)
+                                                   ? "No registrado"
+                                                   : Model.Telefono)
+                            </p>
+                        </div>
+                    </div>
+
+                        <!-- Fecha Nac -->
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Fecha de Nacimiento</label>
+                            <p class="bip">
+                                @(Model.FechaNac?.ToString("dd/MM/yyyy") ?? "No registrada")
+                            </p>
+                        </div>
+                    </div>
+
+                        <!-- Fecha Asigna -->
+                    <div class="col-md-6">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Fecha de Asignación</label>
+                            <p class="bip">
+                                @(Model.FechaAsignacion.ToString("dd/MM/yyyy") ?? "No registrada")
+                            </p>
+                        </div>
+                    </div>
+
+                        <!-- Dirección -->
+                    <div class="col-md-12">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Dirección</label>
+                            <p class="bip">
+                                @(Model.Direccion ?? "No registrada")
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MEMBRESÍA -->
+    <div class="col-lg-6 mb-3">
+        
+        <div class="card">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex
+                    justify-content-between
+                    align-items-center
+                    mb-4">
+
+                    <div>
+                        <h5 class="mb-1 fw-bold">
+                            Membresía
+                        </h5>
+                    </div>
+
+                </div>
+
+
+                @if (Model.IdMembresia.HasValue)
+                {
+                    <div class="row">
+
+                            <!-- Nombre Plan -->
+                        <div class="col-md-6">
+                            <div class="bloque_info">
+                                <label class="bloque_info_titulo">Plan Seleccionado</label>
+                                <p class="bip">@Model.NombrePlan</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <!-- Estado Membresía -->
+                            <div class="bloque_info">
+                                <label class="bloque_info_titulo">Estado de Membresía</label> <br />
+                                @if (string.Equals(
+                                    Model.EstadoMembresia,
+                                    "Activa",
+                                    StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-success-subtle text-success-emphasis">
+                                        Activa
+                                    </span>
+                                }
+                                else if (string.Equals(
+                                    Model.EstadoMembresia,
+                                    "Vencida",
+                                    StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-danger-subtle text-danger-emphasis">
+                                        Vencida
+                                    </span>
+                                }
+                                else if (string.Equals(
+                                    Model.EstadoMembresia,
+                                    "Cancelada",
+                                    StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary-emphasis">
+                                        Cancelada
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary-subtle text-secondary-emphasis">
+                                        @Model.EstadoMembresia
+                                    </span>
+                                }
+
+                            </div>
+                        </div>
+
+
+                            <!-- Fecha Inicio -->
+                        <div class="col-md-6">
+                            <div class="bloque_info">
+                                <label class="bloque_info_titulo">Fecha de Inicio</label>
+                                <p class="bip">@(Model.FechaInicio?.ToString("dd/MM/yyyy") ?? "No registrada")</p>
+                            </div>
+                        </div>
+
+                            <!-- Fecha Vencimiento -->
+                        <div class="col-md-6">
+                            <div class="bloque_info">
+                                <label class="bloque_info_titulo">Fecha de Vencimiento</label>
+                                <p class="bip">@(Model.FechaVencimiento?.ToString("dd/MM/yyyy") ?? "No registrada")</p>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning mb-0"
+                         role="alert">
+
+                        El cliente no tiene una membresía asignada.
+
+                    </div>
+                }
+
+
+            </div>
+        </div>        
+
+        <div class="row mt-3">
         <div class="d-flex
-            justify-content-between
-            align-items-center
-            mb-4">
+             justify-content-end
+             align-items-center
+             mb-4">
+            <a asp-action="Rutinas_Agregar"
+               asp-controller="Entrenador"
+               class="btn btn-primary">
 
-            <div>
+                <i class="ti ti-plus"></i>
 
-                <h4 class="mb-1">
-                    Información personal
-                </h4>
+                Asignar una rutina
 
-                <p class="mb-0 text-secondary">
-                    Datos registrados del cliente
-                </p>
-
-            </div>
-
-
-            @if (Model.Estado)
-            {
-                <span class="badge bg-success">
-                    Activo
-                </span>
-            }
-            else
-            {
-                <span class="badge bg-danger">
-                    Inactivo
-                </span>
-            }
-
+            </a>
         </div>
-
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Identificación
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(string.IsNullOrWhiteSpace(Model.Identificacion)
-                                           ? "No registrada"
-                                           : Model.Identificacion)"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Nombre completo
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.Nombre @Model.Apellido"
-                       readonly />
-
-            </div>
-
         </div>
-
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Correo electrónico
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.CorreoElectronico"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Teléfono
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(string.IsNullOrWhiteSpace(Model.Telefono)
-                                           ? "No registrado"
-                                           : Model.Telefono)"
-                       readonly />
-
-            </div>
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Fecha de nacimiento
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(Model.FechaNac.HasValue
-                                           ? Model.FechaNac.Value.ToString("dd/MM/yyyy")
-                                       : "No registrada")"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Fecha de asignación
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.FechaAsignacion.ToString("dd/MM/yyyy")"
-                       readonly />
-
-            </div>
-
-        </div>
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Dirección
-            </label>
-
-            <textarea class="form-control"
-                      rows="3"
-                      readonly>@(string.IsNullOrWhiteSpace(Model.Direccion)
-                          ? "No registrada"
-                          : Model.Direccion)</textarea>
-
-        </div>
-
     </div>
 
-</div>
 
-
-<!-- MEMBRESÍA -->
-
-<div class="card mt-4">
-
-    <div class="card-body p-4">
-
-        <div class="d-flex
-            justify-content-between
-            align-items-center
-            mb-4">
-
-            <div>
-
-                <h4 class="mb-1">
-                    Membresía
-                </h4>
-
-                <p class="mb-0 text-secondary">
-                    Estado del plan actual del cliente
-                </p>
-
-            </div>
-
-
-            @if (string.Equals(
-                Model.EstadoMembresia,
-                "Activa",
-                StringComparison.OrdinalIgnoreCase))
-            {
-                <span class="badge bg-success">
-                    Activa
-                </span>
-            }
-            else if (string.Equals(
-                Model.EstadoMembresia,
-                "Vencida",
-                StringComparison.OrdinalIgnoreCase))
-            {
-                <span class="badge bg-danger">
-                    Vencida
-                </span>
-            }
-            else if (!string.IsNullOrWhiteSpace(
-                Model.EstadoMembresia))
-            {
-                <span class="badge bg-secondary">
-                    @Model.EstadoMembresia
-                </span>
-            }
-
-        </div>
-
-
-        @if (Model.IdMembresia.HasValue)
-        {
-            <div class="row">
-
-                <div class="col-md-4 mb-3">
-
-                    <label class="form-label">
-                        Número de membresía
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.IdMembresia"
-                           readonly />
-
-                </div>
-
-
-                <div class="col-md-4 mb-3">
-
-                    <label class="form-label">
-                        Plan
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.NombrePlan"
-                           readonly />
-
-                </div>
-
-
-                <div class="col-md-4 mb-3">
-
-                    <label class="form-label">
-                        Estado
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@Model.EstadoMembresia"
-                           readonly />
-
-                </div>
-
-            </div>
-
-
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Fecha de inicio
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@(Model.FechaInicio.HasValue
-                                                   ? Model.FechaInicio.Value.ToString("dd/MM/yyyy")
-                                               : "No registrada")"
-                           readonly />
-
-                </div>
-
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Fecha de vencimiento
-                    </label>
-
-                    <input type="text"
-                           class="form-control"
-                           value="@(Model.FechaVencimiento.HasValue
-                                                   ? Model.FechaVencimiento.Value.ToString("dd/MM/yyyy")
-                                               : "No registrada")"
-                           readonly />
-
-                </div>
-
-            </div>
-        }
-        else
-        {
-            <div class="alert alert-warning mb-0"
-                 role="alert">
-
-                El cliente no tiene una membresía asignada.
-
-            </div>
-        }
-
-    </div>
-
-</div>
-
-
-<div class="text-center mt-4">
-
-    <a asp-action="Clientes_Lista"
-       asp-controller="Entrenador"
-       class="btn btn-light">
-
-        Volver a clientes
-
-    </a>
 
 </div>

@@ -187,6 +187,7 @@ namespace SuwoGym_Web.Controllers
                 detalleError);
         }
         #endregion
+
         #region Gestión de Rutinas
 
         [HttpGet]
@@ -858,6 +859,7 @@ namespace SuwoGym_Web.Controllers
         }
 
         #endregion
+
         #region Gestión de Ejercicios
 
         [HttpGet]
@@ -1996,6 +1998,7 @@ namespace SuwoGym_Web.Controllers
         }
 
         #endregion
+
         #region Horarios del Entrenador
 
         [HttpGet]
@@ -2167,6 +2170,7 @@ namespace SuwoGym_Web.Controllers
         }
 
         #endregion
+
         #region Asistencia de Clases
 
         [HttpGet]

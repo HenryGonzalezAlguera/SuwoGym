@@ -4,31 +4,11 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Rutinas_Lista"
-                       asp-controller="Entrenador">
-
-                        Rutinas
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Detalle de la rutina
-
-                </li>
-
-            </ol>
-
-        </nav>
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Rutinas_Lista" 
+            asp-controller="Entrenador" class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
 
 
         <div class="d-flex
@@ -37,35 +17,19 @@
             mb-4">
 
             <div>
-
                 <h2 class="mb-1">
                     @Model.NombreRutina
                 </h2>
-
-                <p class="mb-0 text-secondary">
-                    Información general de la rutina
-                </p>
-
             </div>
 
 
             <div class="d-flex gap-2">
 
-                <a asp-action="Rutinas_Ejercicios"
-                   asp-controller="Entrenador"
-                   asp-route-i="@Model.IdRutina"
-                   class="btn btn-light">
-
-                    <i class="ti ti-barbell"></i>
-
-                    Ejercicios
-
-                </a>
-
+                
                 <a asp-action="Rutinas_Editar"
                    asp-controller="Entrenador"
                    asp-route-i="@Model.IdRutina"
-                   class="btn btn-primary">
+                   class="btn btn-outline-primary">
 
                     <i class="ti ti-pencil"></i>
 
@@ -104,291 +68,235 @@
 }
 
 
-<div class="card">
 
-    <div class="card-body p-4">
+<div class="row">
 
-        <div class="d-flex
-            justify-content-between
-            align-items-center
-            mb-4">
+    <!-- DATOS DE RUTINA -->
+    <div class="col-lg-6 mb-3">
 
-            <div>
+        <div class="card">
 
-                <h4 class="mb-1">
-                    Información de la rutina
-                </h4>
+        <div class="card-body p-4">
 
-                <p class="mb-0 text-secondary">
-                    Datos principales de la planificación
-                </p>
+            <div class="d-flex
+                justify-content-between
+                align-items-center
+                mb-4">
 
-            </div>
-
-
-            @if (Model.Estado)
-            {
-                <span class="badge bg-success">
-                    Activa
-                </span>
-            }
-            else
-            {
-                <span class="badge bg-secondary">
-                    Inactiva
-                </span>
-            }
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Número de rutina
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.IdRutina"
-                       readonly />
+                <div>
+                    <h5 class="mb-1 fw-bold">
+                        Información de la rutina
+                    </h5>
+                </div>
 
             </div>
 
 
-            <div class="col-md-4 mb-3">
+            <div class="row">
 
-                <label class="form-label">
-                    Nivel
-                </label>
+                <!-- Nivel -->
+                <div class="col-md-6 mb-3">
+                    <div class="bloque_info">
+                        <label class="bloque_info_titulo">Nivel de dificultad</label>
+                        <p class="bip">@Model.Nivel</p>
+                    </div>
+                </div>
+                <!-- Fecha de Creación -->
+                <div class="col-md-6 mb-3">
+                    <div class="bloque_info">
+                        <label class="bloque_info_titulo">Fecha de Creación</label>
+                        <p class="bip">@Model.FechaCreacion.ToString("dd/MM/yyyy")</p>
+                    </div>
+                </div>
 
-                <input type="text"
-                       class="form-control"
-                       value="@Model.Nivel"
-                       readonly />
+                <!-- Nombre de rutina -->
+                <div class="col-md-12 mb-3">
+                    <div class="bloque_info">
+                        <label class="bloque_info_titulo">Nombre de rutina</label>
+                        <p class="bip">@Model.NombreRutina</p>
+                    </div>
+                </div>
+                <!-- Detalles de rutina -->
+                <div class="col-md-12 mb-3">
+                    <div class="bloque_info">
+                        <label class="bloque_info_titulo">Detalles</label>
+                        <p class="bip">@Model.Detalles</p>
+                    </div>
+                </div>
+                
+                <hr class="lineaGris" />
+                
+                <!-- Detalles de rutina -->
+                <div class="col-md-6 mb-3">
+                    <div class="bloque_info">
+                        <label class="bloque_info_titulo">Listado</label>
+                        <p class="bip">Ejercicios</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3 d-flex
+                        justify-content-end
+                        align-items-center">
+                        
+                    <a asp-action="Rutinas_Ejercicios"
+                        asp-controller="Entrenador"
+                        asp-route-i="@Model.IdRutina"
+                        class="btn btn-outline-primary">
 
-            </div>
+                        <i class="ti ti-barbell"></i>
 
+                        Ver Ejercicios
 
-            <div class="col-md-4 mb-3">
+                    </a>
 
-                <label class="form-label">
-                    Fecha de creación
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.FechaCreacion.ToString("dd/MM/yyyy")"
-                       readonly />
-
-            </div>
-
-        </div>
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Nombre de la rutina
-            </label>
-
-            <input type="text"
-                   class="form-control"
-                   value="@Model.NombreRutina"
-                   readonly />
-
-        </div>
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Detalles
-            </label>
-
-            <textarea class="form-control"
-                      rows="8"
-                      readonly>@Model.Detalles</textarea>
-
-        </div>
-
-    </div>
-
-</div>
+                </div>
 
 
-<div class="card mt-4">
+                <hr class="lineaGris" />
+                
+                <!-- Estado -->
+                <div class="col-md-6 mb-3">
+                    <div class="bloque_info">
+                        <label class="bloque_info_titulo">Estado</label> <br />
+                        @if (Model.Estado)
+                        {
+                            <span class="badge bg-success-subtle text-success-emphasis">
+                                Activa
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger-subtle text-danger-emphasis">
+                                Inactiva
+                            </span>
+                        }
+                    </div>
+                </div>
+                <!-- Botón -->
+                <div class="col-md-6 mb-3 d-flex
+                        justify-content-end
+                        align-items-center">
 
-    <div class="card-body p-4">
+                        <form asp-action="Rutinas_CambiarEstado"
+                              asp-controller="Entrenador"
+                              method="post">
 
-        <div class="mb-4">
+                            <input type="hidden"
+                                   name="IdRutina"
+                                   value="@Model.IdRutina" />
 
-            <h4 class="mb-1">
-                Cliente asignado
-            </h4>
-
-            <p class="mb-0 text-secondary">
-                Cliente que realizará esta rutina
-            </p>
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Identificación
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(string.IsNullOrWhiteSpace(Model.Identificacion)
-                                           ? "No registrada"
-                                           : Model.Identificacion)"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Nombre
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.NombreCliente"
-                       readonly />
-
-            </div>
+                            <input type="hidden"
+                                   name="Estado"
+                                   value="@Model.Estado.ToString().ToLower()" />
 
 
-            <div class="col-md-4 mb-3">
+                            @if (Model.Estado)
+                            {
+                                <button type="submit"
+                                        class="btn btn-outline-danger"
+                                        onclick="return confirm('¿Desea desactivar esta rutina?');">
 
-                <label class="form-label">
-                    Correo electrónico
-                </label>
+                                    <i class="ti ti-ban"></i>
 
-                <input type="text"
-                       class="form-control"
-                       value="@Model.CorreoElectronico"
-                       readonly />
+                                    Desactivar
 
-            </div>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit"
+                                        class="btn btn-outline-success"
+                                        onclick="return confirm('¿Desea activar esta rutina?');">
 
-        </div>
+                                    <i class="ti ti-check"></i>
 
+                                    Activar
 
-        <a asp-action="Clientes_Ver"
-           asp-controller="Entrenador"
-           asp-route-i="@Model.IdCliente"
-           class="btn btn-light">
+                                </button>
+                            }
 
-            <i class="ti ti-user"></i>
+                        </form>
 
-            Ver cliente
-
-        </a>
-
-    </div>
-
-</div>
-
-
-<div class="card mt-4">
-
-    <div class="card-body p-4">
-
-        <div class="d-flex
-            justify-content-between
-            align-items-center">
-
-            <div>
-
-                <h4 class="mb-1">
-                    Estado de la rutina
-                </h4>
-
-                <p class="mb-0 text-secondary">
-
-                    @if (Model.Estado)
-                    {
-                        <span>
-                            La rutina se encuentra disponible para el cliente.
-                        </span>
-                    }
-                    else
-                    {
-                        <span>
-                            La rutina se encuentra desactivada.
-                        </span>
-                    }
-
-                </p>
+                </div>
 
             </div>
 
 
-            <form asp-action="Rutinas_CambiarEstado"
-                  asp-controller="Entrenador"
-                  method="post">
-
-                <input type="hidden"
-                       name="IdRutina"
-                       value="@Model.IdRutina" />
-
-                <input type="hidden"
-                       name="Estado"
-                       value="@Model.Estado.ToString().ToLower()" />
-
-
-                @if (Model.Estado)
-                {
-                    <button type="submit"
-                            class="btn btn-danger"
-                            onclick="return confirm('¿Desea desactivar esta rutina?');">
-
-                        <i class="ti ti-ban"></i>
-
-                        Desactivar
-
-                    </button>
-                }
-                else
-                {
-                    <button type="submit"
-                            class="btn btn-success"
-                            onclick="return confirm('¿Desea activar esta rutina?');">
-
-                        <i class="ti ti-check"></i>
-
-                        Activar
-
-                    </button>
-                }
-
-            </form>
 
         </div>
 
     </div>
 
-</div>
+    </div>
+
+    <div class="col-lg-6">
+        
+    <!-- INFORMACIÓN DEL CLIENTE-->
+        <div class="card mb-3">
+
+            <div class="card-body p-4">
+
+                <div class="mb-4">
+
+                    <h5 class="mb-1 fw-bold">
+                        Cliente asignado
+                    </h5>
+                </div>
 
 
-<div class="text-center mt-4">
+                <div class="row">
 
-    <a asp-action="Rutinas_Lista"
-       asp-controller="Entrenador"
-       class="btn btn-light">
+                    <!-- Nombre completo -->
+                    <div class="col-md-6 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Nombre Completo</label>
+                            <p class="bip">@Model.NombreCliente</p>
+                        </div>
+                    </div>
 
-        Volver a rutinas
+                    <!-- Identificacion -->
+                    <div class="col-md-6 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Identificación</label>
+                            <p class="bip">@Model.Identificacion</p>
+                        </div>
+                    </div>
 
-    </a>
+                    <!-- Correo -->
+                    <div class="col-md-6 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Correo Electrónico</label>
+                            <p class="bip">@Model.CorreoElectronico</p>
+                        </div>
+                    </div>
+
+                    <!-- botón de Ver el cliente-->
+                    <div class="col-md-6 mb-3">
+                        <a asp-action="Clientes_Ver"
+                           asp-controller="Entrenador"
+                           asp-route-i="@Model.IdCliente"
+                           class="btn btn-light">
+
+                            <i class="ti ti-user"></i>
+
+                            Ver cliente
+
+                        </a>
+                    </div>
+
+                </div>
+
+
+              
+
+            </div>
+
+        </div>
+
+
+        <div class="card mb-3">
+
+        </div>
+
+    </div>
 
 </div>

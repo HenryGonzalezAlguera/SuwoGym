@@ -4,43 +4,14 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
 
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Rutinas_Lista"
-                       asp-controller="Entrenador">
-
-                        Rutinas
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Rutinas_Ejercicios"
-                       asp-controller="Entrenador"
-                       asp-route-i="@Model.IdRutina">
-
-                        Ejercicios
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Detalle del ejercicio
-
-                </li>
-
-            </ol>
-
-        </nav>
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Rutinas_Ejercicios"
+               asp-controller="Entrenador"
+               asp-route-i="@Model.IdRutina"
+               class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
 
 
         <div class="d-flex
@@ -104,302 +75,184 @@
 }
 
 
-<!-- INFORMACIÓN GENERAL -->
+<div class="row">
+    
+    <!-- INFORMACIÓN GENERAL -->
+    <div class="col-lg-6 mb-3">    
+        <div class="card">
 
-<div class="card">
+            <div class="card-body p-4">
 
-    <div class="card-body p-4">
+                <div class="d-flex
+                    justify-content-between
+                    align-items-center
+                    mb-4">
 
-        <div class="d-flex
-            justify-content-between
-            align-items-center
-            mb-4">
+                    <div>
 
-            <div>
+                        <h5 class="mb-1 fw-bold">
+                            Información del ejercicio
+                        </h5>
 
-                <h4 class="mb-1">
-                    Información del ejercicio
-                </h4>
+                    </div>
 
-                <p class="mb-0 text-secondary">
-                    Datos generales del ejercicio seleccionado
-                </p>
+                </div>
 
+
+                <div class="row">
+                    
+                    <!--Nombre-->
+                    <div class="col-md-4 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Ejercicio</label>
+                            <p class="bip">@Model.NombreEjercicio</p>
+                        </div>
+                    </div>
+
+                    <!--Grupo Muscular-->
+                    <div class="col-md-4 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Grupo Muscular</label>
+                            <p class="bip">@Model.GrupoMuscular</p>
+                        </div>
+                    </div>
+
+                    <!-- Dia semana -->
+                    <div class="col-md-4 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Día de la semana</label>
+                            <p class="bip">@Model.DiaSemana</p>
+                        </div>
+                    </div>
+
+                
+                    <div class="col-md-12 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Descripción</label>
+                            <p class="bip">
+                                @(string.IsNullOrWhiteSpace(Model.Descripcion)
+                              ? "Sin descripción"
+                              : Model.Descripcion)
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12 mb-3 d-flex justify-content-end">
+                        <form asp-action="Rutinas_EjercicioQuitar"
+                              asp-controller="Entrenador"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="IdRutinaEjercicio"
+                                   value="@Model.IdRutinaEjercicio" />
+
+                            <input type="hidden"
+                                   name="IdRutina"
+                                   value="@Model.IdRutina" />
+
+
+                            <button type="submit"
+                                    class="btn btn-outline-danger"
+                                    onclick="return confirm('¿Desea retirar este ejercicio de la rutina?');">
+
+                                <i class="ti ti-trash"></i>
+
+                                Retirar ejercicio
+
+                            </button>
+
+                        </form>
+                    </div>
+                </div>
             </div>
-
-
-            @if (Model.Estado)
-            {
-                <span class="badge bg-success">
-                    Activo
-                </span>
-            }
-            else
-            {
-                <span class="badge bg-secondary">
-                    Retirado
-                </span>
-            }
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Ejercicio
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.NombreEjercicio"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Grupo muscular
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.GrupoMuscular"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Día de la semana
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.DiaSemana"
-                       readonly />
-
-            </div>
-
-        </div>
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Descripción del ejercicio
-            </label>
-
-            <textarea class="form-control"
-                      rows="4"
-                      readonly>@(string.IsNullOrWhiteSpace(Model.Descripcion)
-                          ? "Sin descripción"
-                          : Model.Descripcion)</textarea>
 
         </div>
 
     </div>
 
-</div>
+    <!-- CONFIGURACIÓN DE LA RUTINA -->
+    <div class="col-lg-6 mb-3">
+        <div class="card">
+
+            <div class="card-body p-4">
+
+                <div class="mb-4">
+
+                    <h5 class="mb-1 fw-bold">
+                        Configuración dentro de la rutina
+                    </h5>
+
+                </div>
 
 
-<!-- CONFIGURACIÓN DE LA RUTINA -->
+                <div class="row">
 
-<div class="card mt-4">
+                    <!-- Orden -->
+                    <div class="col-md-4 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Orden dentro del día</label>
+                            <p class="bip">@Model.Orden</p>
+                        </div>
+                    </div>
+                    <!-- Series -->
+                    <div class="col-md-4 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Series</label>
+                            <p class="bip">@Model.Series</p>
+                        </div>
+                    </div>
+                    <!-- Repeticiones -->
+                    <div class="col-md-4 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Repeticiones</label>
+                            <p class="bip">@Model.Repeticiones</p>
+                        </div>
+                    </div>
+                    <!-- Peso -->
+                    <div class="col-md-4 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Peso Sugerido (kg)</label>
+                            <p class="bip">
+                                @(string.IsNullOrWhiteSpace(Model.PesoSugerido.ToString())
+                                    ? "No asignado"
+                                    : Model.PesoSugerido.ToString())
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Descanso -->
+                    <div class="col-md-4 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Descanso (s)</label>
+                            <p class="bip">@Model.DescansoSegundos</p>
+                        </div>
+                    </div>
+                    <!-- Fecha Asigna -->
+                    <div class="col-md-4 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Fecha de asignación</label>
+                            <p class="bip">@Model.FechaAsignacion.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
+                    <!-- Observaciones -->
+                    <div class="col-md-12 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Observaciones del entrenador</label>
+                            <p class="bip">
+                                @(string.IsNullOrWhiteSpace(Model.Observacion)
+                                  ? "Sin observaciones"
+                                  : Model.Observacion)
+                            </p>
+                        </div>
+                    </div>
 
-    <div class="card-body p-4">
-
-        <div class="mb-4">
-
-            <h4 class="mb-1">
-                Configuración dentro de la rutina
-            </h4>
-
-            <p class="mb-0 text-secondary">
-                Series, repeticiones y parámetros definidos por el entrenador
-            </p>
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Series
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.Series"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Repeticiones
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.Repeticiones"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Peso sugerido
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(Model.PesoSugerido.HasValue
-                                           ? Model.PesoSugerido.Value.ToString("N2") + " kg"
-                                       : "No indicado")"
-                       readonly />
-
-            </div>
+                </div>
 
 
-            <div class="col-md-3 mb-3">
-
-                <label class="form-label">
-                    Descanso
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(Model.DescansoSegundos.HasValue
-                                           ? Model.DescansoSegundos.Value + " segundos"
-                                       : "No indicado")"
-                       readonly />
-
-            </div>
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Orden dentro del día
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.Orden"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Fecha de asignación
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(Model.FechaAsignacion.ToString("dd/MM/yyyy"))"
-                       readonly />
-
+                
             </div>
 
         </div>
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Observaciones del entrenador
-            </label>
-
-            <textarea class="form-control"
-                      rows="5"
-                      readonly>@(string.IsNullOrWhiteSpace(Model.Observacion)
-                          ? "Sin observaciones"
-                          : Model.Observacion)</textarea>
-
-        </div>
-
     </div>
 
 </div>
 
-
-<!-- ACCIONES -->
-
-<div class="d-flex
-    justify-content-center
-    gap-2
-    mt-4">
-
-    <a asp-action="Rutinas_Ejercicios"
-       asp-controller="Entrenador"
-       asp-route-i="@Model.IdRutina"
-       class="btn btn-light">
-
-        <i class="ti ti-arrow-left"></i>
-
-        Volver a ejercicios
-
-    </a>
-
-
-    @if (Model.Estado)
-    {
-        <a asp-action="Rutinas_EjercicioEditar"
-           asp-controller="Entrenador"
-           asp-route-i="@Model.IdRutinaEjercicio"
-           class="btn btn-primary">
-
-            <i class="ti ti-pencil"></i>
-
-            Modificar
-
-        </a>
-
-
-        <form asp-action="Rutinas_EjercicioQuitar"
-              asp-controller="Entrenador"
-              method="post">
-
-            <input type="hidden"
-                   name="IdRutinaEjercicio"
-                   value="@Model.IdRutinaEjercicio" />
-
-            <input type="hidden"
-                   name="IdRutina"
-                   value="@Model.IdRutina" />
-
-
-            <button type="submit"
-                    class="btn btn-danger"
-                    onclick="return confirm('¿Desea retirar este ejercicio de la rutina?');">
-
-                <i class="ti ti-trash"></i>
-
-                Retirar ejercicio
-
-            </button>
-
-        </form>
-    }
-
-</div>

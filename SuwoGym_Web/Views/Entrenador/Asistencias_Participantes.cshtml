@@ -28,31 +28,12 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Asistencias_Lista"
-                       asp-controller="Entrenador">
-
-                        Asistencias
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Participantes
-
-                </li>
-
-            </ol>
-
-        </nav>
+      
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Asistencias_Lista" asp-controller="Entrenador" 
+            class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
 
 
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -77,33 +58,34 @@
 
                 </p>
 
+                @if (Model.Clase.EstadoHorario == "Programada")
+                {
+                    <span class="badge bg-success">
+                        Programada
+                    </span>
+                }
+                else if (Model.Clase.EstadoHorario == "En curso")
+                {
+                    <span class="badge bg-warning">
+                        En curso
+                    </span>
+                }
+                else if (Model.Clase.EstadoHorario == "Finalizada")
+                {
+                    <span class="badge bg-dark">
+                        Finalizada
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">
+                        @Model.Clase.EstadoHorario
+                    </span>
+                }
+
+
             </div>
 
-
-            @if (Model.Clase.EstadoHorario == "Programada")
-            {
-                <span class="badge bg-success">
-                    Programada
-                </span>
-            }
-            else if (Model.Clase.EstadoHorario == "En curso")
-            {
-                <span class="badge bg-warning">
-                    En curso
-                </span>
-            }
-            else if (Model.Clase.EstadoHorario == "Finalizada")
-            {
-                <span class="badge bg-dark">
-                    Finalizada
-                </span>
-            }
-            else
-            {
-                <span class="badge bg-secondary">
-                    @Model.Clase.EstadoHorario
-                </span>
-            }
 
         </div>
 
@@ -538,16 +520,3 @@
 
 </div>
 
-
-<div class="mt-4">
-
-    <a asp-action="Asistencias_Lista"
-       asp-controller="Entrenador"
-       class="btn btn-light">
-
-        <i class="ti ti-arrow-left"></i>
-        Volver a asistencias
-
-    </a>
-
-</div>

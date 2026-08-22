@@ -4,31 +4,13 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Horarios_Lista"
-                       asp-controller="Entrenador">
-
-                        Mi cronograma
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Detalle de la clase
-
-                </li>
-
-            </ol>
-
-        </nav>
+       
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Horarios_Lista"
+               asp-controller="Entrenador"
+               class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
 
 
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -42,35 +24,19 @@
                 <p class="text-secondary mb-0">
                     Clase programada #@Model.IdClaseProg
                 </p>
-
             </div>
 
+                <a asp-action="Asistencias_Participantes"
+                   asp-controller="Entrenador"
+                   asp-route-i="@Model.IdClaseProg"
+                   class="btn btn-primary">
 
-            @if (Model.EstadoHorario == "Programada")
-            {
-                <span class="badge bg-success">
-                    Programada
-                </span>
-            }
-            else if (Model.EstadoHorario == "En curso")
-            {
-                <span class="badge bg-warning">
-                    En curso
-                </span>
-            }
-            else if (Model.EstadoHorario == "Finalizada")
-            {
-                <span class="badge bg-dark">
-                    Finalizada
-                </span>
-            }
-            else
-            {
-                <span class="badge bg-secondary">
-                    @Model.EstadoHorario
-                </span>
-            }
+                    <i class="ti ti-users"></i>
+                    Ver participantes
 
+                </a>
+
+           
         </div>
 
     </div>
@@ -89,179 +55,129 @@
 }
 
 
-<div class="card">
+<div class="row">
 
-    <div class="card-body p-4">
+    <!-- Información general-->
+    <div class="col-md-8">
+        <div class="card mb-3">
 
-        <div class="mb-4">
+            <div class="card-body p-4">
 
-            <h4 class="mb-1">
-                Información de la clase
-            </h4>
+                <div class="mb-4">
+                    <h5 class="mb-1 fw-bold">
+                        Información de la clase
+                    </h5>
+                </div>
 
-            <p class="text-secondary mb-0">
-                Fecha, horario y descripción de la actividad
-            </p>
+                <div class="row">
 
-        </div>
+                    <!-- Nombre de clase -->
+                    <div class="col-md-6 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Clase</label>
+                            <p class="bip">@Model.NombreClase</p>
+                        </div>
+                    </div>
 
+                    <!-- Fecha -->
+                    <div class="col-md-6 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Fecha</label>
+                            <p class="bip">@Model.FechaHoraInicio.ToString("dd/MM/yyyy")</p>
+                        </div>
+                    </div>
 
-        <div class="row">
+                    <!-- Horario -->
+                    <div class="col-md-6 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Horario</label>
+                            <p class="bip">
+                                @Model.FechaHoraInicio.ToString("hh:mm tt") - @Model.FechaHoraFin.ToString("hh:mm tt")
+                            </p>
+                        </div>
+                    </div>
 
-            <div class="col-md-4 mb-3">
+                    <!-- Estado -->
+                    <div class="col-md-6 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Estado Administrativo</label> <br />
+                            @if (Model.Estado)
+                            {
+                                <span class="badge bg-success-subtle text-success-emphasis">
+                                    Activa
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary-subtle text-danger-emphasis">
+                                    Inactiva
+                                </span>
+                            }
 
-                <label class="form-label">
-                    Clase
-                </label>
+                        </div>
+                    </div>
 
-                <input type="text"
-                       class="form-control"
-                       value="@Model.NombreClase"
-                       readonly />
+                    <!-- Descripción -->
+                    <div class="col-md-12">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Descripción</label>
+                            <p class="bip">
+                                @(string.IsNullOrWhiteSpace(Model.DescripcionClase)
+                                   ? "Sin descripción."
+                                   : Model.DescripcionClase)
+                            </p>
+                        </div>
+                    </div>
 
-            </div>
-
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Fecha
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.FechaHoraInicio.ToString("dd/MM/yyyy")"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Horario
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(Model.FechaHoraInicio.ToString("hh:mm tt")
-                                               + " - "
-                                               + Model.FechaHoraFin.ToString("hh:mm tt"))"
-                       readonly />
-
-            </div>
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Estado de la clase
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.EstadoHorario"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-6 mb-3">
-
-                <label class="form-label">
-                    Estado administrativo
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(Model.Estado ? "Activa" : "Inactiva")"
-                       readonly />
+                </div>
 
             </div>
 
         </div>
-
-
-        <div class="mb-3">
-
-            <label class="form-label">
-                Descripción
-            </label>
-
-            <textarea class="form-control"
-                      rows="4"
-                      readonly>@(string.IsNullOrWhiteSpace(Model.DescripcionClase)
-                          ? "Sin descripción."
-                          : Model.DescripcionClase)</textarea>
-
-        </div>
-
     </div>
 
-</div>
+    <!-- Entrenador asignado -->
+    <div class="col-md-4">
+        <div class="card mb-3">
 
+            <div class="card-body p-4">
 
-<div class="card mt-4">
+                <div class="mb-4">
+                    <h5 class="mb-1 fw-bold">
+                        Entrenador asignado
+                    </h5>
+                </div>
 
-    <div class="card-body p-4">
+                <div class="row">
+                    <!-- Nombre -->
+                    <div class="col-md-12 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Nombre</label>
+                            <p class="bip">@Model.NombreEntrenador</p>
+                        </div>
+                    </div>
 
-        <div class="mb-4">
+                    <!-- Correo -->
+                    <div class="col-md-12 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Correo Electrónico</label>
+                            <p class="bip">@Model.CorreoEntrenador</p>
+                        </div>
+                    </div>
 
-            <h4 class="mb-1">
-                Control de cupos
-            </h4>
+                    <!-- Teléfono -->
+                    <div class="col-md-12 mb-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Teléfono</label>
+                            <p class="bip">
+                                @(string.IsNullOrWhiteSpace(Model.TelefonoEntrenador)
+                                                                   ? "No registrado"
+                                                                   : Model.TelefonoEntrenador)
+                            </p>
+                        </div>
+                    </div>
 
-            <p class="text-secondary mb-0">
-                Capacidad y participación actual de la clase
-            </p>
-
-        </div>
-
-
-        <div class="row">
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Cupo máximo
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.CupoMaximo"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Participantes actuales
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.CupoActual"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Cupos disponibles
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.CuposDisponibles"
-                       readonly />
+                </div>
 
             </div>
 
@@ -269,96 +185,88 @@
 
     </div>
 
-</div>
+    <!-- Control de cupos -->
+    <div class="col-md-12">
+        <div class="card mb-3">
+
+            <div class="card-body p-4">
+
+                <div class="mb-4">
+
+                    <h5 class="mb-1 fw-bold">
+                        Control de cupos
+                    </h5>
+
+                    <p class="text-secondary mb-0">
+                        Capacidad actual de la clase
+                    </p>
+
+                </div>
 
 
-<div class="card mt-4">
+                <div class="row">
 
-    <div class="card-body p-4">
+                    <!-- Máximo -->
+                    <div class="col-md-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Cupo máximo</label>
+                            <p class="bip">@Model.CupoMaximo</p>
+                        </div>
+                    </div>
 
-        <div class="mb-4">
+                    <!-- Actual -->
+                    <div class="col-md-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Participantes Registrados</label>
+                            <p class="bip">@Model.CupoActual</p>
+                        </div>
+                    </div>
 
-            <h4 class="mb-1">
-                Información del entrenador
-            </h4>
+                    <!-- Disponible -->
+                    <div class="col-md-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Cupos Disponibles</label>
+                            <p class="bip">@Model.CuposDisponibles</p>
+                        </div>
+                    </div>
 
-            <p class="text-secondary mb-0">
-                Datos asociados a la cuenta encargada de la clase
-            </p>
+                    <!-- Botón eliminar -->
+                    <div class="col-md-3">
+                        <div class="bloque_info">
+                            <label class="bloque_info_titulo">Estado de la clase</label> <br/>
+                            @if (Model.EstadoHorario == "Programada")
+                            {
+                                <span class="badge bg-success-subtle text-success-emphasis">
+                                    Programada
+                                </span>
+                            }
+                            else if (Model.EstadoHorario == "En curso")
+                            {
+                                <span class="badge bg-warning-subtle text-warning-emphasis">
+                                    En curso
+                                </span>
+                            }
+                            else if (Model.EstadoHorario == "Finalizada")
+                            {
+                                <span class="badge bg-dark-subtle text-danger-emphasis">
+                                    Finalizada
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary-subtle text-secondary-emphasis">
+                                    @Model.EstadoHorario
+                                </span>
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
-
-
-        <div class="row">
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Nombre
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.NombreEntrenador"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Correo electrónico
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@Model.CorreoEntrenador"
-                       readonly />
-
-            </div>
-
-
-            <div class="col-md-4 mb-3">
-
-                <label class="form-label">
-                    Teléfono
-                </label>
-
-                <input type="text"
-                       class="form-control"
-                       value="@(string.IsNullOrWhiteSpace(Model.TelefonoEntrenador)
-                                           ? "No registrado"
-                                           : Model.TelefonoEntrenador)"
-                       readonly />
-
-            </div>
-
-        </div>
-
     </div>
-
-</div>
-
-
-<div class="mt-4">
-    <a asp-action="Asistencias_Participantes"
-       asp-controller="Entrenador"
-       asp-route-i="@Model.IdClaseProg"
-       class="btn btn-primary">
-
-        <i class="ti ti-users"></i>
-        Ver participantes
-
-    </a>
-
-    <a asp-action="Horarios_Lista"
-       asp-controller="Entrenador"
-       class="btn btn-light">
-
-        <i class="ti ti-arrow-left"></i>
-        Volver a mi cronograma
-
-    </a>
 
 </div>

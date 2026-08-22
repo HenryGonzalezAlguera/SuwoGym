@@ -4,43 +4,11 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Rutinas_Lista"
-                       asp-controller="Entrenador">
-
-                        Rutinas
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Rutinas_Ver"
-                       asp-controller="Entrenador"
-                       asp-route-i="@Model.IdRutina">
-
-                        Detalle
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Modificar
-
-                </li>
-
-            </ol>
-
-        </nav>
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Rutinas_Lista"
+               asp-controller="Entrenador" class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
+        </div> <br />
 
 
         <div class="mb-4">
@@ -48,10 +16,6 @@
             <h2 class="mb-1">
                 Modificar rutina
             </h2>
-
-            <p class="mb-0 text-secondary">
-                Actualice la información general de la rutina
-            </p>
 
         </div>
 
@@ -160,8 +124,6 @@
 
                 <button type="submit"
                         class="btn btn-primary">
-
-                    <i class="ti ti-device-floppy"></i>
 
                     Guardar cambios
 

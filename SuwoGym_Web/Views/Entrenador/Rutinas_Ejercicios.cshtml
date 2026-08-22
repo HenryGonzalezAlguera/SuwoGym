@@ -4,44 +4,13 @@
 
     <div class="col-12">
 
-        <nav aria-label="breadcrumb">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Rutinas_Lista"
-                       asp-controller="Entrenador">
-
-                        Rutinas
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item">
-
-                    <a asp-action="Rutinas_Ver"
-                       asp-controller="Entrenador"
-                       asp-route-i="@ViewBag.IdRutina">
-
-                        @ViewBag.NombreRutina
-
-                    </a>
-
-                </li>
-
-                <li class="breadcrumb-item active"
-                    aria-current="page">
-
-                    Ejercicios
-
-                </li>
-
-            </ol>
-
-        </nav>
-
+        <!-- Botón atrás -->
+        <div>
+            <a asp-action="Rutinas_Ver" 
+            asp-controller="Entrenador" 
+               asp-route-i="@ViewBag.IdRutina"
+            class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver a Rutina</small></a>
+        </div> <br />
 
         <div class="d-flex
             justify-content-between
@@ -50,7 +19,7 @@
 
             <div>
 
-                <h2 class="mb-1">
+                <h2 class="mb-2">
                     Ejercicios de la rutina
                 </h2>
 
@@ -62,7 +31,7 @@
                         @ViewBag.NombreRutina
                     </strong>
 
-                    · Cliente:
+                    <br /> Cliente:
 
                     <strong>
                         @ViewBag.NombreCliente
@@ -140,39 +109,39 @@
 
                         <tr>
 
-                            <th>
+                            <th class="fw-bold">
                                 Orden
                             </th>
 
-                            <th>
+                            <th class="fw-bold">
                                 Día
                             </th>
 
-                            <th>
+                            <th class="fw-bold">
                                 Ejercicio
                             </th>
 
-                            <th>
+                            <th class="fw-bold">
                                 Grupo muscular
                             </th>
 
-                            <th>
+                            <th class="fw-bold">
                                 Series
                             </th>
 
-                            <th>
+                            <th class="fw-bold">
                                 Repeticiones
                             </th>
 
-                            <th>
+                            <th class="fw-bold">
                                 Peso
                             </th>
 
-                            <th>
+                            <th class="fw-bold">
                                 Descanso
                             </th>
 
-                            <th class="text-center">
+                            <th class="text-center fw-bold">
                                 Acciones
                             </th>
 
@@ -203,10 +172,8 @@
 
                                 <td>
 
-                                    <strong>
+                                    
                                         @item.NombreEjercicio
-                                    </strong>
-
                                 </td>
 
 
@@ -368,17 +335,3 @@
 </div>
 
 
-<div class="text-center mt-4">
-
-    <a asp-action="Rutinas_Ver"
-       asp-controller="Entrenador"
-       asp-route-i="@ViewBag.IdRutina"
-       class="btn btn-light">
-
-        <i class="ti ti-arrow-left"></i>
-
-        Volver a la rutina
-
-    </a>
-
-</div>
