@@ -12,10 +12,9 @@
 USE [master];
 GO
 
-/* Eliminar la base si ya existe */
-DROP DATABASE IF EXISTS [SuwoGym];
-CREATE DATABASE [SuwoGym]
 
+CREATE DATABASE [SuwoGym]
+GO
 
 USE [SuwoGym];
 GO
@@ -5200,6 +5199,23 @@ BEGIN
     END CATCH
 END
 GO
+
+/****** Objeto: StoredProcedure [dbo].[spRegistrarError] ******/
+CREATE procedure [dbo].[spRegistrarError]
+	@IdUsuario int,
+	@Modulo nvarchar(100),
+	@Mensaje nvarchar(max),
+	@FechaHora datetime
+AS
+BEGIN
+
+    INSERT INTO [dbo].ErrorSistema
+           (IdUsuario,Modulo, Mensaje,FechaHora)
+     VALUES
+           (@IdUsuario,@Modulo,@Mensaje,@FechaHora)
+END
+GO
+
 /****** Objeto: StoredProcedure [dbo].[spRegistrarEmpleado] Fecha de script: 03/08/2026 19:28:08 ******/
 SET ANSI_NULLS ON
 GO

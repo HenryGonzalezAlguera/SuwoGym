@@ -342,6 +342,7 @@ namespace SuwoGym_Web.Controllers
                 "Ocurrió un error al cargar la información del empleado.");
         }
 
+
         [HttpPost]
         public IActionResult Empleados_EditarDatos(UsuarioModel model)
         {

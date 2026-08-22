@@ -33,166 +33,30 @@
 </div>
 
 
-<div class="row">
-  <div class="col-lg-6 mx-auto">
 
-        <!-- Datos personales -->
-        <div class="card p-2 mb-3">
-            <div class="card-body">
 
-                <h5 class="card-title mb-1"><b>
-                    <span class="ti ti-user"></span>
-                    Datos personales
-                    </b>
-                </h5>
-                <p class="text-subtitle text-muted mb-4">
-                    Tus información registrada
-                </p>
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success"
+         role="alert">
 
-                @if (ViewBag.ClaseMensaje != null)
-                {
-                    <div class="alert
-                                alert-@ViewBag.ClaseMensaje
-                                text-center">
-
-                        @ViewBag.MensajeSeguridad
-
-                    </div>
-                }
-
-                <form id="DatosPersonalesForm"
-                      asp-action="CambiarDatosP"
-                      asp-controller="Usuario"
-                      method="post">
-
-                   <!-- Nombre y apellido -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-
-                            <label for="nombre" class="form-label">
-                                Nombre
-                            </label>
-
-                            <input asp-for="nombre"
-                                    type="text"
-                                    class="form-control"
-                                    id="nombre"
-                                    value="@Model.nombre"
-                                    maxlength="80" />
-
-                        </div>
-                        <div class="col-md-6 mb-3">
-
-                            <label for="apellido"
-                                    class="form-label">
-                                Apellido
-                            </label>
-
-                            <input asp-for="apellido"
-                                    type="text"
-                                    class="form-control"
-                                    id="apellido"
-                                    value="@Model.apellido"
-                                    maxlength="80" />
-
-                        </div>
-                    </div>
-
-                    <!-- Correo y teléfono -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-
-                            <label for="identificacion"
-                                   class="form-label">
-                                Identificación
-                            </label>
-
-                            <input asp-for="identificacion"
-                                   type="text"
-                                   class="form-control"
-                                   id="identificacion"
-                                   value="@Model.identificacion"
-                                   maxlength="50" />
-
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-
-                            <label for="correo"
-                                   class="form-label">
-                                Correo electrónico
-                            </label>
-
-                            <input asp-for="correoElectronico"
-                                   type="email"
-                                   value="@Model.correoElectronico"
-                                   class="form-control"
-                                   id="correo"
-                                   maxlength="150" />
-
-                        </div>
-                    </div>
-
-                    <!-- Identificación y fecha de nacimiento -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-
-                            <label for="fechaNac"
-                                    class="form-label">
-                                Fecha de nacimiento
-                            </label>
-
-                            <input asp-for="fechaNac"
-                                    type="date"
-                                    value="@Model.fechaNac"
-                                    class="form-control"
-                                    id="fechaNac" />
-                        </div>
-                        <div class="col-md-6 mb-3">
-
-                            <label for="telefon     o"
-                                    class="form-label">
-                                Teléfono
-                            </label>
-
-                            <input asp-for="telefono"
-                                    type="text"
-                                    value="@Model.telefono"
-                                    class="form-control"
-                                    id="telefono"
-                                    maxlength="30" />
-
-                        </div>
-                    </div>
-
-                    <!-- Dirección -->
-                    <div class="mb-5">
-
-                        <label for="direccion"
-                                class="form-label">
-                            Dirección de vivienda
-                        </label>
-
-                        <textarea asp-for="direccion"
-                                    class="form-control"
-                                    id="direccion"
-                                    rows="4"
-                                    maxlength="200">
-                        </textarea>
-
-                    </div>
-
-                    <div class=" col-lg-12 align-content-center mb-3 text-end">
-                        <button type="submit" class="btn btn-primary">Cambiar</button>
-                    </div>
-
-                </form>
-
-            </div>
-
-        </div>
+        @TempData["MensajeExito"]
 
     </div>
+}
+
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger"
+         role="alert">
+
+        @TempData["MensajeError"]
+
+    </div>
+}
+
+<div class="row">
 
     <div class="col-lg-6 mx-auto">
 
@@ -276,156 +140,7 @@
 
         </div>
 
-
-        <!-- Si son clientes -->
-        <!-- Membresía -->
-       @*
-        @if(rol == 3)
-        {
-            <div class="card p-2 mb-3">
-            <div class="card-body">
-
-                <h5 class="card-title mb-1"><b>
-                    <span class="ti ti-lock"></span>
-                    Membresía
-                    </b>
-                </h5>
-                <p class="text-subtitle text-muted mb-4">
-                    Actualiza la contraseña de acceso a tu cuenta.
-                </p>
-
-                @if (ViewBag.MensajeSeguridad != null)
-                {
-                    <div class="alert
-                                alert-@ViewBag.ClaseMensajeSeguridad
-                                text-center">
-
-                        @ViewBag.MensajeSeguridad
-
-                    </div>
-                }
-
-                <div class="row">
-                 <div class="col-md-6 mb-3">
-                        <div class="bloque_info">
-                            <label class="bloque_info_titulo">Plan de Membresía</label>
-                            <p class="bip">@Model.PlanMembresia</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="bloque_info">
-                            <label class="bloque_info_titulo">Estado de Membresía</label>
-                            <p class="bip">
-                                @Model.Estado
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="bloque_info">
-                            <label class="bloque_info_titulo">Fecha de inicio</label>
-                            <p class="bip">
-                                @Model.Estado
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="bloque_info">
-                            <label class="bloque_info_titulo">Fecha de vencimiento</label>
-                            <p class="bip">
-                                @Model.Estado
-                            </p>
-                        </div>
-                    </div>
-                    <a asp-action="" asp-controller="" class="btn btn-outline-primary">Realizar pago</a> 
-                </div>
-            </div>
-
-        </div>
-        }
-        else
-        { <!-- Si no lo son -->
-            <!-- Datos Laborales -->
-            <div class="card p-2 mb-3">
-            <div class="card-body">
-
-                <h5 class="card-title mb-1"><b>
-                    <span class="ti ti-lock"></span>
-                    Datos Laborales
-                    </b>
-                </h5>
-                <p class="text-subtitle text-muted mb-4">
-                    Actualiza la contraseña de acceso a tu cuenta.
-                </p>
-
-                @if (ViewBag.MensajeSeguridad != null)
-                {
-                    <div class="alert
-                                alert-@ViewBag.ClaseMensajeSeguridad
-                                text-center">
-
-                        @ViewBag.MensajeSeguridad
-
-                    </div>
-                }
-
-                <form id="SeguridadForm"
-                      asp-action="CambiarContrasenna"
-                      asp-controller="Usuario"
-                      method="post">
-
-                    <div class="form-group mb-3">
-
-                        <label asp-for="contrasenna"
-                               class="form-label">
-
-                            Contraseña nueva
-                        </label>
-
-                        <input asp-for="contrasenna"
-                               type="password"
-                               class="form-control"
-                               autocomplete="new-password">
-
-                    </div>
-
-                    <div class="form-group mb-4">
-
-                        <label asp-for="confirmarContrasenna"
-                               class="form-label">
-
-                            Confirmar contraseña
-                        </label>
-
-                        <input asp-for="confirmarContrasenna"
-                               type="password"
-                               class="form-control"
-                               autocomplete="new-password">
-
-                    </div>
-
-                    <div class="form-group text-end">
-
-                        <button type="submit"
-                                class="btn btn-primary">
-                            Cambiar Contraseña
-                        </button>
-
-                    </div>
-
-                </form>
-
-            </div>
-
-        </div>
-        }
-
-        *@
-        
-        
-
     </div>
-    
-  
 
 </div>
 

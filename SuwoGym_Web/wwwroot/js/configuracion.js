@@ -48,12 +48,9 @@
 
         errorPlacement: function (error, element) {
 
-            error.addClass(
-                "text-danger small d-block");
+            error.addClass("text-danger small");
 
-            element
-                .closest(".form-group")
-                .after(error);
+            error.insertAfter(element);
         },
 
         highlight: function (element) {
@@ -77,3 +74,6 @@
     });
 
 });
+
+
+
