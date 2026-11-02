@@ -1,0 +1,49 @@
+name: SUWO Gym .NET build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: suwo-build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v5
+
+      - name: Configurar .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Verificar que el JSON publico no contiene secretos
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          config = json.loads(Path("SuwoGym_API/appsettings.json").read_text(encoding="utf-8-sig"))
+          for section, field in [("Correos", "AppPassword"), ("Jwt", "SecretKey")]:
+              assert not config.get(section, {}).get(field), f"Se detectó configuración sensible: {section}:{field}"
+          print("Configuración pública: campos sensibles vacíos")
+          PY
+
+      - name: Restaurar dependencias
+        run: dotnet restore SuwoGym.slnx
+
+      - name: Compilar API y WEB
+        run: dotnet build SuwoGym.slnx --configuration Release --no-restore
+
+      # Actualmente no existe un proyecto de pruebas automatizadas.
+      # Se añadirá al verificar la conexión a SQL Server y los flujos críticos.

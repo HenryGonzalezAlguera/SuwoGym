@@ -1,270 +1,36 @@
-# Sistema de Autenticación SuwoGym
+# Autenticación de SUWÓ GYM — Estado actual del código
 
-## 📋 Descripción
+> **Documento actualizado:** esta guía reemplaza las referencias históricas a SHA-256, Entity Framework Core, migraciones automáticas y rutas `/api/auth/*`, que no corresponden con los archivos de código actuales.
 
-Se ha implementado un sistema funcional de inicio de sesión y registro para la aplicación SuwoGym utilizando ASP.NET Core 10.0. El sistema está dividido en dos proyectos:
+## Arquitectura implementada
 
-### **SuwoGym_API** (Backend)
-- API REST que gestiona la autenticación
-- Conexión a Base de Datos SQL Server
-- Endpoints: `/api/auth/login` y `/api/auth/registro`
-- Hash seguro de contraseñas (SHA256)
-- Entity Framework Core para ORM
+- **`SuwoGym_API`**: ASP.NET Core 10, controladores REST, Dapper, SQL Server, JWT Bearer y BCrypt para verificar contraseñas.
+- **`SuwoGym_Web`**: ASP.NET Core MVC, Razor, HttpClient, almacenamiento de token JWT en sesión y filtro `SessionAuthorizeAttribute`.
+- **Roles de la API**: `Administrador` (ID 1), `Entrenador` (ID 2), `Miembro` (ID 3). La API declara restricciones `[Authorize(Roles = "1")]`, `"2"` o `"3"` en sus respectivos controladores.
+- **SQL**: consultas y procedimientos almacenados mediante Dapper; **no** se encontraron DbContext ni migraciones EF en los proyectos actuales.
 
-### **SuwoGym_Web** (Frontend)
-- Aplicación Razor Pages / MVC
-- Interfaz de usuario para login y registro
-- Manejo de sesiones
-- Cliente HTTP para comunicarse con la API
+## Rutas identificadas en el código
 
----
+| Operación | Método y ruta de la API |
+| --- | --- |
+| Iniciar sesión | `POST /api/Home/IniciarSesionAPI` |
+| Crear miembro | `POST /api/Home/RegistroAPI` |
+| Consultar planes | `GET /api/Home/MembresiasAPI` |
+| Recuperar acceso | `POST /api/Home/RecuperarAccesoAPI` |
+| Consultar perfil autenticado | `GET /api/Usuario/ConsultarUsuarioAPI` |
+| Cambiar contraseña | `PUT /api/Usuario/CambiarContrasennaAPI` |
 
-## 🛠️ Configuración
+La web utiliza rutas MVC de `Home`, `Admin`, `Entrenador`, `Miembro` y `Usuario`. Los métodos de la API pueden requerir JWT según sus atributos.
 
-### **1. Ejecutar el Script SQL**
+## Seguridad y verificación
 
-Primero, ejecuta el script SQL en tu servidor SQL Server para crear la base de datos:
+Las contraseñas de cuentas se contrastan con BCrypt en el login, y la web calcula hashes BCrypt para los flujos de registro y cambio de contraseña. La API firma tokens JWT mediante un secreto que **debe venir del entorno local**, nunca de Git.
 
-```sql
-USE master;
-GO
+**Esta implementación todavía necesita revisión adicional** de autorización en las rutas web, protección CSRF, recuperación de acceso, manejo de excepciones y pruebas de los tres perfiles. No es apropiado afirmar que está lista para producción.
 
-IF DB_ID('SuwoGym') IS NULL
-	CREATE DATABASE SuwoGym;
-GO
+Para instalar y configurar consulta:
+- [README principal](README.md).
+- [Seguridad y User Secrets](docs/SEGURIDAD_Y_CONFIGURACION.md).
+- [Instrucciones de base de datos](Database/README.md).
 
--- El resto del script ya está incluido en el proyecto
-```
-
-### **2. Actualizar Strings de Conexión**
-
-Los archivos `appsettings.json` ya han sido configurados:
-
-**SuwoGym_API/appsettings.json:**
-```json
-{
-  "ConnectionStringsApi": {
-	"DefaultConnection": "Server=(localdb)\\TonyDB;Database=SuwoGym;Integrated Security=True;TrustServerCertificate=True;"
-  }
-}
-```
-
-**SuwoGym_Web/appsettings.json:**
-```json
-{
-  "ConnectionStringsWeb": {
-	"urlApi": "https://localhost:7096"
-  }
-}
-```
-
-### **3. Ejecutar la Aplicación**
-
-#### **Opción 1: Visual Studio**
-1. Establece **SuwoGym_API** como proyecto de inicio
-2. Presiona **F5** para ejecutar
-3. La base de datos se creará automáticamente mediante migraciones
-4. Luego ejecuta **SuwoGym_Web** como segundo proyecto de inicio
-
-#### **Opción 2: Línea de Comandos**
-
-```powershell
-# Restaurar dependencias
-dotnet restore
-
-# Ejecutar API (terminal 1)
-cd SuwoGym_API
-dotnet run
-
-# Ejecutar Web (terminal 2)
-cd SuwoGym_Web
-dotnet run
-```
-
----
-
-## 📝 Características Implementadas
-
-### **Autenticación**
-
-✅ **Login**
-- Validación de correo y contraseña
-- Hash SHA256 para contraseñas
-- Registro de último acceso
-- Manejo de errores
-
-✅ **Registro**
-- Creación de nuevos usuarios
-- Validación de contraseñas coincidentes
-- Creación automática de perfil de cliente
-- Rol por defecto: "Miembro"
-
-✅ **Sesiones**
-- Almacenamiento de datos de usuario en sesión
-- Timeout de 30 minutos
-- Cierre de sesión (Logout)
-
----
-
-## 🗂️ Estructura de Base de Datos
-
-### **Tabla: Rol**
-- IdRol (PK)
-- NombreRol (Administrador, Entrenador, Miembro)
-- Descripcion
-- Estado
-- FechaRegistro
-
-### **Tabla: Usuario**
-- IdUsuario (PK)
-- IdRol (FK)
-- Nombre, Apellido
-- CorreoElectronico (UNIQUE)
-- ContrasennaHash
-- DebeCambiarContrasenna
-- Estado
-- FechaRegistro, FechaUltimoAcceso
-
-### **Tabla: Cliente**
-- IdCliente (PK)
-- IdUsuario (FK, UNIQUE)
-- Identificacion
-- Telefono
-- FechaNacimiento
-- Direccion
-- FechaRegistro
-- Estado
-
----
-
-## 🔐 Roles y Permisos
-
-| Rol | Permisos |
-|-----|----------|
-| **Administrador** | Control total del sistema, gestión de usuarios |
-| **Entrenador** | Gestión de clientes y rutinas |
-| **Miembro** | Acceso a rutinas personalizadas y progreso |
-
----
-
-## 🌐 Endpoints API
-
-### **POST /api/auth/login**
-```json
-Request:
-{
-  "correoElectronico": "usuario@ejemplo.com",
-  "contrasenna": "password123"
-}
-
-Response (Success):
-{
-  "exitoso": true,
-  "mensaje": "Inicio de sesión exitoso.",
-  "usuario": {
-	"idUsuario": 1,
-	"nombre": "Juan",
-	"apellido": "Pérez",
-	"correoElectronico": "usuario@ejemplo.com",
-	"nombreRol": "Miembro"
-  }
-}
-```
-
-### **POST /api/auth/registro**
-```json
-Request:
-{
-  "nombre": "Juan",
-  "apellido": "Pérez",
-  "correoElectronico": "juan@ejemplo.com",
-  "contrasenna": "password123",
-  "confirmarContrasenna": "password123",
-  "identificacion": "123456789",
-  "telefono": "+34612345678"
-}
-
-Response (Success):
-{
-  "exitoso": true,
-  "mensaje": "Registro exitoso. Por favor, inicia sesión.",
-  "usuario": { ... }
-}
-```
-
----
-
-## 📱 Vistas Implementadas
-
-### **Iniciar Sesión** (`/Home/Index`)
-- Formulario con validación
-- Enlace a registro
-- Opción de recuperar acceso
-
-### **Registrar Usuario** (`/Home/Registro`)
-- Validación de contraseña confirmada
-- Requisitos de seguridad mínimos
-- Feedback en tiempo real
-
-### **Panel Principal** (`/Home/Principal`)
-- Dashboard personalizado según rol
-- Opciones contextual para cada tipo de usuario
-- Botón de cierre de sesión
-
----
-
-## ⚠️ Validaciones Implementadas
-
-✅ Correo electrónico único
-✅ Contraseña mínimo 6 caracteres
-✅ Contraseña hash con SHA256
-✅ Validación de estado de usuario
-✅ Campos requeridos no nulos
-✅ Manejo de excepciones
-
----
-
-## 🚀 Próximas Mejoras Sugeridas
-
-- [ ] Implementar JWT (JSON Web Tokens) para APIs
-- [ ] Recuperación de contraseña por email
-- [ ] Two-factor authentication (2FA)
-- [ ] Audit logging de acciones
-- [ ] Rate limiting para intentos de login
-- [ ] Integración con OAuth (Google, Microsoft)
-- [ ] Dashboard de administrador
-- [ ] Gestión de rutinas y entrenamientos
-
----
-
-## 📚 Tecnologías Utilizadas
-
-- **Framework:** ASP.NET Core 10.0
-- **Base de Datos:** SQL Server
-- **ORM:** Entity Framework Core 10.0.0
-- **Autenticación:** Custom (Hash SHA256)
-- **Sesiones:** ASP.NET Core Session Management
-- **HTTP Client:** HttpClientFactory
-
----
-
-## ✅ Estado del Proyecto
-
-- [x] Vulnerabilidad de NuGet corregida (Microsoft.OpenApi)
-- [x] Modelos de datos creados
-- [x] DbContext configurado
-- [x] API de autenticación implementada
-- [x] Servicio de autenticación en Web
-- [x] Vistas del formulario
-- [x] Sistema de sesiones
-- [x] Migraciones de base de datos
-- [x] Validaciones implementadas
-- [x] CORS configurado
-
----
-
-## 📞 Soporte
-
-Para problemas o consultas, revisa los logs en la consola de Visual Studio o verifica la cadena de conexión a la base de datos.
-
-¡Listo para usar! 🎉
+El código fuente refleja los módulos de una aplicación funcional en desarrollo; la validación end-to-end depende de la instancia SQL Server y de cuentas de prueba.

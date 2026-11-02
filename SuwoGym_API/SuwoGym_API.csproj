@@ -4,6 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<UserSecretsId>SuwoGym-API-9d417ae8-4f8d-4ed0-a037-f7e7ac831cb2</UserSecretsId>
 		
 	</PropertyGroup>
 
