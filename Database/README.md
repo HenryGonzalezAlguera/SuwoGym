@@ -1,40 +1,23 @@
-﻿# Base de datos SUWÓ Gym
+# Base de datos SUWÓ Gym (SQL Server)
 
-## Archivos públicos para GitHub
+## Archivos disponibles
 
-1. `01_SuwoGym_Estructura.sql`
-   - Crea la base `SuwoGym`.
-   - Crea tablas, restricciones, índices y procedimientos almacenados.
+- `01_SuwoGym_Estructura.sql`: estructura, tablas, índices y procedimientos almacenados.
+- `02_SuwoGym_DatosIniciales.sql`: datos iniciales de roles, clases y planes de membresía.
 
-2. `02_SuwoGym_DatosIniciales.sql`
-   - Inserta roles, clases y planes de membresía.
+**Importante:** una versión anterior de esta guía mencionaba `03_SuwoGym_AdministradorInicial_Plantilla.sql`; ese archivo **no está incluido** en el repositorio. No se deben inventar tablas, procedimientos ni contraseñas para suplirlo. La preparación documentada y validada del primer administrador forma parte de una fase posterior.
 
-3. `03_SuwoGym_AdministradorInicial_Plantilla.sql`
-   - Plantilla para crear el primer administrador.
-   - Debe configurarse con un correo, identificación y hash BCrypt propios.
-   - Nunca almacene contraseñas en texto plano.
+## Preparación segura
 
-## Orden de instalación
+1. Usa una instancia SQL Server de prueba, nunca una base de datos productiva con información real.
+2. Respaldar previamente cualquier base existente. Revisa `01` antes de ejecutarlo: **puede crear o modificar objetos y datos**.
+3. En una instalación nueva, ejecutar `01_SuwoGym_Estructura.sql` desde SQL Server Management Studio.
+4. Ejecutar `02_SuwoGym_DatosIniciales.sql`.
+5. Configurar `ConnectionStringsApi:DefaultConnection` según tu servidor, usando [la guía de secretos](../docs/SEGURIDAD_Y_CONFIGURACION.md).
+6. Para probar inicio de sesión, todavía se requiere validar un procedimiento de creación de cuenta administradora y comprobar que los scripts SQL corresponden exactamente a los procedimientos consumidos por la API.
 
-1. Ejecutar `01_SuwoGym_Estructura.sql`.
-2. Ejecutar `02_SuwoGym_DatosIniciales.sql`.
-3. Configurar y ejecutar `03_SuwoGym_AdministradorInicial_Plantilla.sql`.
-4. Configurar la cadena de conexión de `SuwoGym_API`.
-5. Iniciar `SuwoGym_API` y `SuwoGym_Web`.
+## No publicar
 
-## Archivos que no deben subirse
+No incluyas respaldos `.bak`, archivos `.mdf`, `.ldf`, datos reales de socios, tokens, contraseñas, claves JWT o credenciales SMTP. Evita subir cualquier script local con usuarios o contraseñas.
 
-- Copias `.bak`.
-- Archivos `.mdf` y `.ldf`.
-- `03_SuwoGym_AdministradorInicial_LOCAL.sql`.
-- Archivos con claves JWT, credenciales de correo o contraseñas.
-- Datos personales o transacciones de prueba.
-
-## Exclusiones recomendadas
-
-```gitignore
-*.bak
-*.mdf
-*.ldf
-03_SuwoGym_AdministradorInicial_LOCAL.sql
-```
+El repositorio es **fuente del proyecto y esquema de demostración**, no un paquete de instalación de producción.
