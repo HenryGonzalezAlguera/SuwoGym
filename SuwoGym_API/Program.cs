@@ -7,6 +7,19 @@ using System.Text;
 var builder =
     WebApplication.CreateBuilder(args);
 
+// La clave de firma nunca debe almacenarse en appsettings versionados.
+// En desarrollo, configúrela con dotnet user-secrets o variables de entorno.
+var jwtSecret = builder.Configuration["Jwt:SecretKey"];
+if (string.IsNullOrWhiteSpace(jwtSecret) ||
+    Encoding.UTF8.GetByteCount(jwtSecret) < 32)
+{
+    throw new InvalidOperationException(
+        "Falta Jwt:SecretKey o tiene menos de 32 bytes. " +
+        "Configure un valor nuevo mediante .NET User Secrets " +
+        "o una variable de entorno antes de iniciar la API.");
+}
+
+
 builder.Services.AddControllers();
 
 /*
@@ -38,8 +51,7 @@ builder.Services
                 IssuerSigningKey =
                     new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(
-                            builder.Configuration[
-                                "Jwt:SecretKey"]!)),
+                            jwtSecret)),
 
                 RoleClaimType =
                     ClaimTypes.Role,
