@@ -44,8 +44,8 @@ Las variables deben estar disponibles en el **proceso que ejecuta la API**, no s
 ## Restricciones y siguientes pasos
 
 - La API valida el JWT firmado pero **no** verifica `issuer` y `audience` en la configuración actual; requiere endurecimiento antes de despliegue.
-- La web utiliza sesiones con un filtro que verifica si existe `Autenticado`, **sin comprobar por sí mismo el rol**. Se debe revisar cada ruta sensible.
-- No se identificó una prueba automatizada de permisos, CSRF ni revocación de sesiones.
+- La web utiliza `SessionAuthorize` para verificar una sesión completa y restringir los controladores por rol (`1`, `2`, `3`); la API mantiene autorización JWT independiente. [Ver fase 2](FASE2_SESIONES_Y_ROLES.md).
+- Se incorporaron pruebas automatizadas del filtro MVC; aún faltan pruebas E2E, CSRF y revocación de tokens.
 - La recuperación de acceso genera contraseñas temporales; su seguridad y el manejo de errores de correo deben revisarse antes de permitir uso real.
 - No publicar el sitio en Internet ni utilizar cuentas reales hasta validar autenticación, roles, integridad y manejo de secretos.
 
