@@ -14,20 +14,9 @@ namespace SuwoGym_API.Services
     {
         public string GenerarContrasena()
         {
-            const string caracteres =
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-            var random = new Random();
-            var chars = new char[10];
-
-            for (int i = 0; i < chars.Length; i++)
-            {
-                chars[i] =
-                    caracteres[
-                        random.Next(caracteres.Length)];
-            }
-
-            return new string(chars);
+            // Se utiliza también para nuevas cuentas y recuperación por correo.
+            // No usar System.Random para generar credenciales.
+            return GeneradorClavesTemporales.Generar();
         }
 
         public async Task EnviarCorreoAsync(
