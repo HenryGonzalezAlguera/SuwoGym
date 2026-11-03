@@ -52,12 +52,13 @@
 }
 
 
-@if (ViewBag.MensajeError != null)
+@if (ViewBag.MensajeError is string mensajeError &&
+    !string.Equals(mensajeError.Trim(), "No tiene reservas registradas.", StringComparison.OrdinalIgnoreCase))
 {
     <div class="alert alert-info"
          role="alert">
 
-        @ViewBag.MensajeError
+        @mensajeError
 
     </div>
 }

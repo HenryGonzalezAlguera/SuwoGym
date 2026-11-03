@@ -30,6 +30,19 @@ contadores usan `Model?.Count ?? 0`, sin consultas adicionales. En la vista
 de detalle de pago también se corrigió el atributo HTML `xlass` a `class`
 para que el separador reciba el estilo.
 
+## Ajuste de estados vacíos (PR de seguimiento)
+
+Cuando una lista está vacía, la API devuelve `404 NotFound` con un texto
+específico. Antes, la WEB representaba ese texto como alerta informativa
+**además** de mostrar el estado vacío diseñado para la página.
+
+En las vistas de clases, reservas, asistencia, pagos y rutinas se evita esa
+alerta redundante **solo si el mensaje recibido coincide exactamente** (sin
+distinguir mayúsculas/minúsculas) con el texto esperado de ausencia de datos.
+Una respuesta inesperada seguirá siendo visible como alerta. Los mensajes de
+éxito y error de operaciones (`TempData`) permanecen intactos. No cambian
+las respuestas API ni los contratos de las acciones MVC.
+
 ## Contratos preservados
 
 - Todas las acciones `asp-action` y `asp-controller` originales.
