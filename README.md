@@ -63,6 +63,14 @@ Consulta [la guía de la Fase Visual 1](docs/FASE_VISUAL_1.md) para verificar la
 presentación en Visual Studio, incluidos móvil y escritorio. La compilación de
 GitHub Actions no sustituye una inspección visual con datos reales de prueba.
 
+### Fase Visual 2 — Vistas de Miembro
+
+Las nueve vistas de Miembro ahora comparten estilos de presentación mediante
+`wwwroot/css/suwo-member.css`: encabezados legibles, tarjetas de detalle,
+tablas, indicadores, estado vacío y contadores de listas. La capa se aplica
+solo a las páginas del Miembro y mantiene los formularios de reserva y las
+rutas MVC existentes. Consulta la [guía de verificación manual](docs/FASE_VISUAL_2_MIEMBRO.md).
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la

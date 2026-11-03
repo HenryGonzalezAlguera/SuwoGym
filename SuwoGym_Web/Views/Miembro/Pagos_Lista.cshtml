@@ -1,11 +1,13 @@
 ﻿@model List<PagoMiembroListaModel>
 
+<section class="suwo-member-view suwo-member-pagos-lista">
 <div class="row">
 
     <div class="col-12">
 
-        <div class="mb-4">
+        <div class="mb-4 suwo-member-headline">
 
+            <span class="suwo-member-eyebrow"><i class="ti ti-receipt" aria-hidden="true"></i> Tu espacio SUWÓ</span>
             <h2 class="mb-1">
                 Mis pagos
             </h2>
@@ -13,6 +15,7 @@
             <p class="mb-0 text-secondary">
                 Historial de pagos relacionados con sus membresías
             </p>
+            <span class="suwo-count" aria-label="Cantidad de pagos registrados">@(Model?.Count ?? 0) pagos registrados</span>
 
         </div>
 
@@ -51,9 +54,7 @@
         {
             <div class="table-responsive">
 
-                <table class="table
-                    table-hover
-                    align-middle">
+                <table class="table table-hover align-middle suwo-member-table">
 
                     <thead>
 
@@ -252,7 +253,7 @@
         }
         else
         {
-            <div class="text-center py-5">
+            <div class="text-center py-5 suwo-member-empty">
 
                 <i class="ti ti-receipt"
                    style="font-size: 48px;">
@@ -275,3 +276,4 @@
     </div>
 
 </div>
+</section>

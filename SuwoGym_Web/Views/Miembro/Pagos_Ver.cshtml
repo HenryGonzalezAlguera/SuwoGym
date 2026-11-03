@@ -1,5 +1,6 @@
 ﻿@model PagoMiembroDetalleModel
 
+<section class="suwo-member-view suwo-member-pagos-ver">
 <div class="row">
 
     <div class="col-12">
@@ -35,7 +36,7 @@
 </div>
 
 
-<div class="card">
+<div class="card suwo-member-detail">
     <div class="card-body p-4">
 
         <h5 class="mb-3 fw-bold">
@@ -103,7 +104,7 @@
         </div>
 
 
-        <hr xlass="lineaGris" />
+        <hr class="lineaGris" />
 
 
         <h5 class="mb-3 fw-bold">
@@ -151,7 +152,7 @@
 
             <!-- Total-->
             <div class="col-md-4 mb-2">
-                <div class="bloque_info">
+                <div class="bloque_info suwo-member-total">
                     <label class="bloque_info_titulo">TOTAL</label>
                     <p class="bip fs-4">&#8353; @Model.Total.ToString("N2")</p>
                 </div>
@@ -162,4 +163,4 @@
 
     </div>
 </div>
-
+</section>
