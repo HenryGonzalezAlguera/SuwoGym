@@ -18,18 +18,13 @@
           rel="icon"
           type="image/x-icon" />
 
-    <title>Suwo Gym</title>
+    <title>@(ViewData["Title"] ?? "Panel principal") | SUWÓ GYM</title>
 
     <link rel="manifest"
           href="~/images/site.webmanifest" />
 
     <!-- Archivos principales -->
-    <script type="module"
-            crossorigin=""
-            src="~/js/main.js"
-            asp-append-version="true">
-    </script>
-
+    <!-- Estilos principales. main.js se carga una sola vez al final del body. -->
     <!-- Estilos -->
     <link rel="stylesheet"
           crossorigin=""
@@ -45,6 +40,9 @@
           crossorigin=""
           href="~/css/colores.css"
           asp-append-version="true" />
+    <link rel="stylesheet"
+          href="~/css/suwo-polish.css"
+          asp-append-version="true" />
 
     <!-- jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"
@@ -58,145 +56,70 @@
 
 </head>
 
-<body>
+<body class="suwo-app">
 
     <div id="overlay"
          class="overlay">
     </div>
 
 
-    <!-- TOPBAR -->
-
+    <!-- Barra superior -->
     <nav id="topbar"
-         class="navbar bg-white border-bottom fixed-top topbar px-3">
-
-        <!-- TOGGLE PARA COMPUTADORA -->
-
-        <button id="toggleBtn"
-                class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm">
-
-            <i class="ti ti-layout-sidebar-left-expand"></i>
-
-        </button>
-
-
-        <!-- TOGGLE PARA MÓVIL -->
-
-        <button id="mobileBtn"
-                class="btn btn-light btn-icon btn-sm d-lg-none me-2">
-
-            <i class="ti ti-layout-sidebar-left-expand"></i>
-
-        </button>
-
-
-        <!-- NAVEGACIÓN SUPERIOR -->
-
-        <div>
-
-            <ul class="list-unstyled d-flex align-items-center mb-0 gap-2">
-
-                <li class="ms-3 dropdown">
-
-                    <a href="#"
-                       role="button"
-                       data-bs-toggle="dropdown"
-                       aria-expanded="false">
-
-                        <div style="
-                            background-color: aliceblue;
-                            border-radius: 16px;
-                            padding: 2px 6px;
-                            font-size: 20px;">
-
-                            <i class="ti ti-user-circle"></i>
-
-                            <i class="ti ti-chevron-down"></i>
-
-                        </div>
-
-                    </a>
-
-
-                    <div class="dropdown-menu dropdown-menu-end p-0"
-                         style="min-width: 200px;">
-
-                        <div>
-
-                            <div class="d-flex gap-3
-                                align-items-center
-                                border-dashed
-                                border-bottom
-                                px-3 py-3">
-
-                                <div>
-
-                                    <h4 class="mb-0 small">
-
-                                        <b>
-                                            @nombre
-                                        </b>
-
-                                    </h4>
-
-                                    <p class="mb-0 small">
-                                        @rol
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="p-3
-                                d-flex
-                                flex-column
-                                gap-1
-                                small
-                                lh-lg">
-
-                                <a asp-action="Configuracion"
-                                   asp-controller="Usuario">
-
-                                    <i class="ti ti-settings"></i>
-
-                                    <span>
-                                        Configuración
-                                    </span>
-
-                                </a>
-
-
-                                <a asp-action="Logout"
-                                   asp-controller="Home">
-
-                                    <i class="ti ti-door-exit"></i>
-
-                                    <span>
-                                        Cerrar Sesión
-                                    </span>
-
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </li>
-
-            </ul>
-
+         class="navbar bg-white border-bottom fixed-top topbar px-3"
+         aria-label="Barra superior">
+        <div class="suwo-topbar-left">
+            <button id="toggleBtn" type="button"
+                    class="d-none d-lg-inline-flex btn btn-light btn-icon btn-sm"
+                    aria-label="Contraer o expandir menú lateral"
+                    title="Contraer o expandir menú lateral">
+                <i class="ti ti-layout-sidebar-left-expand" aria-hidden="true"></i>
+            </button>
+            <button id="mobileBtn" type="button"
+                    class="btn btn-light btn-icon btn-sm d-lg-none"
+                    aria-label="Abrir menú de navegación"
+                    title="Abrir menú de navegación">
+                <i class="ti ti-layout-sidebar-left-expand" aria-hidden="true"></i>
+            </button>
+            <div class="suwo-topbar-copy">
+                <span class="suwo-topbar-eyebrow">Bienvenido a SUWÓ</span>
+                <span class="suwo-topbar-title">Tu centro de entrenamiento</span>
+            </div>
         </div>
-
+        <div class="dropdown">
+            <a href="#" role="button" class="suwo-user-toggle"
+               data-bs-toggle="dropdown" aria-expanded="false"
+               aria-label="Abrir menú de usuario">
+                <span class="suwo-user-avatar" aria-hidden="true">
+                    <i class="ti ti-user-circle"></i>
+                </span>
+                <span class="d-none d-sm-flex flex-column">
+                    <span class="suwo-user-name">@nombre</span>
+                    <span class="suwo-user-role">@rol</span>
+                </span>
+                <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end p-2" style="min-width: 210px;">
+                <div class="px-2 py-2 border-bottom mb-2">
+                    <div class="fw-bold small">@nombre</div>
+                    <div class="text-secondary small">@rol</div>
+                </div>
+                <a class="d-block text-decoration-none mb-1"
+                   asp-action="Configuracion" asp-controller="Usuario">
+                    <i class="ti ti-settings me-2" aria-hidden="true"></i> Configuración
+                </a>
+                <a class="d-block text-decoration-none"
+                   asp-action="Logout" asp-controller="Home">
+                    <i class="ti ti-door-exit me-2" aria-hidden="true"></i> Cerrar sesión
+                </a>
+            </div>
+        </div>
     </nav>
 
 
     <!-- SIDEBAR -->
 
     <aside id="sidebar"
-           class="sidebar">
+           class="sidebar" aria-label="Menú principal">
 
         <!-- LOGO -->
 
@@ -227,7 +150,7 @@
 
         <!-- NAVEGACIÓN -->
 
-        <ul class="nav flex-column mt-2">
+        <ul class="nav flex-column suwo-nav-group">
 
             <!-- OPCIÓN DISPONIBLE PARA TODOS -->
 
@@ -246,7 +169,8 @@
                 </a>
 
             </li>
-        </ul>
+
+            <li class="suwo-nav-caption">Tu espacio</li>
 
             @if (rol == "Administrador")
             {
@@ -505,6 +429,7 @@
             </li>
             }
 
+        </ul>
     </aside>
 
 
@@ -519,38 +444,17 @@
             @RenderBody()
 
 
-            <!-- FOOTER -->
-
-            <div class="row">
-
-                <footer class="py-2 mt-6 text-secondary">
-
-                    <div class="row">
-
-                        <div class="col-6">
-
-                            <p class="mb-0">
-                                Gimnasio SUWÓ | Fuerza, Enfoque y Balance
-                            </p>
-
-                        </div>
-
-
-                        <div class="col-6 text-end">
-
-                            <p class="mb-0">
-
-                                Programación Avanzada en la Web | IIC2026 | Proyecto Final | Grupo 3
-
-                            </p>
-
-                        </div>
-
+            <!-- Pie de página -->
+            <footer class="suwo-footer">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p>&copy; @DateTime.Now.Year SUWÓ GYM · Fuerza, Enfoque y Balance</p>
                     </div>
-
-                </footer>
-
-            </div>
+                    <div class="col-md-6 text-md-end">
+                        <p>Plataforma de gestión y entrenamiento</p>
+                    </div>
+                </div>
+            </footer>
 
         </div>
 
@@ -563,6 +467,10 @@
             type="module"
             asp-append-version="true">
     </script>
+    <script src="~/js/suwo-polish.js"
+            type="module"
+            asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 
