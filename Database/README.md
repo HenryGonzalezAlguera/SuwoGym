@@ -7,6 +7,23 @@
 
 **Importante:** una versión anterior de esta guía mencionaba `03_SuwoGym_AdministradorInicial_Plantilla.sql`; ese archivo **no está incluido** en el repositorio. No se deben inventar tablas, procedimientos ni contraseñas para suplirlo. La preparación documentada y validada del primer administrador forma parte de una fase posterior.
 
+## Recuperación segura del registro
+
+Para diagnosticar una instalación donde no aparecen usuarios o falla el
+registro, usa [`03_Diagnostico_Registro.sql`](03_Diagnostico_Registro.sql)
+(solo lectura). Si faltan los catálogos de roles/planes, el script
+[`04_Catalogos_Registro_Sin_Usuarios.sql`](04_Catalogos_Registro_Sin_Usuarios.sql)
+inserta únicamente los registros ausentes, sin usuarios ni contraseñas.
+
+La guía detallada está en
+[`docs/REGISTRO_Y_CATALOGOS_LOCALES.md`](../docs/REGISTRO_Y_CATALOGOS_LOCALES.md).
+
+**Advertencia:** `02_SuwoGym_DatosIniciales.sql` incluye usuarios cuyos hashes
+figuran en el repositorio público. No deben considerarse credenciales seguras
+ni usarse para crear acceso de demostración. Los scripts históricos dentro de
+`SuwoGym_API/Scripts/` no son equivalentes al esquema actual; uno contiene
+una instrucción destructiva `DROP DATABASE`.
+
 ## Preparación segura
 
 1. Usa una instancia SQL Server de prueba, nunca una base de datos productiva con información real.
