@@ -11,7 +11,7 @@
           rel="icon"
           type="image/x-icon">
 
-    <title>Suwo Gym</title>
+    <title>@(ViewData["Title"] ?? "Acceder") | SUWÓ GYM</title>
 
     <link rel="manifest"
           href="~/images/site.webmanifest">
@@ -30,6 +30,7 @@
           crossorigin=""
           href="~/css/colores.css"
           asp-append-version="true">
+    <link rel="stylesheet" href="~/css/suwo-polish.css" asp-append-version="true">
 
     <!-- jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"
@@ -43,15 +44,14 @@
 
 </head>
 
-<body>
+<body class="suwo-auth">
 
-    <div class="container d-flex
+    <main class="container suwo-auth-wrap d-flex
         align-items-center
         justify-content-center
         min-vh-100">
 
-        <div class="card mt-6 mb-6"
-             style="max-width:500px; width:100%;">
+        <div class="card suwo-auth-card my-4">
 
             <div class="card-body p-5">
 
@@ -73,12 +73,12 @@
 
             </div>
 
-        <div class="text-center text-secondary mb-4">
+        <div class="suwo-auth-footer text-center mb-4">
                 <small> <small>Proyecto Final | Grupo 3 | IIC2026 </small></small>
         </div>
         </div>
 
-    </div>
+    </main>
 
     
 
