@@ -1017,6 +1017,50 @@ namespace SuwoGym_API.Controllers
         
         #region Gestión de Horarios y Clases
 
+        // Solo Administrador: el rol se exige en este controlador.
+        [HttpPost("ClaseCrearAPI")]
+        public IActionResult ClaseCrearAPI(ClaseCrearRequestModel model)
+        {
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(model.NombreClase))
+                return BadRequest("Indica un nombre de clase válido.");
+
+            var nombre = model.NombreClase.Trim();
+            var descripcion = string.IsNullOrWhiteSpace(model.Descripcion)
+                ? null
+                : model.Descripcion.Trim();
+
+            if (nombre.Length is < 2 or > 50 || descripcion?.Length > 200)
+                return BadRequest("Comprueba el nombre y la descripción de la clase.");
+
+            try
+            {
+                using var context = new SqlConnection(
+                    _databasekey["ConnectionStringsApi:DefaultConnection"]);
+
+                var idClase = context.QuerySingle<int>(
+                    "spRegistrarClase",
+                    new { NombreClase = nombre, Descripcion = descripcion },
+                    commandType: CommandType.StoredProcedure);
+
+                return Ok(new { idClase, mensaje = "Clase registrada correctamente." });
+            }
+            catch (SqlException ex) when (ex.Number == 51013)
+            {
+                return Conflict("Ya existe una clase con ese nombre.");
+            }
+            catch (SqlException ex) when (ex.Number == 2812)
+            {
+                return StatusCode(503,
+                    "Falta configurar el catálogo de clases en SQL Server. Ejecuta Database/06_Registrar_Clases_Catalogo.sql en tu base de desarrollo.");
+            }
+            catch (SqlException)
+            {
+                return StatusCode(500,
+                    "No fue posible registrar la clase. Revisa la conexión y el procedimiento de SQL Server.");
+            }
+        }
+
+
         [HttpGet("ClasesListaAPI")]
         public IActionResult ClasesListaAPI()
         {
