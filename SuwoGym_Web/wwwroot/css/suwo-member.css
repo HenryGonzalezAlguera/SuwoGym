@@ -36,6 +36,23 @@
   color: var(--suwo-member-muted) !important;
   line-height: 1.55;
 }
+.suwo-member-view .suwo-member-headline {
+  margin-bottom: 25px !important;
+}
+.suwo-member-view .suwo-member-headline h2 {
+  font-size: clamp(1.55rem, 2.1vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -.035em;
+}
+.suwo-member-view .suwo-member-headline p {
+  color: var(--suwo-member-muted) !important;
+  max-width: 660px;
+  line-height: 1.6;
+  margin-bottom: 12px !important;
+}
+.suwo-member-view .suwo-page-heading .suwo-count {
+  margin-top: 9px;
+}
 .suwo-member-view .suwo-member-eyebrow {
   display: flex;
   align-items: center;
