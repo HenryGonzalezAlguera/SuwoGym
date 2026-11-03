@@ -8,7 +8,7 @@
     
     <!-- Pestaña -->
     <link href="~/images/logoSuwo_icon.png" rel="icon" type="image/x-icon">
-    <title>Suwo Gym</title>
+    <title>@(ViewData["Title"] ?? "SUWÓ GYM") | SUWÓ GYM</title>
     
     <link rel="manifest" href="~/images/site.webmanifest">
 
@@ -16,10 +16,11 @@
     <link rel="stylesheet" crossorigin="" href="~/css/main.css">
     <link rel="stylesheet" crossorigin="" href="~/css/apexcharts.css">
     <link rel="stylesheet" crossorigin="" href="~/css/colores.css">
+    <link rel="stylesheet" href="~/css/suwo-polish.css" asp-append-version="true">
 
 </head>
 
-<body>
+<body class="suwo-plain">
 
   <!-- MAIN CONTENT -->
   <main style="margin: 20px;">
