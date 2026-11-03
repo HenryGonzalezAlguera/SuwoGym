@@ -16,5 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SuwoGym_Web\SuwoGym_Web.csproj" />
+    <ProjectReference Include="..\SuwoGym_API\SuwoGym_API.csproj" />
   </ItemGroup>
 </Project>
