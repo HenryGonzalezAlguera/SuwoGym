@@ -1,10 +1,12 @@
 ﻿@model List<ReservaClaseMiembroListaModel>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<section class="suwo-member-view suwo-member-reservas-lista">
+<div class="suwo-page-heading d-flex justify-content-between align-items-center mb-4">
 
     <div>
 
-        <h2 class="mb-1">
+        <span class="suwo-member-eyebrow"><i class="ti ti-calendar-check" aria-hidden="true"></i> Tu espacio SUWÓ</span>
+            <h2 class="mb-1">
             Mis reservas
         </h2>
 
@@ -68,7 +70,7 @@
         {
             <div class="table-responsive">
 
-                <table class="table table-hover align-middle">
+                <table class="table table-hover align-middle suwo-member-table">
 
                     <thead>
 
@@ -283,7 +285,7 @@
         }
         else
         {
-            <div class="text-center py-5">
+            <div class="text-center py-5 suwo-member-empty">
 
                 <i class="ti ti-calendar-question"
                    style="font-size: 48px;">
@@ -316,3 +318,4 @@
     </div>
 
 </div>
+</section>
