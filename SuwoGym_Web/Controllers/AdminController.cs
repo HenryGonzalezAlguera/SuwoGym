@@ -1785,7 +1785,7 @@ namespace SuwoGym_Web.Controllers
 
 
         [HttpGet]
-        public IActionResult Horarios_Agregar()
+        public IActionResult Horarios_Agregar(int? idClase)
         {
             using var client =
                 _http.CreateClient();
@@ -1795,7 +1795,7 @@ namespace SuwoGym_Web.Controllers
                 "Bearer " +
                 HttpContext.Session.GetString("Token"));
 
-            CargarListasHorario(client);
+            CargarListasHorario(client, idClase);
 
             var fechaInicio =
                 DateTime.Now
@@ -1806,6 +1806,7 @@ namespace SuwoGym_Web.Controllers
             var model =
                 new ClaseProgramadaCrearModel
                 {
+                    IdClase = idClase ?? 0,
                     FechaHoraInicio =
                         fechaInicio,
 
