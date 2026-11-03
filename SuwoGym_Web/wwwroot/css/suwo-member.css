@@ -1,0 +1,269 @@
+/*
+ * SUWÓ GYM — Fase Visual 2 / área de Miembro
+ * Capa no destructiva: todas las reglas están limitadas a .suwo-member-view.
+ * No modifica el tema base, comportamiento del menú, API ni rutas de MVC.
+ */
+.suwo-member-view {
+  --suwo-member-surface: #fff;
+  --suwo-member-soft: #f8fafc;
+  --suwo-member-orange: #f06430;
+  --suwo-member-ink: #23364c;
+  --suwo-member-muted: #64748b;
+  --suwo-member-border: #e5ebf2;
+  font-size: .96rem;
+  line-height: 1.6;
+}
+.suwo-member-view > .row:first-child,
+.suwo-member-view > .suwo-page-heading {
+  margin-bottom: 18px;
+}
+.suwo-member-view .suwo-page-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px !important;
+}
+.suwo-member-view .suwo-page-heading h2 {
+  margin-bottom: 7px !important;
+  font-size: clamp(1.55rem, 2.1vw, 2rem);
+  letter-spacing: -.035em;
+  line-height: 1.24;
+}
+.suwo-member-view .suwo-page-heading p {
+  max-width: 660px;
+  color: var(--suwo-member-muted) !important;
+  line-height: 1.55;
+}
+.suwo-member-view .suwo-member-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+  color: #bd572e;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  font-size: .72rem;
+  font-weight: 700;
+}
+.suwo-member-view .suwo-member-eyebrow .ti {
+  font-size: 1rem;
+}
+.suwo-member-view .suwo-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid #f2d3c4;
+  background: #fff5ef;
+  color: #a94c2c;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.suwo-member-view .suwo-page-heading .btn {
+  flex-shrink: 0;
+}
+
+/* Tarjetas y secciones de datos personales */
+.suwo-member-view .card {
+  border-color: var(--suwo-member-border);
+  box-shadow: 0 10px 30px rgba(24, 49, 78, .045);
+}
+.suwo-member-view .card-body h5 {
+  color: var(--suwo-member-ink);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+.suwo-member-view .suwo-section-card {
+  height: 100%;
+  overflow: hidden;
+}
+.suwo-member-view .suwo-section-card > .card-body { padding: clamp(20px, 2.2vw, 30px); }
+.suwo-member-view .suwo-section-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.suwo-member-view .suwo-section-title > .ti {
+  display: inline-grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  background: #fff1e9;
+  color: #dd6133;
+  border-radius: 10px;
+  font-size: 1.05rem;
+}
+.suwo-member-view .bloque_info {
+  min-height: 78px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px 17px;
+  background: var(--suwo-member-soft);
+  border: 1px solid #edf0f5;
+  border-radius: 13px;
+}
+.suwo-member-view .bloque_info_titulo {
+  margin: 0 0 5px;
+  font-size: .77rem;
+  font-weight: 600;
+  color: var(--suwo-member-muted);
+}
+.suwo-member-view .bloque_info .bip {
+  font-size: .93rem;
+  color: var(--suwo-member-ink);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.suwo-member-view .suwo-member-total {
+  background: #fff2eb;
+  border-color: #f6d6c5;
+}
+.suwo-member-view .suwo-member-total .bip {
+  color: #b84b23;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* Cards de clases, disponibilidad y progreso */
+.suwo-member-view .suwo-class-card {
+  border: 1px solid var(--suwo-member-border);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.suwo-member-view .suwo-class-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 17px 42px rgba(23, 43, 66, .09);
+  border-color: #f5c6ac;
+}
+.suwo-member-view .suwo-class-card .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.suwo-member-view .suwo-class-card h4 {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: var(--suwo-member-ink);
+}
+.suwo-member-view .suwo-class-card p.text-secondary {
+  line-height: 1.7;
+}
+.suwo-member-view .suwo-class-card hr {
+  border-color: var(--suwo-member-border);
+  opacity: 1;
+  margin: 12px 0 16px;
+}
+.suwo-member-view .suwo-class-card .ti {
+  color: var(--suwo-member-orange);
+  font-size: 1.1rem;
+}
+.suwo-member-view .suwo-class-card form { margin-top: auto; padding-top: 8px; }
+.suwo-member-view .suwo-class-card form button { min-height: 45px; }
+
+/* Tablas de pagos, reservas y asistencia */
+.suwo-member-view .suwo-member-table {
+  width: 100%;
+}
+.suwo-member-view .suwo-member-table th {
+  color: #52647a;
+  font-size: .76rem;
+}
+.suwo-member-view .suwo-member-table td {
+  font-size: .88rem;
+  line-height: 1.6;
+}
+.suwo-member-view .suwo-member-table td strong { color: var(--suwo-member-ink); font-weight: 650; }
+.suwo-member-view .suwo-member-table td small { font-size: .76rem; }
+.suwo-member-view .suwo-member-table tbody tr:hover td { background-color: #fbfcfe; }
+
+/* Estadísticas */
+.suwo-member-view .suwo-stat-card .card-body {
+  min-height: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.suwo-member-view .suwo-stat-card h3 {
+  font-size: clamp(1.85rem, 2.2vw, 2.25rem);
+  line-height: 1.2;
+  font-weight: 750;
+}
+.suwo-member-view .suwo-stat-card .text-secondary {
+  font-size: .82rem;
+}
+
+/* Estados vacíos: misma identidad y espacio controlado */
+.suwo-member-view .suwo-member-empty {
+  max-width: 600px;
+  padding: clamp(30px, 3.8vw, 54px) 20px !important;
+  margin: 0 auto;
+  text-align: center;
+}
+.suwo-member-view .suwo-member-empty > .ti {
+  display: inline-grid;
+  width: 82px;
+  height: 82px;
+  place-items: center;
+  font-size: 2.4rem !important;
+  color: var(--suwo-member-orange);
+  background: #fff0e8;
+  border-radius: 22px;
+}
+.suwo-member-view .suwo-member-empty h4 {
+  margin-top: 21px !important;
+  font-size: 1.18rem;
+  font-weight: 700;
+}
+.suwo-member-view .suwo-member-empty p {
+  max-width: 430px;
+  margin: 8px auto 18px;
+  color: var(--suwo-member-muted);
+  line-height: 1.65;
+}
+
+/* Detalles: secciones separadas sin perder información */
+.suwo-member-view .suwo-member-detail h5 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.suwo-member-view .suwo-member-detail hr {
+  border-color: #e9eef4;
+  margin: 23px 0;
+}
+.suwo-member-view .suwo-member-detail .bloque_info { min-height: 88px; }
+
+/* Controles y foco */
+.suwo-member-view .btn,
+.suwo-member-view .form-control,
+.suwo-member-view .form-select {
+  font-size: .89rem;
+}
+.suwo-member-view .badge { font-size: .76rem; }
+.suwo-member-view .btn:focus-visible,
+.suwo-member-view a:focus-visible {
+  outline: 3px solid #2277b8;
+  outline-offset: 3px;
+}
+@media (max-width: 768px) {
+  .suwo-member-view .suwo-page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .suwo-member-view .suwo-page-heading > .btn {
+    width: 100%;
+  }
+  .suwo-member-view .card-body { padding: 19px; }
+  .suwo-member-view .suwo-member-table th,
+  .suwo-member-view .suwo-member-table td { padding: 13px 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .suwo-member-view .suwo-class-card { transition: none; }
+  .suwo-member-view .suwo-class-card:hover { transform: none; }
+}
