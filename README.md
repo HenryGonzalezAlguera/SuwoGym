@@ -88,6 +88,15 @@ ficticia independiente y un script SQL manual con validación de rol y rollback.
 No existen credenciales administrativas predeterminadas ni endpoint público
 para conceder privilegios.
 
+## Gestión de clases por Administrador (Fase 3B)
+
+Para programar horarios, primero se deben registrar actividades en el catálogo.
+La sección **Admin → Clases** permite listar y crear tipos de clase sin alterar
+los módulos de reservas. **Instala primero en tu instancia SQL Server**
+`Database/06_Registrar_Clases_Catalogo.sql` mediante SSMS, después de
+revisar el script. Sigue la
+[guía de Fase 3B](docs/FASE3B_CATALOGO_CLASES.md).
+
 ## Ejecución local
 
 **Requisitos:** SDK de .NET 10, SQL Server y una instancia local de base de datos configurada. Para usar Visual Studio, abre `SuwoGym.slnx`.

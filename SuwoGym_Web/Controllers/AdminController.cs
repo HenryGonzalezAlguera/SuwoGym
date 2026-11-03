@@ -1610,6 +1610,105 @@ namespace SuwoGym_Web.Controllers
 
         #endregion
 
+        #region Catálogo de clases
+
+        [HttpGet]
+        public IActionResult Clases_Lista()
+        {
+            using var client = _http.CreateClient();
+            client.DefaultRequestHeaders.Add("Authorization",
+                "Bearer " + HttpContext.Session.GetString("Token"));
+
+            var url = _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Admin/ClasesListaAPI";
+
+            try
+            {
+                using var response = client.GetAsync(url).Result;
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var clases = response.Content
+                        .ReadFromJsonAsync<List<ClaseListaModel>>().Result;
+                    return View(clases ?? new List<ClaseListaModel>());
+                }
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                    return View(new List<ClaseListaModel>());
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return RedirectToAction("Logout", "Home");
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                    return RedirectToAction("Principal", "Home");
+
+                ViewBag.MensajeError = "No fue posible consultar el catálogo de clases.";
+            }
+            catch (HttpRequestException)
+            {
+                ViewBag.MensajeError = "No hay conexión con la API. Comprueba que esté iniciada.";
+            }
+
+            return View(new List<ClaseListaModel>());
+        }
+
+        [HttpGet]
+        public IActionResult Clases_Agregar() => View(new ClaseCrearModel());
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Clases_Agregar(ClaseCrearModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model.NombreClase))
+                ModelState.AddModelError(nameof(model.NombreClase), "Indica el nombre de la clase.");
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            using var client = _http.CreateClient();
+            client.DefaultRequestHeaders.Add("Authorization",
+                "Bearer " + HttpContext.Session.GetString("Token"));
+
+            var url = _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Admin/ClaseCrearAPI";
+
+            try
+            {
+                using var response = client.PostAsJsonAsync(url, model).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["MensajeExito"] =
+                        "Clase creada. Ahora puedes programar su primer horario.";
+                    return RedirectToAction(nameof(Clases_Lista));
+                }
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return RedirectToAction("Logout", "Home");
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                    return RedirectToAction("Principal", "Home");
+
+                if (response.StatusCode == HttpStatusCode.Conflict)
+                {
+                    ModelState.AddModelError(nameof(model.NombreClase),
+                        "Ya existe una clase con ese nombre.");
+                    return View(model);
+                }
+
+                if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+                    ViewBag.MensajeError =
+                        "Falta aplicar Database/06_Registrar_Clases_Catalogo.sql en la instancia SQL Server de la API.";
+                else
+                    ViewBag.MensajeError =
+                        "No se pudo guardar la clase. Verifica los datos y la conexión con SQL Server.";
+            }
+            catch (HttpRequestException)
+            {
+                ViewBag.MensajeError = "No hay conexión con la API. Comprueba que esté iniciada.";
+            }
+
+            return View(model);
+        }
+
+        #endregion
+
         #region Horarios
 
         [HttpGet]
@@ -1686,7 +1785,7 @@ namespace SuwoGym_Web.Controllers
 
 
         [HttpGet]
-        public IActionResult Horarios_Agregar()
+        public IActionResult Horarios_Agregar(int? idClase)
         {
             using var client =
                 _http.CreateClient();
@@ -1696,7 +1795,7 @@ namespace SuwoGym_Web.Controllers
                 "Bearer " +
                 HttpContext.Session.GetString("Token"));
 
-            CargarListasHorario(client);
+            CargarListasHorario(client, idClase);
 
             var fechaInicio =
                 DateTime.Now
@@ -1707,6 +1806,7 @@ namespace SuwoGym_Web.Controllers
             var model =
                 new ClaseProgramadaCrearModel
                 {
+                    IdClase = idClase ?? 0,
                     FechaHoraInicio =
                         fechaInicio,
 
