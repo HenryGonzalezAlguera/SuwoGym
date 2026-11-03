@@ -38,7 +38,7 @@ flowchart LR
 - **`Database/`**: esquema y datos iniciales en SQL. No contiene una base de datos real ni credenciales.
 - **`IEEE/`**: recursos académicos de modelado.
 
-La API declara autorización por roles numéricos: `1` Administrador, `2` Entrenador, `3` Miembro. La web conserva el patrón actual de sesión mediante `SessionAuthorize`. **La seguridad de esta web requiere una revisión posterior**, especialmente autorización por rol en el servidor, CSRF y revocación de sesión.
+La API declara autorización por roles numéricos: `1` Administrador, `2` Entrenador, `3` Miembro. La web aplica `SessionAuthorize` con rol explícito en cada controlador (`[SessionAuthorize(1)]`, `(2)` o `(3)`), además de requerir sesión completa para `/Home/Principal`. La API sigue siendo la autoridad final sobre la firma y vencimiento del JWT. **Quedan pendientes** CSRF, recuperación de acceso, comprobaciones E2E y revocación de tokens.
 
 ## Tecnologías
 
@@ -87,6 +87,10 @@ La configuración versionada de la WEB apunta a `https://localhost:7129` y su pe
 
 **Importante:** compilar correctamente **no garantiza** que los procedimientos SQL, los correos o los flujos de roles funcionen con una instalación nueva. Para la validación completa falta preparar una cuenta de demostración y una base local coherente.
 
+## Seguridad de acceso MVC y pruebas
+
+La [fase 2](docs/FASE2_SESIONES_Y_ROLES.md) documenta las validaciones de sesión y la matriz de autorización por rol. Puedes ejecutar las pruebas sin SQL Server con `dotnet test SuwoGym.Tests/SuwoGym.Tests.csproj`.
+
 ## Evidencia y límites actuales
 
 | Verificación | Situación |
@@ -94,14 +98,14 @@ La configuración versionada de la WEB apunta a `https://localhost:7129` y su pe
 | Código fuente API y MVC | Disponible |
 | Scripts SQL de estructura y datos iniciales | Disponibles |
 | Compilación automatizada | Definida en [CI](.github/workflows/dotnet-ci.yml) |
-| Pruebas unitarias automatizadas | **Pendientes** |
+| Pruebas automatizadas de sesión y permisos MVC | Disponibles en [SuwoGym.Tests](SuwoGym.Tests/) |
 | Pruebas funcionales con SQL Server | **Pendientes** |
 | Capturas reales del sistema | **Pendientes** |
 | Despliegue público | **No realizado** |
 
 ## Siguientes mejoras
 
-Se priorizan pruebas automatizadas, revisión de permisos por rol en la web, endurecimiento de recuperación de acceso, validación SQL desde cero, capturas reales y documentación de demo. Evitamos publicar datos personales, credenciales, contraseñas o tokens.
+Se priorizan pruebas de integración SQL, revisión de formularios CSRF, endurecimiento de recuperación de acceso, validación SQL desde cero, capturas reales y documentación de demo. Evitamos publicar datos personales, credenciales, contraseñas o tokens.
 
 ## Autoría
 
