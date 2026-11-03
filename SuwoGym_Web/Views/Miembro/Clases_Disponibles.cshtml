@@ -1,10 +1,12 @@
 ﻿@model List<ClaseDisponibleMiembroModel>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<section class="suwo-member-view suwo-member-clases-disponibles">
+<div class="suwo-page-heading d-flex justify-content-between align-items-center mb-4">
 
     <div>
 
-        <h2 class="mb-1">
+        <span class="suwo-member-eyebrow"><i class="ti ti-calendar-event" aria-hidden="true"></i> Tu espacio SUWÓ</span>
+            <h2 class="mb-1">
             Clases disponibles
         </h2>
 
@@ -67,7 +69,7 @@
         {
             <div class="col-lg-6 col-xl-4 mb-4">
 
-                <div class="card h-100">
+                <div class="card h-100 suwo-class-card">
 
                     <div class="card-body p-4">
 
@@ -241,7 +243,7 @@ else
 {
     <div class="card">
 
-        <div class="card-body text-center py-5">
+        <div class="card-body text-center py-5 suwo-member-empty">
 
             <i class="ti ti-calendar-off"
                style="font-size: 48px;">
@@ -262,3 +264,4 @@ else
 
     </div>
 }
+</section>
