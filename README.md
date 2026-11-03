@@ -79,6 +79,15 @@ Incluye SQL de **solo lectura**, un script idempotente para completar roles y
 planes **sin usuarios predefinidos**, verificación de API antigua ocupando el
 puerto 7129 y pruebas del formulario de registro.
 
+## Acceso inicial de Administrador (entorno de desarrollo)
+
+El registro público asigna rol Miembro por seguridad. Para probar el primer
+Administrador sobre una base de pruebas, consulta la
+[guía Fase 3](docs/FASE3_ADMIN_Y_DATOS_DE_PRUEBA.md). Se utiliza una cuenta
+ficticia independiente y un script SQL manual con validación de rol y rollback.
+No existen credenciales administrativas predeterminadas ni endpoint público
+para conceder privilegios.
+
 ## Ejecución local
 
 **Requisitos:** SDK de .NET 10, SQL Server y una instancia local de base de datos configurada. Para usar Visual Studio, abre `SuwoGym.slnx`.
