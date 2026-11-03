@@ -51,6 +51,18 @@ La API declara autorización por roles numéricos: `1` Administrador, `2` Entren
 | Correo | MailKit / SMTP, configurable fuera del repositorio |
 | CI | GitHub Actions: restauración y compilación de ambos proyectos |
 
+## Diseño de interfaz (Fase Visual 1)
+
+SUWÓ GYM utiliza una capa de diseño propia sobre el tema existente: `suwo-polish.css`
+y `suwo-polish.js`. Mejoran de forma compartida el sidebar, topbar, tarjetas,
+botones, tablas, formularios y navegación activa de las vistas de Administrador,
+Entrenador y Miembro, conservando el logo y los estilos originales del equipo.
+También se pulieron el panel principal y los indicadores de asistencia.
+
+Consulta [la guía de la Fase Visual 1](docs/FASE_VISUAL_1.md) para verificar la
+presentación en Visual Studio, incluidos móvil y escritorio. La compilación de
+GitHub Actions no sustituye una inspección visual con datos reales de prueba.
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
