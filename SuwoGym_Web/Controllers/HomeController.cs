@@ -270,6 +270,7 @@ namespace SuwoGym_Web.Controllers
         #endregion
 
         [HttpGet]
+        [SessionAuthorize]
         public IActionResult Principal()
         {
             return View();
