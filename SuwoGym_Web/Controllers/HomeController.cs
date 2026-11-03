@@ -121,83 +121,110 @@ namespace SuwoGym_Web.Controllers
         #region Registrar usuarios
 
         [HttpGet]
-        public IActionResult Registro()
+        public async Task<IActionResult> Registro()
         {
-            using var client = _http.CreateClient();
-            var urlApi = _config["ConnectionStringsWeb:urlApi"] + "/api/Home/MembresiasAPI";
-            var membresias = client.GetAsync(urlApi).Result;
-            
-            if (membresias.StatusCode == HttpStatusCode.OK)
-            {
-                var datos = membresias.Content
-                        .ReadFromJsonAsync<List<PlanModel>>()
-                        .Result;
-                ViewBag.Membresias = datos;
-                return View();
+            var planes = await ObtenerPlanesRegistroAsync();
+            ViewBag.Membresias = planes;
 
-            }
-            else if(membresias.StatusCode == HttpStatusCode.BadRequest)
+            if (planes.Count == 0)
             {
                 ViewBag.Mensaje =
-                   membresias.Content
-                       .ReadAsStringAsync()
-                       .Result;
-                return View();
+                    "No hay planes de membresía disponibles. Verifica los datos iniciales de SQL Server y la conexión con la API.";
             }
-            throw new Exception("Ocurrió un error inesperado");
+
+            return View(new RegistroUsuarioViewModel());
         }
 
         [HttpPost]
-        public IActionResult Registro(
-            UsuarioModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Registro(RegistroUsuarioViewModel model)
         {
-            /*
-             * Igual que RepoSM:
-             * la WEB genera el hash antes de enviarlo.
-             */
-            model.contrasenna =
-                BCrypt.Net.BCrypt.HashPassword(
-                    model.contrasenna);
+            var planes = await ObtenerPlanesRegistroAsync();
+            ViewBag.Membresias = planes;
 
-            using var client =
-                _http.CreateClient();
-
-            var urlApi =
-                _config[
-                    "ConnectionStringsWeb:urlApi"]
-                + "/api/Home/RegistroAPI";
-
-            var response =
-                client.PostAsJsonAsync(
-                    urlApi,
-                    model).Result;
-
-            if (response.StatusCode ==
-                HttpStatusCode.OK)
+            if (planes.Count == 0)
             {
-                TempData["RegistroExitoso"] =
-                    "¡Registro exitoso! Tu cuenta ha sido creada correctamente. Por favor, inicia sesión.";
-
-                return RedirectToAction(
-                    "Index",
-                    "Home");
+                ModelState.AddModelError(
+                    nameof(model.PlanMembresia),
+                    "No hay planes disponibles. Comprueba la conexión y los catálogos de membresía.");
+            }
+            else if (!planes.Any(p => p.IdPlan == model.PlanMembresia))
+            {
+                ModelState.AddModelError(
+                    nameof(model.PlanMembresia),
+                    "Selecciona un plan de membresía válido.");
             }
 
-            if (response.StatusCode ==
-                HttpStatusCode.BadRequest)
-            {
-                var respuesta =
-                    response.Content
-                        .ReadAsStringAsync()
-                        .Result;
+            if (!ModelState.IsValid)
+                return View(model);
 
-                return RedirectToAction(
-                    "Registro",
-                    "Home");
+            // No se cambia la contraseña en el modelo del formulario:
+            // ante un error de la API se conservan los datos y se puede reintentar.
+            var solicitud = new
+            {
+                model.nombre,
+                model.apellido,
+                model.correoElectronico,
+                model.identificacion,
+                contrasenna = BCrypt.Net.BCrypt.HashPassword(model.contrasenna),
+                model.PlanMembresia
+            };
+
+            try
+            {
+                using var client = _http.CreateClient();
+                var urlApi = _config["ConnectionStringsWeb:urlApi"]
+                    + "/api/Home/RegistroAPI";
+                var response = await client.PostAsJsonAsync(urlApi, solicitud);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["RegistroExitoso"] =
+                        "¡Registro exitoso! Tu cuenta ha sido creada correctamente. Por favor, inicia sesión.";
+                    return RedirectToAction("Index", "Home");
+                }
+
+                // Nunca imprimir excepciones de SQL Server en el navegador.
+                ViewBag.Mensaje = response.StatusCode == HttpStatusCode.BadRequest
+                    ? "No se pudo completar el registro. Comprueba que el correo y la identificación no estén registrados y que la API esté actualizada."
+                    : "No se pudo completar el registro. Verifica que la API esté funcionando.";
+            }
+            catch (HttpRequestException)
+            {
+                ViewBag.Mensaje = "No se pudo conectar con la API. Comprueba que esté iniciada.";
+            }
+            catch (TaskCanceledException)
+            {
+                ViewBag.Mensaje = "La API tardó demasiado en responder. Inténtalo nuevamente.";
             }
 
-            throw new Exception(
-                "Ocurrió un error al intentar registrar el usuario.");
+            return View(model);
+        }
+
+        private async Task<List<PlanModel>> ObtenerPlanesRegistroAsync()
+        {
+            try
+            {
+                using var client = _http.CreateClient();
+                var urlApi = _config["ConnectionStringsWeb:urlApi"]
+                    + "/api/Home/MembresiasAPI";
+                using var response = await client.GetAsync(urlApi);
+
+                if (!response.IsSuccessStatusCode)
+                    return new List<PlanModel>();
+
+                return await response.Content
+                    .ReadFromJsonAsync<List<PlanModel>>()
+                    ?? new List<PlanModel>();
+            }
+            catch (HttpRequestException)
+            {
+                return new List<PlanModel>();
+            }
+            catch (TaskCanceledException)
+            {
+                return new List<PlanModel>();
+            }
         }
 
         #endregion
