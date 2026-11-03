@@ -1,0 +1,61 @@
+@model ClaseCrearModel
+@{
+    ViewData["Title"] = "Nueva clase";
+}
+
+<div class="mb-4">
+    <a asp-controller="Admin" asp-action="Clases_Lista" class="btn btn-light mb-3">
+        <i class="ti ti-arrow-left me-1" aria-hidden="true"></i> Volver al catálogo
+    </a>
+    <div class="text-uppercase fw-bold small mb-2" style="letter-spacing:.12em; color:var(--suwo-orange);">
+        <i class="ti ti-barbell me-1" aria-hidden="true"></i> Administración
+    </div>
+    <h1 class="mb-1">Crear tipo de clase</h1>
+    <p class="text-secondary mb-0">Define la actividad. El horario y el entrenador se asignan después.</p>
+</div>
+
+@if (ViewBag.MensajeError is string mensajeError)
+{
+    <div class="alert alert-danger" role="alert">@mensajeError</div>
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <form asp-controller="Admin" asp-action="Clases_Agregar" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="mb-3">
+                        <label asp-for="NombreClase" class="form-label">Nombre de la clase <span class="text-danger">*</span></label>
+                        <input asp-for="NombreClase" class="form-control" maxlength="50"
+                               autocomplete="off" placeholder="Ej.: Entrenamiento funcional" />
+                        <span asp-validation-for="NombreClase" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Descripcion" class="form-label">Descripción (opcional)</label>
+                        <textarea asp-for="Descripcion" class="form-control" rows="4" maxlength="200"
+                                  placeholder="Describe brevemente la actividad y sus objetivos."></textarea>
+                        <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                        <div class="form-text">Hasta 200 caracteres.</div>
+                    </div>
+                    <div class="d-flex justify-content-end flex-wrap gap-2">
+                        <a asp-controller="Admin" asp-action="Clases_Lista" class="btn btn-light">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="ti ti-device-floppy me-1" aria-hidden="true"></i> Guardar clase
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5"><i class="ti ti-info-circle me-2" aria-hidden="true"></i>¿Qué sucede después?</h2>
+                <p class="text-secondary mb-2">La actividad quedará disponible para programar horarios.</p>
+                <p class="text-secondary mb-0">Desde <strong>Horarios → Programar clase</strong> podrás elegirla, asignar un entrenador y definir la fecha y los cupos.</p>
+            </div>
+        </div>
+    </div>
+</div>
