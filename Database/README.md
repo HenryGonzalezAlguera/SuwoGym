@@ -33,6 +33,17 @@ requiere una cuenta ficticia previamente registrada y valida que no exista
 otro administrador activo. Se ejecuta manualmente y no cambia contraseñas.
 **No ejecutes este script contra bases reales o de producción.**
 
+## Catálogo de clases (Fase 3B)
+
+El script [`06_Registrar_Clases_Catalogo.sql`](06_Registrar_Clases_Catalogo.sql)
+crea o actualiza únicamente el procedimiento `dbo.spRegistrarClase` requerido
+por **Admin → Clases → Nueva clase**. Se debe ejecutar **manualmente** en SSMS
+sobre la instancia local SuwoGym; no recrea ni inserta usuarios, clases,
+horarios o membresías. Consulta la
+[guía](../docs/FASE3B_CATALOGO_CLASES.md). El campo `IdClase` existente no
+es `IDENTITY`; el procedimiento asigna el siguiente identificador de forma
+transaccional con bloqueo exclusivo.
+
 ## Preparación segura
 
 1. Usa una instancia SQL Server de prueba, nunca una base de datos productiva con información real.
