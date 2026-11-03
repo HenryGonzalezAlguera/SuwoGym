@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="SuwoGym_API/SuwoGym_API.csproj" />
   <Project Path="SuwoGym_Web/SuwoGym_Web.csproj" />
+  <Project Path="SuwoGym.Tests/SuwoGym.Tests.csproj" />
 </Solution>
