@@ -1,0 +1,61 @@
+@model AccesoTemporalEntrenadorModel
+@{
+    ViewData["Title"] = "Acceso temporal del entrenador";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+        <div class="mb-4">
+            <span class="text-uppercase fw-bold small" style="color:var(--suwo-orange); letter-spacing:.1em;">
+                <i class="ti ti-shield-lock me-1" aria-hidden="true"></i> Gestión de empleados
+            </span>
+            <h1 class="mt-2">Nueva contraseña temporal</h1>
+            <p class="text-secondary">La contraseña anterior ha dejado de ser válida.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Solo para desarrollo local.</strong> Esta contraseña se muestra una sola vez.
+                    Cópiala de forma privada antes de salir de esta pantalla. No la subas a GitHub
+                    ni la incluyas en capturas.
+                </div>
+
+                <h2 class="h5 mb-3">Cuenta recuperada</h2>
+                <div class="mb-3">
+                    <div class="form-label">Empleado</div>
+                    <div class="fw-semibold">@Model.Nombre</div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-label">Correo para iniciar sesión</div>
+                    <div class="fw-semibold">@Model.CorreoElectronico</div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="clave-temporal" class="form-label">Contraseña temporal</label>
+                    <input id="clave-temporal" class="form-control form-control-lg fw-bold"
+                           type="text" readonly autocomplete="off" spellcheck="false"
+                           value="@Model.ContrasennaTemporal" aria-describedby="aviso-temporal" />
+                    <small id="aviso-temporal" class="text-secondary">
+                        Selecciona el texto y cópialo. No se conservará en esta página.
+                    </small>
+                </div>
+
+                <p class="text-secondary">
+                    Inicia sesión como Entrenador con esta contraseña. SUWÓ GYM te dirigirá a
+                    <strong>Configuración</strong> para que establezcas una contraseña personal
+                    antes de continuar.
+                </p>
+
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <a asp-controller="Admin" asp-action="Empleados_Lista" class="btn btn-primary">
+                        <i class="ti ti-check me-1" aria-hidden="true"></i> Entendido
+                    </a>
+                    <a asp-controller="Home" asp-action="Logout" class="btn btn-light">
+                        Cerrar sesión para probar entrenador
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
