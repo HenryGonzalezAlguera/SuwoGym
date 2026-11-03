@@ -7,29 +7,12 @@ using System.Net;
 
 namespace SuwoGym_Web.Controllers
 {
-    [SessionAuthorize]
+    [SessionAuthorize(2)]
     public class EntrenadorController(
         IHttpClientFactory _http,
         IConfiguration _config) : Controller
     {
-        public override void OnActionExecuting(
-            ActionExecutingContext context)
-        {
-            if (HttpContext.Session.GetInt32("IdRol") != 2)
-            {
-                context.Result =
-                    RedirectToAction(
-                        "Principal",
-                        "Home");
-
-                return;
-            }
-
-            base.OnActionExecuting(context);
-        }
-
-
-        #region Clientes asignados
+#region Clientes asignados
 
         [HttpGet]
         public IActionResult Clientes_Lista()
