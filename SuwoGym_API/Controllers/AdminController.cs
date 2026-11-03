@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using SuwoGym_API.Models;
@@ -13,7 +14,8 @@ namespace SuwoGym_API.Controllers
     [ApiController]
     public class AdminController(
       IConfiguration _databasekey,
-      IUtilesService _utiles) : ControllerBase
+      IUtilesService _utiles,
+      IWebHostEnvironment _environment) : ControllerBase
     {
         #region Gestión de Empleados
 
@@ -176,6 +178,71 @@ namespace SuwoGym_API.Controllers
             {
                 return BadRequest(
                     ex.Message);
+            }
+        }
+
+
+        // Recuperación administrativa SOLO en Development: sin correo SMTP.
+        // La API sigue exigiendo JWT con rol Administrador a nivel de clase.
+        [HttpPost("EmpleadoRestablecerAccesoTemporalAPI")]
+        public IActionResult EmpleadoRestablecerAccesoTemporalAPI(
+            RestablecerAccesoEntrenadorRequestModel model)
+        {
+            if (!_environment.IsDevelopment())
+                return NotFound();
+
+            if (model.IdUsuario <= 0 || model.IdUsuario == _utiles.ObtenerIdUsuarioToken())
+                return BadRequest("Selecciona una cuenta de entrenador válida.");
+
+            try
+            {
+                using var context = new SqlConnection(
+                    _databasekey["ConnectionStringsApi:DefaultConnection"]);
+
+                // Por seguridad no se permite restablecer administradores,
+                // miembros, empleados inactivos ni otra cuenta inexistente.
+                var entrenador = context.QueryFirstOrDefault<EmpleadoDetalleResponseModel>(
+                    @"SELECT IdUsuario, Nombre, Apellido, CorreoElectronico, IdRol, Estado
+                      FROM dbo.Usuario
+                      WHERE IdUsuario = @IdUsuario AND IdRol = 2 AND Estado = 1",
+                    new { model.IdUsuario });
+
+                if (entrenador is null)
+                    return NotFound("No existe un entrenador activo con ese identificador.");
+
+                var temporal = GeneradorClavesTemporales.Generar();
+                var hash = BCrypt.Net.BCrypt.HashPassword(temporal);
+
+                var filas = context.Execute(
+                    "spActualizarContrasenna",
+                    new
+                    {
+                        model.IdUsuario,
+                        ContrasennaHash = hash,
+                        DebeCambiarContrasenna = true
+                    },
+                    commandType: CommandType.StoredProcedure);
+
+                if (filas != 1)
+                    return StatusCode(500, "No se pudo actualizar el acceso.");
+
+                // Evita cachés de credenciales. El valor no se guarda en logs
+                // ni se incluye en TempData/cookies/consultas de URLs.
+                Response.Headers.CacheControl = "no-store, no-cache";
+                Response.Headers.Pragma = "no-cache";
+
+                return Ok(new AccesoTemporalEntrenadorResponseModel
+                {
+                    IdUsuario = entrenador.IdUsuario,
+                    Nombre = entrenador.Nombre + " " + entrenador.Apellido,
+                    CorreoElectronico = entrenador.CorreoElectronico,
+                    ContrasennaTemporal = temporal
+                });
+            }
+            catch (SqlException)
+            {
+                return StatusCode(500,
+                    "No se pudo restablecer el acceso del entrenador. Verifica SQL Server.");
             }
         }
 

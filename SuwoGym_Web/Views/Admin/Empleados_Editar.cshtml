@@ -1,5 +1,5 @@
-﻿
-@model UsuarioModel
+﻿@model UsuarioModel
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment Entorno
 
 <!-- Header -->
 <div class="row">
@@ -23,6 +23,11 @@
         </div>
     </div>
 </div>
+
+@if (TempData["MensajeError"] is string mensajeErrorAcceso)
+{
+    <div class="alert alert-danger" role="alert">@mensajeErrorAcceso</div>
+}
 
 <div class="row">
     
@@ -224,6 +229,33 @@
                     </div>
                 </form>
 
+                @if (Entorno.IsDevelopment() && Model.IdRol == 2 && Model.Estado)
+                {
+                    <hr class="my-4" />
+                    <div class="d-flex align-items-start gap-3">
+                        <span class="p-2 rounded-3" style="background:var(--suwo-orange-tint); color:var(--suwo-orange);">
+                            <i class="ti ti-shield-lock fs-4" aria-hidden="true"></i>
+                        </span>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-2">Recuperar acceso del entrenador</h6>
+                            <p class="text-secondary small mb-3">
+                                Si no recibió la contraseña por correo, genera una nueva clave temporal.
+                                Se mostrará una sola vez y el entrenador deberá cambiarla al ingresar.
+                                Disponible exclusivamente en el entorno local de desarrollo.
+                            </p>
+                            <form asp-controller="Admin"
+                                  asp-action="Empleados_RestablecerAccesoTemporal"
+                                  method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="idUsuario" value="@Model.IdUsuario" />
+                                <button type="submit" class="btn btn-outline-primary">
+                                    <i class="ti ti-key me-1" aria-hidden="true"></i>
+                                    Generar contraseña temporal
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>

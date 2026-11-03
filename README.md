@@ -97,6 +97,17 @@ los módulos de reservas. **Instala primero en tu instancia SQL Server**
 revisar el script. Sigue la
 [guía de Fase 3B](docs/FASE3B_CATALOGO_CLASES.md).
 
+## Acceso de Entrenador en desarrollo (Fase 3D)
+
+Las cuentas de empleados reciben una clave temporal automática por correo
+si SMTP está configurado. Para una base de desarrollo sin SMTP, un Administrador
+puede abrir **Empleados → Editar** y generar una **nueva contraseña temporal**
+para un Entrenador activo. La pantalla muestra la clave una única vez, sin
+guardarla en el repositorio; al iniciar sesión, el Entrenador debe cambiarla.
+La opción y el endpoint solo están habilitados en `Development`.
+Se utiliza `spActualizarContrasenna` existente; **no se instala SQL adicional**.
+Consulta la [guía de la Fase 3D](docs/FASE3D_ACCESO_ENTRENADOR.md).
+
 ## Ejecución local
 
 **Requisitos:** SDK de .NET 10, SQL Server y una instancia local de base de datos configurada. Para usar Visual Studio, abre `SuwoGym.slnx`.

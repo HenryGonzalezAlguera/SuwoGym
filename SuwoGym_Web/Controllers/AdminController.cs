@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SuwoGym_Web.Filters;
@@ -10,7 +11,8 @@ namespace SuwoGym_Web.Controllers
     [SessionAuthorize(1)]
     public class AdminController(
         IHttpClientFactory _http,
-        IConfiguration _config) : Controller
+        IConfiguration _config,
+        IWebHostEnvironment _environment) : Controller
     {
 #region Empleados
 
@@ -325,6 +327,63 @@ namespace SuwoGym_Web.Controllers
 
             throw new Exception(
                 "Ocurrió un error al cargar la información del empleado.");
+        }
+
+
+        // Sólo Development. La contraseña no se guarda en cookies ni TempData.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Empleados_RestablecerAccesoTemporal(int idUsuario)
+        {
+            if (!_environment.IsDevelopment())
+                return NotFound();
+
+            if (idUsuario <= 0 || idUsuario == HttpContext.Session.GetInt32("IdUsuario"))
+                return BadRequest();
+
+            using var client = _http.CreateClient();
+            client.DefaultRequestHeaders.Add(
+                "Authorization", "Bearer " + HttpContext.Session.GetString("Token"));
+
+            var url = _config["ConnectionStringsWeb:urlApi"]
+                + "/api/Admin/EmpleadoRestablecerAccesoTemporalAPI";
+
+            try
+            {
+                using var response = client.PostAsJsonAsync(
+                    url, new { IdUsuario = idUsuario }).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var acceso = response.Content
+                        .ReadFromJsonAsync<AccesoTemporalEntrenadorModel>().Result;
+
+                    if (acceso is null || string.IsNullOrWhiteSpace(acceso.ContrasennaTemporal))
+                    {
+                        TempData["MensajeError"] = "No fue posible obtener la contraseña temporal.";
+                        return RedirectToAction("Empleados_Editar", new { i = idUsuario });
+                    }
+
+                    Response.Headers.CacheControl = "no-store, no-cache";
+                    Response.Headers.Pragma = "no-cache";
+                    return View("Empleados_ClaveTemporal", acceso);
+                }
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return RedirectToAction("Logout", "Home");
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                    return RedirectToAction("Principal", "Home");
+
+                TempData["MensajeError"] = response.StatusCode == HttpStatusCode.NotFound
+                    ? "No se encontró un entrenador activo con ese identificador."
+                    : "No se pudo restablecer el acceso. Revisa que la API esté en Development.";
+            }
+            catch (HttpRequestException)
+            {
+                TempData["MensajeError"] = "No hay conexión con la API de SUWÓ GYM.";
+            }
+
+            return RedirectToAction("Empleados_Editar", new { i = idUsuario });
         }
 
 
