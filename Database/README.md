@@ -5,7 +5,7 @@
 - `01_SuwoGym_Estructura.sql`: estructura, tablas, índices y procedimientos almacenados.
 - `02_SuwoGym_DatosIniciales.sql`: datos iniciales de roles, clases y planes de membresía.
 
-**Importante:** una versión anterior de esta guía mencionaba `03_SuwoGym_AdministradorInicial_Plantilla.sql`; ese archivo **no está incluido** en el repositorio. No se deben inventar tablas, procedimientos ni contraseñas para suplirlo. La preparación documentada y validada del primer administrador forma parte de una fase posterior.
+**Importante:** el antiguo archivo `03_SuwoGym_AdministradorInicial_Plantilla.sql` no existe. El primer Administrador **de una base de desarrollo local** se habilita ahora mediante el script manual controlado [`05_Habilitar_Primer_Admin_Desarrollo.sql`](05_Habilitar_Primer_Admin_Desarrollo.sql), después de registrar una segunda cuenta ficticia desde la WEB. No es un mecanismo de producción.
 
 ## Recuperación segura del registro
 
@@ -23,6 +23,15 @@ figuran en el repositorio público. No deben considerarse credenciales seguras
 ni usarse para crear acceso de demostración. Los scripts históricos dentro de
 `SuwoGym_API/Scripts/` no son equivalentes al esquema actual; uno contiene
 una instrucción destructiva `DROP DATABASE`.
+
+## Primera cuenta Administrador (solo desarrollo)
+
+Para probar la administración sin publicar contraseñas, sigue la
+[guía de Fase 3](../docs/FASE3_ADMIN_Y_DATOS_DE_PRUEBA.md). El script
+[`05_Habilitar_Primer_Admin_Desarrollo.sql`](05_Habilitar_Primer_Admin_Desarrollo.sql)
+requiere una cuenta ficticia previamente registrada y valida que no exista
+otro administrador activo. Se ejecuta manualmente y no cambia contraseñas.
+**No ejecutes este script contra bases reales o de producción.**
 
 ## Preparación segura
 
