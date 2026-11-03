@@ -45,5 +45,5 @@ jobs:
       - name: Compilar API y WEB
         run: dotnet build SuwoGym.slnx --configuration Release --no-restore
 
-      # Actualmente no existe un proyecto de pruebas automatizadas.
-      # Se añadirá al verificar la conexión a SQL Server y los flujos críticos.
+      - name: Probar permisos de sesión y rol (sin SQL Server)
+        run: dotnet test SuwoGym.Tests/SuwoGym.Tests.csproj --configuration Release --no-restore --verbosity normal
