@@ -442,6 +442,17 @@ body.suwo-app, body.suwo-auth, body.suwo-plain {
 .suwo-auth .suwo-auth-card h2 { font-size: clamp(1.35rem, 2.7vw, 1.8rem); }
 .suwo-auth .suwo-auth-card .alert { font-size: .85rem; }
 .suwo-auth .suwo-auth-card .card-input-container { gap: 8px; }
+/* Radio nativo accesible con teclado: no se oculta con display:none. */
+.suwo-auth .card-input-container label { position: relative; display: block; }
+.suwo-auth .card-input-element {
+  display: block;
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
 .suwo-auth .suwo-auth-card .card-input {
   margin-bottom: 0;
   border-radius: 13px;
