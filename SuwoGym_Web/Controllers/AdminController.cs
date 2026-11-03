@@ -7,27 +7,12 @@ using System.Net;
 
 namespace SuwoGym_Web.Controllers
 {
-    [SessionAuthorize]
+    [SessionAuthorize(1)]
     public class AdminController(
         IHttpClientFactory _http,
         IConfiguration _config) : Controller
     {
-        public override void OnActionExecuting(
-            ActionExecutingContext context)
-        {
-            if (HttpContext.Session.GetInt32("IdRol") != 1)
-            {
-                context.Result = RedirectToAction(
-                    "Principal",
-                    "Home");
-
-                return;
-            }
-
-            base.OnActionExecuting(context);
-        }
-
-        #region Empleados
+#region Empleados
 
         [HttpGet]
         public IActionResult Empleados_Lista()

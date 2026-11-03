@@ -6,7 +6,7 @@ using System.Net;
 
 namespace SuwoGym_Web.Controllers
 {
-    [SessionAuthorize]
+    [SessionAuthorize(3)]
     public class MiembroController : Controller
     {
         private readonly IHttpClientFactory _http;
@@ -22,27 +22,7 @@ namespace SuwoGym_Web.Controllers
         }
 
 
-        public override void OnActionExecuting(
-            ActionExecutingContext context)
-        {
-            var idRol =
-                HttpContext.Session.GetInt32("IdRol");
-
-            if (idRol != 3)
-            {
-                context.Result =
-                    RedirectToAction(
-                        "Principal",
-                        "Home");
-
-                return;
-            }
-
-            base.OnActionExecuting(context);
-        }
-
-
-        #region Perfil del Miembro
+#region Perfil del Miembro
 
         [HttpGet]
         public IActionResult Perfil()
