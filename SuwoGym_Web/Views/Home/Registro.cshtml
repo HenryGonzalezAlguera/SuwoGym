@@ -1,9 +1,9 @@
-﻿@model UsuarioModel
+﻿@model RegistroUsuarioViewModel
 
 @{
     Layout = "_LayoutExterno";
     ViewData["Title"] = "Registro - SuwoGym";
-    var opciones = ViewBag.Membresias;
+    var opciones = ViewBag.Membresias as IEnumerable<PlanModel> ?? Enumerable.Empty<PlanModel>();
 }
 
 <h2 class="card-title mt-1 mb-1" style="color:#0c0c0c;"><b>CREA TU <span class="naranjaClaro">CUENTA</span> </b></h2>
@@ -73,7 +73,19 @@
         <label class="form-label d-flex justify-content-between">
             <span><span class="ti ti-lock mt-3"></span> Contraseña</span>
         </label>
-        <input asp-for="contrasenna" class="form-control" type="password" placeholder="Mínimo 6 caracteres" required minlength="8" id="contrasenna">
+        <input asp-for="contrasenna" class="form-control" type="password" placeholder="Mínimo 8 caracteres" required minlength="8" id="contrasenna" autocomplete="new-password">
+        <span asp-validation-for="contrasenna" class="text-danger small"></span>
+    </div>
+
+    <!-- Confirmación: necesaria para registrar y validar la contraseña -->
+    <div class="mb-3 text-start">
+        <label asp-for="confirmarContrasenna" class="form-label">
+            <span class="ti ti-lock-check mt-3"></span> Confirmar contraseña
+        </label>
+        <input asp-for="confirmarContrasenna" class="form-control" type="password"
+               placeholder="Repite la contraseña" required id="confirmarContrasenna"
+               autocomplete="new-password">
+        <span asp-validation-for="confirmarContrasenna" class="text-danger small"></span>
     </div>
 
     <!-- Tipo de Plan Membresía -->
@@ -88,7 +100,7 @@
             @foreach (var opcion in opciones)
             {
                 <label>
-                    <input type="radio" class="card-input-element" id="planMembresia_@opcion.IdPlan" name="planMembresia"
+                    <input type="radio" class="card-input-element" id="planMembresia_@opcion.IdPlan" asp-for="PlanMembresia"
                            value="@opcion.IdPlan" />
                     <div class="panel panel-default card-input">
                         <div class="panel-heading"><h5><b>@opcion.NombrePlan</b></h5></div>
@@ -101,9 +113,7 @@
                 </label>
             
             }
-            <input type="text" asp-for="PlanMembresia" id="plan"
-                   class="form-control white-on-white"
-                   readonly />
+            <span asp-validation-for="PlanMembresia" class="text-danger small"></span>
        
         </div>
 
@@ -127,6 +137,6 @@
 </p>
 </div>
 
-<script src="~/js/registrousuario.js" asp-append-version="true"></script>
+<script src="~/js/registroUsuario.js" asp-append-version="true"></script>
 
 

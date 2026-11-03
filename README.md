@@ -51,6 +51,14 @@ La API declara autorización por roles numéricos: `1` Administrador, `2` Entren
 | Correo | MailKit / SMTP, configurable fuera del repositorio |
 | CI | GitHub Actions: restauración y compilación de ambos proyectos |
 
+## Registro y primera cuenta local
+
+Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
+[guía de diagnóstico y reparación del registro](docs/REGISTRO_Y_CATALOGOS_LOCALES.md).
+Incluye SQL de **solo lectura**, un script idempotente para completar roles y
+planes **sin usuarios predefinidos**, verificación de API antigua ocupando el
+puerto 7129 y pruebas del formulario de registro.
+
 ## Ejecución local
 
 **Requisitos:** SDK de .NET 10, SQL Server y una instancia local de base de datos configurada. Para usar Visual Studio, abre `SuwoGym.slnx`.

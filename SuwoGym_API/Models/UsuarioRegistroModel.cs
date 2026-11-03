@@ -19,6 +19,7 @@ namespace SuwoGym_API.Models
         [Required]
         public string identificacion { get; set; } = string.Empty;
 
+        [Range(1, int.MaxValue, ErrorMessage = "Selecciona una membresía válida.")]
         public int PlanMembresia { get; set; }
     }
 }

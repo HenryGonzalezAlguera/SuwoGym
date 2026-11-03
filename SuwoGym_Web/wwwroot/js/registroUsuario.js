@@ -1,11 +1,3 @@
-﻿
-
-$("input[name='planMembresia']").on("change", function () {
-    var idPlan = $(this).val();
-    $("#plan").val(idPlan);
-});
-
-
 $.validator.addMethod(
     "caracterEspecial",
     function (value, element) {
@@ -36,8 +28,12 @@ $(document).ready(function () {
             },
             contrasenna: {
                 required: true,
-                minlength: 6,
+                minlength: 8,
                 caracterEspecial: true
+            },
+            confirmarContrasenna: {
+                required: true,
+                equalTo: "#contrasenna"
             },
             PlanMembresia: {
                 required: true
@@ -59,9 +55,13 @@ $(document).ready(function () {
             },
             contrasenna: {
                 required: "Campo obligatorio.",
-                minlength: "Mínimo 6 caracteres",
+                minlength: "Mínimo 8 caracteres",
                 caracterEspecial:
                     "Al menos 1 carácter especial"
+            },
+            confirmarContrasenna: {
+                required: "Debes confirmar tu contraseña.",
+                equalTo: "Las contraseñas no coinciden."
             },
             PlanMembresia: {
                 required: "Debe seleccionar una membresía"
