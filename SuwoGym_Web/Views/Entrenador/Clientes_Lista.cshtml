@@ -1,12 +1,14 @@
 ﻿@model IEnumerable<EntrenadorClienteModel>
+@{ ViewData["Title"] = "Clientes asignados"; }
 
-<div class="row">
+<div class="row suwo-trainer-page">
 
     <div class="col-12">
 
         <div class="mb-4">
 
-            <h2>
+            <div class="suwo-trainer-eyebrow"><i class="ti ti-users" aria-hidden="true"></i> Área del entrenador</div>
+                <h2>
                 Clientes asignados
             </h2>
 
@@ -198,7 +200,7 @@
     }
     else
     {
-        <div class="text-center p-4">
+        <div class="text-center p-4 suwo-trainer-empty">
 
             <p class="mb-0">
                 No tiene clientes asignados.
