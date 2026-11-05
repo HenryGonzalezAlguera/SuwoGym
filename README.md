@@ -71,6 +71,17 @@ tablas, indicadores, estado vacío y contadores de listas. La capa se aplica
 solo a las páginas del Miembro y mantiene los formularios de reserva y las
 rutas MVC existentes. Consulta la [guía de verificación manual](docs/FASE_VISUAL_2_MIEMBRO.md).
 
+### Fase 4 — Diseño de Entrenador
+
+Se aplicó una capa visual específica para el rol Entrenador sobre las **16
+vistas Razor existentes**: clientes, ejercicios, rutinas, cronograma y
+asistencias. La hoja `suwo-trainer.css` mejora encabezados, tablas, fichas,
+formularios, indicadores y estados vacíos, y conserva sin modificaciones los
+flujos funcionales.
+
+Consulta la [guía de la Fase 4](docs/FASE4_DISENO_ENTRENADOR.md) y su
+checklist de revisión manual desde Visual Studio.
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
@@ -119,7 +130,7 @@ git clone https://github.com/HenryGonzalezAlguera/SuwoGym.git
 cd SuwoGym
 ```
 
-2. Revisar [Database/README.md](Database/README.md). Los archivos públicos disponibles son `01_SuwoGym_Estructura.sql` y `02_SuwoGym_DatosIniciales.sql`. **La guía anterior menciona una plantilla `03` de administrador que no está en el repositorio**; no ejecutar un script inexistente ni crear credenciales reales directamente desde ejemplos públicos.
+2. Revisar [Database/README.md](Database/README.md). Los archivos públicos disponibles son `01_SuwoGym_Estructura.sql` y `02_SuwoGym_DatosIniciales.sql`. El primer Administrador local se habilita mediante el script manual `Database/05_Habilitar_Primer_Admin_Desarrollo.sql`. El catálogo de clases requiere `Database/06_Registrar_Clases_Catalogo.sql`. No ejecutes scripts destructivos sobre la base ya utilizada.
 
 3. **Configurar secretos locales antes de iniciar la API**. No hay clave JWT ni contraseña SMTP predeterminadas. Sigue los pasos en [SEGURIDAD_Y_CONFIGURACION.md](docs/SEGURIDAD_Y_CONFIGURACION.md) para revocar credenciales anteriores y crear un nuevo secreto de firma con `dotnet user-secrets`.
 
@@ -156,7 +167,7 @@ La [fase 2](docs/FASE2_SESIONES_Y_ROLES.md) documenta las validaciones de sesió
 | Scripts SQL de estructura y datos iniciales | Disponibles |
 | Compilación automatizada | Definida en [CI](.github/workflows/dotnet-ci.yml) |
 | Pruebas automatizadas de sesión y permisos MVC | Disponibles en [SuwoGym.Tests](SuwoGym.Tests/) |
-| Pruebas funcionales con SQL Server | **Pendientes** |
+| Pruebas funcionales con SQL Server | **Validaciones manuales en entorno local**: altas de clases/horarios, reservas, asistencia, acceso por roles y ejercicios; el usuario también indicó pruebas de rutinas y pagos. No equivalen a pruebas E2E automatizadas. |
 | Capturas reales del sistema | **Pendientes** |
 | Despliegue público | **No realizado** |
 
