@@ -1,6 +1,7 @@
 ﻿@model List<RutinaEjercicioListaModel>
+@{ ViewData["Title"] = "Ejercicios de la rutina"; }
 
-<div class="row">
+<div class="row suwo-trainer-page">
 
     <div class="col-12">
 
@@ -19,6 +20,7 @@
 
             <div>
 
+                <div class="suwo-trainer-eyebrow"><i class="ti ti-list-details" aria-hidden="true"></i> Área del entrenador</div>
                 <h2 class="mb-2">
                     Ejercicios de la rutina
                 </h2>
@@ -296,7 +298,7 @@
         }
         else
         {
-            <div class="text-center py-5">
+            <div class="text-center py-5 suwo-trainer-empty">
 
                 <i class="ti ti-barbell"
                    style="font-size: 48px;">

@@ -1,6 +1,7 @@
 ﻿@model List<EjercicioListaModel>
+@{ ViewData["Title"] = "Catálogo de ejercicios"; }
 
-<div class="row">
+<div class="row suwo-trainer-page">
 
     <div class="col-12">
 
@@ -11,6 +12,7 @@
 
             <div>
 
+                <div class="suwo-trainer-eyebrow"><i class="ti ti-barbell" aria-hidden="true"></i> Área del entrenador</div>
                 <h2 class="mb-1">
                     Catálogo de ejercicios
                 </h2>
@@ -182,7 +184,7 @@
         }
         else
         {
-            <div class="text-center py-5">
+            <div class="text-center py-5 suwo-trainer-empty">
 
                 <i class="ti ti-barbell"
                    style="font-size: 48px;">
