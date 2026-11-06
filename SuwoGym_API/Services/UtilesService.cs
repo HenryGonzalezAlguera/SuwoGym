@@ -109,6 +109,12 @@ namespace SuwoGym_API.Services
                     Subject =
                         new ClaimsIdentity(claims),
 
+                    Issuer = _config["Jwt:Issuer"]
+                        ?? throw new InvalidOperationException("Jwt:Issuer no configurado."),
+
+                    Audience = _config["Jwt:Audience"]
+                        ?? throw new InvalidOperationException("Jwt:Audience no configurado."),
+
                     Expires =
                         DateTime.UtcNow
                             .AddMinutes(30),

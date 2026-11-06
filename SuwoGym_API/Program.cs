@@ -20,6 +20,16 @@ if (string.IsNullOrWhiteSpace(jwtSecret) ||
 }
 
 
+var jwtIssuer = builder.Configuration["Jwt:Issuer"];
+var jwtAudience = builder.Configuration["Jwt:Audience"];
+if (string.IsNullOrWhiteSpace(jwtIssuer) ||
+    string.IsNullOrWhiteSpace(jwtAudience))
+{
+    throw new InvalidOperationException(
+        "Faltan Jwt:Issuer o Jwt:Audience. " +
+        "Revise la configuración de autenticación de la API.");
+}
+
 builder.Services.AddControllers();
 
 /*
@@ -40,9 +50,11 @@ builder.Services
         options.TokenValidationParameters =
             new TokenValidationParameters
             {
-                ValidateIssuer = false,
+                ValidateIssuer = true,
+                ValidIssuer = jwtIssuer,
 
-                ValidateAudience = false,
+                ValidateAudience = true,
+                ValidAudience = jwtAudience,
 
                 ValidateLifetime = true,
 

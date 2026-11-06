@@ -93,6 +93,18 @@ Consulta [la guía de la Fase 5](docs/FASE5_DISENO_ADMINISTRADOR.md) para el
 checklist de pruebas funcionales, visuales y responsive. La validación manual
 de esta fase queda pendiente hasta su comprobación en Visual Studio.
 
+### Fase 6A — Seguridad de autenticación
+
+La API ahora emite y valida JWT con **emisor y audiencia explícitos** además de
+firma y expiración. La WEB establece cookies de sesión y antifalsificación
+seguras para HTTPS; los formularios de inicio de sesión y recuperación exigen
+tokens antifalsificación. Los tokens anteriores a esta actualización dejan de
+ser válidos y se debe volver a iniciar sesión.
+
+Consulta la [guía de la fase 6A](docs/FASE6A_SEGURIDAD_AUTENTICACION.md)
+para pruebas con los tres roles, límites de seguridad y trabajo pendiente
+(fase 6B: recuperación de acceso, auditoría de CSRF y revocación). No se cambia SQL.
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la

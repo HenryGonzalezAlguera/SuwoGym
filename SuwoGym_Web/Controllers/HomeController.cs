@@ -20,6 +20,7 @@ namespace SuwoGym_Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Index(
             UsuarioModel model)
         {
@@ -238,6 +239,7 @@ namespace SuwoGym_Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RecuperarAcceso(
             UsuarioModel model)
         {
