@@ -1,4 +1,5 @@
 ﻿@model PagoRegistrarModel
+@{ ViewData["Title"] = "Registrar pago"; }
 
 <div class="row">
     <div class="col-12">
@@ -10,9 +11,10 @@
         </div> <br />
 
         <!-- Título -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 suwo-admin-head">
             <div class="">
-                <h2>Registrar pago</h2>
+                <div class="suwo-admin-eyebrow"><i class="ti ti-cash" aria-hidden="true"></i> Administración</div>
+<h2>Registrar pago</h2>
             </div>
             <div>
                 <a asp-action="Clientes_Pagos" asp-controller="Admin" class="btn btn-outline-primary" asp-route-i="@Model.IdUsuario">
