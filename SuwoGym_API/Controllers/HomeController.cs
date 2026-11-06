@@ -160,7 +160,13 @@ namespace SuwoGym_API.Controllers
             {
                 // Nunca devolver detalles de SQL Server ni del hash al cliente.
                 return StatusCode(StatusCodes.Status500InternalServerError,
-                    "No         #region Recuperar acceso API — Fase 6B-2
+                    "No se pudo procesar el inicio de sesión.");
+            }
+        }
+
+        #endregion
+
+        #region Recuperar acceso API — Fase 6B-2
 
         // Respuesta genérica para evitar averiguar si existe un correo.
         private const string RespuestaRecuperacion =
@@ -312,9 +318,6 @@ namespace SuwoGym_API.Controllers
                 _logger?.LogError("Falló el consumo del enlace de recuperación.");
                 return StatusCode(StatusCodes.Status503ServiceUnavailable);
             }
-        }
-
-          "No se ha recuperado su acceso, por favor intente nuevamente.");
         }
 
         #endregion
