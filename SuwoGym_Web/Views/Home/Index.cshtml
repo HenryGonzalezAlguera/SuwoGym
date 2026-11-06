@@ -41,8 +41,7 @@
 }
 
 <form class="mt-3 align-content-start text-start" id="IniciarSesionForm"
-     asp-action="Index" asp-controller="Home" method="post"> 
-    @Html.AntiForgeryToken()
+     asp-action="Index" asp-controller="Home" method="post" asp-antiforgery="true"> 
 
 
     <!-- Correo Electrónico -->
