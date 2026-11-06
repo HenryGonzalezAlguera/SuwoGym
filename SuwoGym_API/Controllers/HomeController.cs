@@ -181,6 +181,8 @@ namespace SuwoGym_API.Controllers
             if (string.IsNullOrWhiteSpace(_databasekey["Correos:Correo"]) ||
                 string.IsNullOrWhiteSpace(_databasekey["Correos:AppPassword"]))
             {
+                _logger?.LogWarning(
+                    "Recuperación: faltan Correos:Correo o Correos:AppPassword en la configuración de la API.");
                 return StatusCode(StatusCodes.Status503ServiceUnavailable,
                     "El correo de recuperación no está configurado.");
             }
@@ -191,6 +193,8 @@ namespace SuwoGym_API.Controllers
                 !string.IsNullOrEmpty(origen.Query) ||
                 !string.IsNullOrEmpty(origen.Fragment))
             {
+                _logger?.LogWarning(
+                    "Recuperación: Recuperacion:UrlBaseWeb debe ser un origen HTTPS válido.");
                 return StatusCode(StatusCodes.Status503ServiceUnavailable,
                     "La dirección de recuperación no está configurada.");
             }
@@ -233,10 +237,13 @@ namespace SuwoGym_API.Controllers
                             "Restablecimiento de contraseña SUWÓ GYM",
                             plantilla);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         // Revocar el enlace que no se pudo entregar.
-                        _logger?.LogWarning("No fue posible enviar el enlace de recuperación.");
+                        // No registrar correo, enlace ni token.
+                        _logger?.LogWarning(
+                            "Recuperación: fallo al enviar correo. Tipo de error: {TipoError}.",
+                            ex.GetType().Name);
                         try
                         {
                             await context.ExecuteAsync(
@@ -253,10 +260,20 @@ namespace SuwoGym_API.Controllers
 
                 return Accepted(new { Mensaje = RespuestaRecuperacion });
             }
-            catch (Exception)
+            catch (SqlException ex)
             {
-                // Error de infraestructura, no devolver excepciones SQL.
-                _logger?.LogError("Falló la solicitud de recuperación.");
+                // Diagnóstico local sin registrar correo, enlace, token ni contraseña.
+                _logger?.LogError(
+                    "Recuperación: error SQL {Numero}, procedimiento {Procedimiento}.",
+                    ex.Number, ex.Procedure ?? "(ninguno)");
+                return StatusCode(StatusCodes.Status503ServiceUnavailable,
+                    "El servicio de recuperación no está disponible.");
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(
+                    "Recuperación: error de infraestructura {TipoError}.",
+                    ex.GetType().Name);
                 return StatusCode(StatusCodes.Status503ServiceUnavailable,
                     "El servicio de recuperación no está disponible.");
             }
