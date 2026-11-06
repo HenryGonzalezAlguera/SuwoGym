@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 namespace SuwoGym_Web.Controllers
 {
     [SessionAuthorize]
+    [AutoValidateAntiforgeryToken]
     public class UsuarioController(
         IHttpClientFactory _http,
         IConfiguration _config) : Controller
