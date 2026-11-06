@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace SuwoGym_API.Models
 {
     public class DatoUsuarioResponseModel
@@ -12,6 +14,8 @@ namespace SuwoGym_API.Models
 
         public string CorreoElectronico { get; set; } = string.Empty;
 
+        // Dapper lo utiliza para verificar el login, pero nunca debe enviarse en respuestas JSON.
+        [JsonIgnore]
         public string ContrasennaHash { get; set; } = string.Empty;
 
         public bool Estado { get; set; }

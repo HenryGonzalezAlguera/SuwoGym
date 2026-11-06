@@ -26,6 +26,13 @@
     </div>
 }
 
+@if (ViewBag.Mensaje != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Mensaje
+    </div>
+}
+
 @if (!ViewData.ModelState.IsValid)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">

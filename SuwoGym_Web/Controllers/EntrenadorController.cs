@@ -8,6 +8,7 @@ using System.Net;
 namespace SuwoGym_Web.Controllers
 {
     [SessionAuthorize(2)]
+    [AutoValidateAntiforgeryToken]
     public class EntrenadorController(
         IHttpClientFactory _http,
         IConfiguration _config) : Controller

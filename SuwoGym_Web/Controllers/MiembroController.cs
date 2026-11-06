@@ -7,6 +7,7 @@ using System.Net;
 namespace SuwoGym_Web.Controllers
 {
     [SessionAuthorize(3)]
+    [AutoValidateAntiforgeryToken]
     public class MiembroController : Controller
     {
         private readonly IHttpClientFactory _http;

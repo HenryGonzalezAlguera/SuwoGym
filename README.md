@@ -105,6 +105,19 @@ Consulta la [guía de la fase 6A](docs/FASE6A_SEGURIDAD_AUTENTICACION.md)
 para pruebas con los tres roles, límites de seguridad y trabajo pendiente
 (fase 6B: recuperación de acceso, auditoría de CSRF y revocación). No se cambia SQL.
 
+### Fase 6B-1 — Protección CSRF, límites de acceso y logout
+
+Los controladores MVC de Administrador, Entrenador, Miembro y Usuario
+exigen tokens antifalsificación en POST; el cierre de sesión usa
+POST protegido en vez de GET. La API limita los intentos de inicio de
+sesión (12/min) y recuperación (4/15 min) por IP, devolviendo HTTP 429
+cuando se supera el máximo. **No se requiere SQL adicional**.
+
+Consulta la [guía de fase 6B-1](docs/FASE6B1_CSRF_RATE_LIMIT_LOGOUT.md).
+La recuperación de contraseñas por enlace seguro y la revocación de JWT
+quedan pendientes de la fase siguiente. **No utilizar recuperación actual
+con cuentas reales hasta rediseñar el envío y consumo de tokens.**
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la

@@ -9,6 +9,7 @@ using System.Net;
 namespace SuwoGym_Web.Controllers
 {
     [SessionAuthorize(1)]
+    [AutoValidateAntiforgeryToken]
     public class AdminController(
         IHttpClientFactory _http,
         IConfiguration _config,

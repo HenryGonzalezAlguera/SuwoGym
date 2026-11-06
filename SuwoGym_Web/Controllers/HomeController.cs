@@ -107,14 +107,11 @@ namespace SuwoGym_Web.Controllers
                 return View();
             }
 
-            var detalleError =
-      response.Content
-          .ReadAsStringAsync()
-          .Result;
-
-            throw new Exception(
-                $"La API respondió {(int)response.StatusCode} " +
-                $"({response.StatusCode}): {detalleError}");
+            // Error de límite de intentos: informar sin exponer respuestas internas.
+            ViewBag.Mensaje = response.StatusCode == HttpStatusCode.TooManyRequests
+                ? "Se han realizado demasiados intentos. Espere un minuto e inténtelo de nuevo."
+                : "No se pudo iniciar sesión. Inténtelo nuevamente.";
+            return View();
         }
 
         #endregion
@@ -264,17 +261,25 @@ namespace SuwoGym_Web.Controllers
                     "Home");
             }
 
-            if (response.StatusCode ==
-                    HttpStatusCode.NotFound
-                ||
-                response.StatusCode ==
-                    HttpStatusCode.BadRequest)
+            if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
             {
                 ViewBag.Mensaje =
-                    response.Content
-                        .ReadAsStringAsync()
-                        .Result;
+                    "La recuperación por correo no está configurada. Consulte con el administrador del sistema.";
+                return View();
+            }
 
+            if (response.StatusCode == HttpStatusCode.TooManyRequests)
+            {
+                ViewBag.Mensaje =
+                    "Hay demasiadas solicitudes de recuperación. Espere 15 minutos e inténtelo de nuevo.";
+                return View();
+            }
+
+            if (response.StatusCode == HttpStatusCode.NotFound ||
+                response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                ViewBag.Mensaje =
+                    "No se pudo procesar la solicitud de recuperación.";
                 return View();
             }
 
@@ -286,7 +291,8 @@ namespace SuwoGym_Web.Controllers
 
         #region Cerrar sesión
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

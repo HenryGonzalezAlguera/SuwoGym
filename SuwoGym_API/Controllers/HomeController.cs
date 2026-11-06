@@ -1,5 +1,6 @@
 using Dapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using SuwoGym_API.Models;
@@ -101,6 +102,7 @@ namespace SuwoGym_API.Controllers
         #region Iniciar sesión API
 
         [HttpPost("IniciarSesionAPI")]
+        [EnableRateLimiting("auth-login")]
         public IActionResult IniciarSesionAPI(
             UsuarioLoginModel model)
         {
@@ -151,10 +153,11 @@ namespace SuwoGym_API.Controllers
 
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(
-                    ex.Message);
+                // Nunca devolver detalles de SQL Server ni del hash al cliente.
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "No se pudo procesar el inicio de sesión.");
             }
         }
 
@@ -163,10 +166,20 @@ namespace SuwoGym_API.Controllers
         #region Recuperar acceso API
 
         [HttpPost("RecuperarAccesoAPI")]
+        [EnableRateLimiting("auth-recovery")]
         public async Task<IActionResult>
             RecuperarAccesoAPI(
                 RecuperarAccesoRequestModel model)
         {
+            // Seguridad: no modificar la contraseña si no es posible enviar correo.
+            // El rediseño con enlaces de un solo uso se implementará en fase 6B-2.
+            if (string.IsNullOrWhiteSpace(_databasekey["Correos:Correo"]) ||
+                string.IsNullOrWhiteSpace(_databasekey["Correos:AppPassword"]))
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable,
+                    "El servicio de recuperación por correo no está configurado.");
+            }
+
             using var context = new SqlConnection(
                 _databasekey[
                     "ConnectionStringsApi:DefaultConnection"]);
