@@ -1,9 +1,11 @@
 ﻿@model List<ClaseProgramadaListaModel>
+@{ ViewData["Title"] = "Horarios y clases"; }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4 suwo-admin-head">
 
     <div>
-        <h1 class="mb-1">
+        <div class="suwo-admin-eyebrow"><i class="ti ti-calendar-event" aria-hidden="true"></i> Administración</div>
+<h1 class="mb-1">
             Horarios y clases
         </h1>
 
@@ -257,7 +259,7 @@
         }
         else
         {
-            <div class="text-center py-5">
+            <div class="text-center py-5 suwo-admin-empty">
 
                 <i class="ti ti-calendar-off"
                    style="font-size: 48px;">
