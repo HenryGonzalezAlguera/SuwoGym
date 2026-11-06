@@ -3,9 +3,9 @@
     ViewData["Title"] = "Catálogo de clases";
 }
 
-<div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-4">
+<div class="d-flex justify-content-between align-items-start gap-3 flex-wrap mb-4 suwo-admin-head">
     <div>
-        <div class="text-uppercase fw-bold small mb-2" style="letter-spacing:.12em; color:var(--suwo-orange);">
+        <div class="suwo-admin-eyebrow" style="letter-spacing:.12em; color:var(--suwo-orange);">
             <i class="ti ti-barbell me-1" aria-hidden="true"></i> Administración
         </div>
         <h1 class="mb-1">Catálogo de clases</h1>
@@ -31,7 +31,7 @@
         {
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h2 class="h5 mb-0">Actividades disponibles</h2>
-                <span class="badge text-bg-light border">@Model.Count clases</span>
+                <span class="badge text-bg-light border">@Model.Count @(Model.Count == 1 ? "clase" : "clases")</span>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle">

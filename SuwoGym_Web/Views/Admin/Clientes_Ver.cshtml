@@ -1,4 +1,5 @@
 ﻿@model ClienteModel
+@{ ViewData["Title"] = "Detalle del cliente"; }
 
 <div class="row">
 
@@ -9,9 +10,10 @@
             <a asp-action="Clientes_Lista" asp-controller="Admin" class="btn btn-light"><small><i class="ti ti-arrow-left"></i> Volver</small></a>
         </div> <br />
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 suwo-admin-head">
             <div class="">
-                <h2>
+                <div class="suwo-admin-eyebrow"><i class="ti ti-user-check" aria-hidden="true"></i> Administración</div>
+<h2>
                     Detalle del cliente
                 </h2>
             </div>

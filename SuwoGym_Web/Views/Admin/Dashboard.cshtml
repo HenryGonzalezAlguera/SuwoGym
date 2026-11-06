@@ -1,10 +1,12 @@
 ﻿@model DashboardModel
+@{ ViewData["Title"] = "Dashboard administrativo"; }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4 suwo-admin-head">
 
     <div>
 
-        <h1 class="mb-1">
+        <div class="suwo-admin-eyebrow"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Administración</div>
+<h1 class="mb-1">
             Dashboard administrativo
         </h1>
 
@@ -44,7 +46,7 @@
 
     <div class="col-md-6 col-xl-3 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-kpi-card">
 
             <div class="card-body">
 
@@ -61,7 +63,7 @@
                         </h2>
 
                         <small class="text-success">
-                            @Model.Indicadores.ClientesActivos activos
+                            @Model.Indicadores.ClientesActivos @(Model.Indicadores.ClientesActivos == 1 ? "activo" : "activos")
                         </small>
 
                     </div>
@@ -85,7 +87,7 @@
 
     <div class="col-md-6 col-xl-3 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-kpi-card">
 
             <div class="card-body">
 
@@ -126,7 +128,7 @@
 
     <div class="col-md-6 col-xl-3 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-kpi-card">
 
             <div class="card-body">
 
@@ -167,7 +169,7 @@
 
     <div class="col-md-6 col-xl-3 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-kpi-card">
 
             <div class="card-body">
 
@@ -184,7 +186,7 @@
                         </h2>
 
                         <small class="text-secondary">
-                            @Model.Indicadores.PagosMesActual pagos
+                            @Model.Indicadores.PagosMesActual @(Model.Indicadores.PagosMesActual == 1 ? "pago" : "pagos")
                         </small>
 
                     </div>
@@ -214,7 +216,7 @@
 
     <div class="col-md-4 col-xl-2 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-metric-card">
 
             <div class="card-body text-center">
 
@@ -237,7 +239,7 @@
 
     <div class="col-md-4 col-xl-2 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-metric-card">
 
             <div class="card-body text-center">
 
@@ -260,7 +262,7 @@
 
     <div class="col-md-4 col-xl-2 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-metric-card">
 
             <div class="card-body text-center">
 
@@ -283,7 +285,7 @@
 
     <div class="col-md-4 col-xl-2 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-metric-card">
 
             <div class="card-body text-center">
 
@@ -306,7 +308,7 @@
 
     <div class="col-md-4 col-xl-2 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-metric-card">
 
             <div class="card-body text-center">
 
@@ -329,11 +331,11 @@
 
     <div class="col-md-4 col-xl-2 mb-4">
 
-        <div class="card h-100">
+        <div class="card h-100 suwo-admin-metric-card">
 
             <div class="card-body text-center">
 
-                <h3 class="mb-1">
+                <h3 class="mb-1 suwo-admin-currency-value">
                     ₡@(Model.Indicadores.IngresosTotales.ToString("N2"))
                 </h3>
 
@@ -487,7 +489,7 @@
                 }
                 else
                 {
-                    <div class="text-center py-5">
+                    <div class="text-center py-5 suwo-admin-empty">
 
                         <i class="ti ti-receipt-off"
                            style="font-size: 40px;">
@@ -659,7 +661,7 @@
                 }
                 else
                 {
-                    <div class="text-center py-5">
+                    <div class="text-center py-5 suwo-admin-empty">
 
                         <i class="ti ti-calendar-off"
                            style="font-size: 40px;">

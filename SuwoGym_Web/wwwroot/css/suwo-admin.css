@@ -1,0 +1,284 @@
+/*
+ * SUWÓ GYM — Fase 5: diseño del panel Administrador
+ * Capa visual no destructiva, aislada en body.suwo-admin.
+ * Mantener intactos el tema, los formularios, rutas, controladores y SQL.
+ */
+.suwo-app.suwo-admin {
+  --admin-ink: #20344c;
+  --admin-muted: #62758b;
+  --admin-border: #e1e9f1;
+  --admin-soft: #f6f9fd;
+  --admin-orange: #ed6536;
+  --admin-orange-deep: #bf4c28;
+  --admin-shadow: 0 12px 30px rgba(32, 53, 79, .06);
+  background: #f4f7fb;
+}
+.suwo-admin .content > .container-fluid { max-width: 1680px; }
+.suwo-admin .content { color: var(--admin-ink); font-size: .96rem; line-height: 1.57; }
+.suwo-admin .content h1,
+.suwo-admin .content h2 {
+  color: var(--admin-ink);
+  font-size: clamp(1.52rem, 2.1vw, 2rem);
+  font-weight: 750;
+  line-height: 1.23;
+  letter-spacing: -.034em;
+}
+.suwo-admin .content h3,
+.suwo-admin .content h4,
+.suwo-admin .content h5 { color: var(--admin-ink); font-weight: 700; letter-spacing: -.018em; }
+.suwo-admin .content p.text-secondary,
+.suwo-admin .content small.text-secondary { color: var(--admin-muted) !important; }
+.suwo-admin .content .suwo-admin-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--admin-orange-deep);
+  font-weight: 750;
+  font-size: .72rem;
+  letter-spacing: .115em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+.suwo-admin .content .suwo-admin-eyebrow .ti { font-size: 1.05rem; }
+.suwo-admin .content .suwo-admin-head { margin-bottom: 27px !important; }
+.suwo-admin .content .suwo-admin-head p { max-width: 760px; }
+.suwo-admin .content .suwo-admin-head .btn { flex-shrink: 0; }
+
+/* Componentes compartidos por listas, detalles, planes, clases y horarios */
+.suwo-admin .content .card {
+  border: 1px solid var(--admin-border);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--admin-shadow);
+}
+.suwo-admin .content .card-body { padding: clamp(19px, 2vw, 30px); }
+.suwo-admin .content .card-header {
+  padding: 17px 23px;
+  border-bottom: 1px solid var(--admin-border);
+  background: #fafbfd;
+  border-radius: 17px 17px 0 0;
+}
+.suwo-admin .content .card-footer {
+  padding: 16px 23px;
+  border-color: var(--admin-border);
+  background: #fff;
+  border-radius: 0 0 17px 17px;
+}
+.suwo-admin .content .bloque_info {
+  min-height: 80px;
+  padding: 15px 17px;
+  border: 1px solid #e9eef5;
+  border-radius: 13px;
+  background: #f8fafc;
+  overflow-wrap: anywhere;
+}
+.suwo-admin .content .bloque_info_titulo {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--admin-muted);
+  font-size: .79rem;
+  font-weight: 650;
+}
+.suwo-admin .content .bloque_info .bip {
+  color: var(--admin-ink);
+  font-size: .94rem;
+  font-weight: 650;
+}
+
+/* Tablas legibles con desplazamiento horizontal en móvil */
+.suwo-admin .content .table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 13px;
+}
+.suwo-admin .content .table { margin-bottom: 0; --bs-table-bg: transparent; }
+.suwo-admin .content .table thead th {
+  padding: 15px 14px;
+  color: #526881;
+  background: #f3f7fc;
+  border-bottom: 1px solid var(--admin-border);
+  font-size: .74rem;
+  font-weight: 750;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.suwo-admin .content .table tbody td {
+  padding: 15px 14px;
+  border-color: #ebf0f6;
+  color: #364b63;
+  font-size: .89rem;
+  line-height: 1.55;
+  vertical-align: middle;
+}
+.suwo-admin .content .table tbody tr:hover > * { --bs-table-accent-bg: #f8fafc; }
+.suwo-admin .content .table tbody tr:last-child td { border-bottom: none; }
+.suwo-admin .content .table td strong { color: var(--admin-ink); font-weight: 700; }
+.suwo-admin .content .table td .btn-sm {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  min-height: 37px;
+  min-width: 38px;
+}
+.suwo-admin .content .badge {
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .005em;
+}
+
+/* Formularios. Respeta select, validaciones, checks y atributos originales. */
+.suwo-admin .content .form-label {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: #435a72;
+  font-weight: 650;
+  font-size: .85rem;
+}
+.suwo-admin .content .form-control,
+.suwo-admin .content .form-select {
+  min-height: 45px;
+  padding: .65rem .85rem;
+  border: 1px solid #d8e2ed;
+  border-radius: 11px;
+  background-color: #fff;
+  font-size: .9rem;
+}
+.suwo-admin .content textarea.form-control { min-height: 106px; resize: vertical; }
+.suwo-admin .content .form-control:focus,
+.suwo-admin .content .form-select:focus {
+  border-color: var(--admin-orange);
+  box-shadow: 0 0 0 .2rem rgba(237, 101, 54, .12);
+}
+.suwo-admin .content .form-text { color: #6e8297; line-height: 1.55; }
+.suwo-admin .content .text-danger.field-validation-error { font-size: .83rem; }
+.suwo-admin .content .btn {
+  min-height: 41px;
+  padding: .6rem .94rem;
+  border-radius: 11px;
+  font-size: .87rem;
+  font-weight: 650;
+}
+.suwo-admin .content .btn-primary {
+  color: #fff;
+  background: var(--admin-orange);
+  border-color: var(--admin-orange);
+  box-shadow: 0 5px 15px rgba(237, 101, 54, .15);
+}
+.suwo-admin .content .btn-primary:hover,
+.suwo-admin .content .btn-primary:active {
+  color: #fff;
+  background: var(--admin-orange-deep);
+  border-color: var(--admin-orange-deep);
+}
+.suwo-admin .content .btn-outline-primary { color: var(--admin-orange-deep); border-color: #efb7a0; }
+.suwo-admin .content .btn-outline-primary:hover {
+  color: #fff;
+  background: var(--admin-orange-deep);
+  border-color: var(--admin-orange-deep);
+}
+.suwo-admin .content :is(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid #2579ba;
+  outline-offset: 3px;
+}
+.suwo-admin .content .alert {
+  padding: 14px 18px;
+  border-radius: 13px;
+  line-height: 1.55;
+  font-size: .9rem;
+}
+.suwo-admin .content .breadcrumb { font-size: .86rem; color: var(--admin-muted); }
+.suwo-admin .content .breadcrumb a { color: var(--admin-orange-deep); }
+.suwo-admin .content .suwo-admin-empty {
+  max-width: 580px;
+  margin: 5px auto;
+  padding: 34px 18px !important;
+  text-align: center;
+}
+.suwo-admin .content .suwo-admin-empty > .ti {
+  display: inline-grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  border-radius: 20px;
+  background: #fff2eb;
+  color: var(--admin-orange);
+  font-size: 2.15rem !important;
+}
+
+/* Dashboard: indicadores principales y secundarios sin alterar bindings de Razor */
+.suwo-admin .content .suwo-admin-kpi-card {
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid #f0a37e;
+}
+.suwo-admin .content .suwo-admin-kpi-card .card-body {
+  display: flex;
+  align-items: center;
+  min-height: 145px;
+}
+.suwo-admin .content .suwo-admin-kpi-card h2 {
+  margin: 9px 0 5px !important;
+  font-size: clamp(1.55rem, 2vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -.03em;
+  overflow-wrap: anywhere;
+}
+.suwo-admin .content .suwo-admin-kpi-card .fs-2 {
+  display: grid;
+  place-items: center;
+  width: 49px;
+  height: 49px;
+  border-radius: 13px;
+  color: var(--admin-orange);
+  background: #fff2eb;
+}
+.suwo-admin .content .suwo-admin-metric-card .card-body {
+  min-height: 120px;
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.suwo-admin .content .suwo-admin-metric-card h3 {
+  margin-bottom: 3px !important;
+  font-size: clamp(1.55rem, 2vw, 1.95rem);
+  font-weight: 800;
+}
+.suwo-admin .content .suwo-admin-metric-card span { font-size: .83rem; }
+
+/* El total monetario necesita espacio extra en las tarjetas compactas del Dashboard. */
+.suwo-admin .content .suwo-admin-metric-card .suwo-admin-currency-value {
+  font-size: clamp(1.05rem, 1.25vw, 1.42rem);
+  letter-spacing: -.03em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.suwo-admin .content .suwo-admin-metric-card:has(.suwo-admin-currency-value) .card-body {
+  padding-inline: 12px;
+}
+
+/* Adaptabilidad: no esconder columnas ni acciones */
+@media (max-width: 992px) {
+  .suwo-admin .content .suwo-admin-head { flex-wrap: wrap; align-items: flex-start !important; gap: 12px; }
+  .suwo-admin .content .card-body { padding: 21px; }
+}
+@media (max-width: 640px) {
+  .suwo-admin .content { font-size: .94rem; }
+  .suwo-admin .content .card-body { padding: 18px; }
+  .suwo-admin .content .suwo-admin-head { flex-direction: column; }
+  .suwo-admin .content .suwo-admin-head > .btn,
+  .suwo-admin .content .suwo-admin-head > div:last-child > .btn { max-width: 100%; }
+  .suwo-admin .content .table thead th,
+  .suwo-admin .content .table tbody td { padding: 12px; }
+  .suwo-admin .content .suwo-admin-kpi-card .card-body { min-height: 127px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .suwo-admin .content .card,
+  .suwo-admin .content .btn { transition: none !important; }
+}
