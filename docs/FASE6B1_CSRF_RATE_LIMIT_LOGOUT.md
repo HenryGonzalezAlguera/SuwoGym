@@ -67,6 +67,19 @@ El login ya no devuelve al navegador detalles internos de excepción SQL.
 La WEB muestra errores genéricos cuando la API falla y un mensaje específico
 cuando el límite de peticiones devuelve 429.
 
+### 5. Recuperación: prevención de bloqueo sin SMTP
+
+Antes de consultar SQL Server o actualizar una contraseña, el endpoint de
+recuperación comprueba que `Correos:Correo` y `Correos:AppPassword` estén
+configurados. Si faltan, devuelve **HTTP 503**, y la WEB muestra un mensaje
+sin revelar detalles internos. Se añadió una prueba automatizada que
+comprueba que esta ruta se detiene antes de acceder a SQL.
+
+**Esta protección es parcial:** con SMTP configurado, un fallo posterior
+al escribir en SQL podría igualmente dejar la contraseña temporal sin
+entregar. La recuperación por enlace de un solo uso sigue siendo necesaria
+antes de usar esta funcionalidad con cuentas reales.
+
 ## Guía de pruebas manuales en Visual Studio
 
 1. Trabajar en una rama local `feature/fase6b1-csrf-rate-limit-logout`
@@ -111,9 +124,10 @@ prueba funcional de los límites del middleware.
 ## Pendientes de la fase 6B-2
 
 La recuperación actual **genera y guarda una contraseña temporal antes de
-enviarla por correo**. Si SMTP no está configurado o el envío falla,
-el usuario puede perder el acceso. No se ha corregido este flujo en la
-fase 6B-1: no usarlo con cuentas reales.
+enviarla por correo**. Ahora se bloquea antes de consultar SQL cuando
+SMTP no está configurado, pero si el envío SMTP falla después de actualizar
+la contraseña, el usuario todavía podría perder acceso.
+No usar este flujo con cuentas reales.
 
 Para solucionarlo hace falta implementar un enlace de un solo uso
 con expiración, tokens almacenados como hash, consumo atómico
