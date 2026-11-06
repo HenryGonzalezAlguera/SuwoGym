@@ -67,6 +67,35 @@ código y ejecuta pruebas sin BD.
 - La API y WEB deben ejecutarse con los perfiles HTTPS existentes.
 - No es necesario cambiar claves JWT, roles ni ningún dato de usuarios.
 
+## Diagnóstico de mensaje "El servicio de recuperación no está disponible"
+
+La pantalla WEB presenta este texto cuando la API devuelve cualquier respuesta
+distinta de HTTP 202 o del límite HTTP 429. La creación de objetos en SQL
+no confirma que la API esté apuntando a esa misma instancia ni que lea SMTP.
+
+1. Confirmar que están ejecutándose API y WEB con HTTPS.
+2. En Visual Studio, clic derecho en **SuwoGym_API → Administrar secretos del usuario**.
+   Comprobar que existen `Correos:Correo` y `Correos:AppPassword`
+   **sin publicar valores ni capturas de secretos**. `appsettings.json` contiene
+   valores vacíos intencionalmente; deben prevalecer los User Secrets.
+3. Confirmar `Recuperacion:UrlBaseWeb = https://localhost:7035` para
+   desarrollo y que la WEB esté usando ese puerto.
+4. Reiniciar API y WEB, enviar una solicitud de recuperación con una
+   **cuenta de prueba** y observar la ventana **Salida → ASP.NET Core Web Server**
+   o la consola de la API, no la WEB.
+5. La API registra solo el tipo de causa, sin correo ni token:
+   `faltan Correos`, `UrlBaseWeb`, `error SQL <número>`,
+   o `error de infraestructura <tipo>`. Los fallos SMTP se reportan
+   de modo genérico y revocan el token emitido.
+6. Si aparece error SQL 2812 (procedimiento inexistente), comprobar
+   la cadena de conexión utilizada por **SuwoGym_API**, y ejecutar la
+   consulta de comprobación del script `07` en **esa misma base**.
+   Nunca publicar la cadena de conexión completa.
+7. Si falta SMTP, configurar exclusivamente en User Secrets una contraseña
+   de aplicación válida; no usar la contraseña habitual de Gmail.
+8. No repetir la migración ni cambiar hashes de usuarios para intentar
+   arreglar un HTTP 503.
+
 ## Verificación manual con cuenta DE PRUEBA
 
 1. Con BD respaldada y script `07` aplicado, ejecuta API y WEB.
