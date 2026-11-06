@@ -247,8 +247,7 @@
                             </p>
                             <form asp-controller="Admin"
                                   asp-action="Empleados_RestablecerAccesoTemporal"
-                                  method="post">
-                                @Html.AntiForgeryToken()
+                                  method="post" asp-antiforgery="true">
                                 <input type="hidden" name="idUsuario" value="@Model.IdUsuario" />
                                 <button type="submit" class="btn btn-outline-primary">
                                     <i class="ti ti-key me-1" aria-hidden="true"></i>
