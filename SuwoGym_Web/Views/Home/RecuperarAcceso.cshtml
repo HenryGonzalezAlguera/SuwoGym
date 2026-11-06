@@ -2,6 +2,12 @@
 
 @{
     Layout = "_LayoutExterno";
+    ViewData["Title"] = "Recuperar contraseña";
+}
+
+@if (ViewBag.MensajeExito != null)
+{
+    <div class="alert alert-success text-center" role="status">@ViewBag.MensajeExito</div>
 }
 
 @if (ViewBag.Mensaje != null)
@@ -24,7 +30,7 @@
 
 <p class="mb-5 text-secondary">
     Ingresa tu correo electrónico y te enviaremos
-    instrucciones para restablecer tu contraseña.
+    un enlace seguro de un solo uso (válido durante 15 minutos).
 </p>
 
 <form id="RecuperarAccesoForm"
