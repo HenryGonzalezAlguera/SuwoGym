@@ -50,6 +50,10 @@
           href="~/css/suwo-trainer.css"
           asp-append-version="true" />
 
+    <link rel="stylesheet"
+          href="~/css/suwo-admin.css"
+          asp-append-version="true" />
+
     <!-- jQuery -->
     <script src="~/lib/jquery/dist/jquery.min.js"
             asp-append-version="true">
@@ -62,7 +66,7 @@
 
 </head>
 
-<body class="suwo-app @(rol == "Entrenador" ? "suwo-trainer" : "")">
+<body class="suwo-app @(rol == "Entrenador" ? "suwo-trainer" : (rol == "Administrador" ? "suwo-admin" : ""))">
 
     <div id="overlay"
          class="overlay">
