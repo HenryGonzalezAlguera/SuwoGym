@@ -252,6 +252,17 @@
 }
 .suwo-admin .content .suwo-admin-metric-card span { font-size: .83rem; }
 
+/* El total monetario necesita espacio extra en las tarjetas compactas del Dashboard. */
+.suwo-admin .content .suwo-admin-metric-card .suwo-admin-currency-value {
+  font-size: clamp(1.05rem, 1.25vw, 1.42rem);
+  letter-spacing: -.03em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.suwo-admin .content .suwo-admin-metric-card:has(.suwo-admin-currency-value) .card-body {
+  padding-inline: 12px;
+}
+
 /* Adaptabilidad: no esconder columnas ni acciones */
 @media (max-width: 992px) {
   .suwo-admin .content .suwo-admin-head { flex-wrap: wrap; align-items: flex-start !important; gap: 12px; }
