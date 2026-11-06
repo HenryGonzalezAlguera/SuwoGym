@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using SuwoGym_API.Models;
@@ -47,6 +48,25 @@ public class SeguridadFase6B1Tests
             .GetMethod(nombreAccion);
         Assert.NotNull(accion);
         Assert.NotNull(accion!.GetCustomAttribute<EnableRateLimitingAttribute>());
+    }
+
+    [Fact]
+    public void HashDeContrasenaNoSeIncluyeEnRespuestasJson()
+    {
+        var modelo = new DatoUsuarioResponseModel
+        {
+            IdUsuario = 23,
+            ContrasennaHash = "$2a$12$test-private-hash",
+            Token = "jwt-ficticio"
+        };
+
+        var json = JsonSerializer.Serialize(modelo);
+
+        Assert.DoesNotContain("ContrasennaHash", json);
+        Assert.DoesNotContain("test-private-hash", json);
+        Assert.Contains("IdUsuario", json);
+        // El campo sigue accesible para BCrypt/Dapper internamente.
+        Assert.Contains("test-private-hash", modelo.ContrasennaHash);
     }
 
     [Fact]
