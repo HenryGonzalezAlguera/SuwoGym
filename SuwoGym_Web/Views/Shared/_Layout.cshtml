@@ -117,10 +117,12 @@
                    asp-action="Configuracion" asp-controller="Usuario">
                     <i class="ti ti-settings me-2" aria-hidden="true"></i> Configuración
                 </a>
-                <a class="d-block text-decoration-none"
-                   asp-action="Logout" asp-controller="Home">
-                    <i class="ti ti-door-exit me-2" aria-hidden="true"></i> Cerrar sesión
-                </a>
+                <form asp-action="Logout" asp-controller="Home" method="post"
+                      asp-antiforgery="true" class="m-0">
+                    <button type="submit" class="suwo-logout-button">
+                        <i class="ti ti-door-exit me-2" aria-hidden="true"></i> Cerrar sesión
+                    </button>
+                </form>
             </div>
         </div>
     </nav>
