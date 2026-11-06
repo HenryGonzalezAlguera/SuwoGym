@@ -80,6 +80,15 @@ al escribir en SQL podría igualmente dejar la contraseña temporal sin
 entregar. La recuperación por enlace de un solo uso sigue siendo necesaria
 antes de usar esta funcionalidad con cuentas reales.
 
+### 6. Evitar exposición de hashes de contraseña
+
+El modelo `DatoUsuarioResponseModel` conserva `ContrasennaHash` para las
+consultas internas de Dapper y la verificación BCrypt, pero ahora usa
+`[JsonIgnore]`: las respuestas JSON de ASP.NET Core no incluyen esa
+propiedad. El inicio de sesión sigue devolviendo ID, rol, token y datos
+que la WEB necesita para crear la sesión. Una prueba xUnit verifica
+que el hash permanece disponible internamente y no se serializa.
+
 ## Guía de pruebas manuales en Visual Studio
 
 1. Trabajar en una rama local `feature/fase6b1-csrf-rate-limit-logout`
