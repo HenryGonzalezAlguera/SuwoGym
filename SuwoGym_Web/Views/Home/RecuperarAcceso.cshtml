@@ -32,8 +32,8 @@
       novalidate
       asp-action="RecuperarAcceso"
       asp-controller="Home"
-      method="post">
-    @Html.AntiForgeryToken()
+      method="post"
+      asp-antiforgery="true">
 
 
     <div class="mb-5 form-group">
