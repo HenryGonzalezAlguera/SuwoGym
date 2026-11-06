@@ -63,7 +63,7 @@
                         </h2>
 
                         <small class="text-success">
-                            @Model.Indicadores.ClientesActivos activos
+                            @Model.Indicadores.ClientesActivos @(Model.Indicadores.ClientesActivos == 1 ? "activo" : "activos")
                         </small>
 
                     </div>
@@ -186,7 +186,7 @@
                         </h2>
 
                         <small class="text-secondary">
-                            @Model.Indicadores.PagosMesActual pagos
+                            @Model.Indicadores.PagosMesActual @(Model.Indicadores.PagosMesActual == 1 ? "pago" : "pagos")
                         </small>
 
                     </div>
