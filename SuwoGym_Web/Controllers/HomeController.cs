@@ -227,7 +227,7 @@ namespace SuwoGym_Web.Controllers
 
         #endregion
 
-        #region Recuperar acceso
+        #region Recuperar acceso — Fase 6B-2
 
         [HttpGet]
         public IActionResult RecuperarAcceso()
@@ -237,54 +237,126 @@ namespace SuwoGym_Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult RecuperarAcceso(
-            UsuarioModel model)
+        public async Task<IActionResult> RecuperarAcceso(UsuarioModel model)
         {
-            using var client =
-                _http.CreateClient();
-
-            var urlApi =
-                _config[
-                    "ConnectionStringsWeb:urlApi"]
-                + "/api/Home/RecuperarAccesoAPI";
-
-            var response =
-                client.PostAsJsonAsync(
-                    urlApi,
-                    model).Result;
-
-            if (response.StatusCode ==
-                HttpStatusCode.OK)
+            if (string.IsNullOrWhiteSpace(model.correoElectronico))
             {
-                return RedirectToAction(
-                    "Index",
-                    "Home");
+                ViewBag.Mensaje = "Introduce un correo electrónico válido.";
+                return View(model);
             }
 
-            if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+            try
             {
-                ViewBag.Mensaje =
-                    "La recuperación por correo no está configurada. Consulte con el administrador del sistema.";
-                return View();
+                using var client = _http.CreateClient();
+                var urlApi = _config["ConnectionStringsWeb:urlApi"]
+                    + "/api/Home/RecuperarAccesoAPI";
+                using var response = await client.PostAsJsonAsync(
+                    urlApi, new { CorreoElectronico = model.correoElectronico });
+
+                if (response.StatusCode == HttpStatusCode.Accepted)
+                {
+                    ViewBag.MensajeExito =
+                        "Si el correo pertenece a una cuenta activa, recibirás un enlace que vence en 15 minutos.";
+                    return View();
+                }
+
+                ViewBag.Mensaje = response.StatusCode == HttpStatusCode.TooManyRequests
+                    ? "Demasiadas solicitudes. Espera 15 minutos y vuelve a intentarlo."
+                    : "El servicio de recuperación no está disponible. Intenta más tarde.";
+            }
+            catch (HttpRequestException)
+            {
+                ViewBag.Mensaje = "No se pudo conectar con el servicio de recuperación.";
+            }
+            catch (TaskCanceledException)
+            {
+                ViewBag.Mensaje = "El servicio tardó demasiado. Inténtalo nuevamente.";
             }
 
-            if (response.StatusCode == HttpStatusCode.TooManyRequests)
+            return View(model);
+        }
+
+        [HttpGet]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public async Task<IActionResult> RestablecerContrasenna([FromQuery] string? token)
+        {
+            Response.Headers["Referrer-Policy"] = "no-referrer";
+            Response.Headers["Cache-Control"] = "no-store";
+            var model = new RestablecerContrasennaViewModel { Token = token ?? "" };
+
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                ViewBag.Mensaje =
-                    "Hay demasiadas solicitudes de recuperación. Espere 15 minutos e inténtelo de nuevo.";
-                return View();
+                try
+                {
+                    using var client = _http.CreateClient();
+                    var urlApi = _config["ConnectionStringsWeb:urlApi"]
+                        + "/api/Home/ValidarEnlaceRecuperacionAPI";
+                    using var response = await client.PostAsJsonAsync(
+                        urlApi, new { Token = token });
+                    model.TokenValido = response.IsSuccessStatusCode;
+                }
+                catch (HttpRequestException) { }
+                catch (TaskCanceledException) { }
             }
 
-            if (response.StatusCode == HttpStatusCode.NotFound ||
-                response.StatusCode == HttpStatusCode.BadRequest)
+            if (!model.TokenValido)
+                model.MensajeError = "El enlace no es válido, expiró o no está disponible.";
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+        public async Task<IActionResult> RestablecerContrasenna(
+            RestablecerContrasennaViewModel model)
+        {
+            Response.Headers["Referrer-Policy"] = "no-referrer";
+            Response.Headers["Cache-Control"] = "no-store";
+
+            if (!ModelState.IsValid)
             {
-                ViewBag.Mensaje =
-                    "No se pudo procesar la solicitud de recuperación.";
-                return View();
+                model.TokenValido = true;
+                return View(model);
             }
 
-            throw new Exception(
-                "Ocurrió un error al intentar recuperar su acceso.");
+            try
+            {
+                using var client = _http.CreateClient();
+                var urlApi = _config["ConnectionStringsWeb:urlApi"]
+                    + "/api/Home/RestablecerContrasennaAPI";
+                using var response = await client.PostAsJsonAsync(
+                    urlApi, new { model.Token, model.NuevaContrasenna });
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Mensaje"] =
+                        "Contraseña actualizada. Ya puedes iniciar sesión.";
+                    return RedirectToAction("Index", "Home");
+                }
+
+                model.TokenValido = response.StatusCode != HttpStatusCode.BadRequest;
+                model.MensajeError = response.StatusCode switch
+                {
+                    HttpStatusCode.TooManyRequests =>
+                        "Demasiados intentos. Espera antes de intentarlo nuevamente.",
+                    HttpStatusCode.BadRequest =>
+                        "El enlace no es válido, expiró o ya fue utilizado.",
+                    _ => "No se pudo actualizar la contraseña. Inténtalo nuevamente."
+                };
+            }
+            catch (HttpRequestException)
+            {
+                model.TokenValido = true;
+                model.MensajeError = "No se pudo conectar con el servidor.";
+            }
+            catch (TaskCanceledException)
+            {
+                model.TokenValido = true;
+                model.MensajeError = "El servidor tardó demasiado en responder.";
+            }
+
+            return View(model);
         }
 
         #endregion

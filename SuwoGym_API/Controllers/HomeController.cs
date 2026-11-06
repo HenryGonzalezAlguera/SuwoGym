@@ -6,6 +6,8 @@ using Microsoft.Data.SqlClient;
 using SuwoGym_API.Models;
 using SuwoGym_API.Services;
 using System.Data;
+using System.Net;
+using System.Text;
 using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace SuwoGym_API.Controllers
@@ -15,7 +17,8 @@ namespace SuwoGym_API.Controllers
     [ApiController]
     public class HomeController(
         IConfiguration _databasekey,
-        IUtilesService _utiles) : ControllerBase
+        IUtilesService _utiles,
+        ILogger<HomeController>? _logger = null) : ControllerBase
     {
 
         #region Registro API
@@ -163,100 +166,175 @@ namespace SuwoGym_API.Controllers
 
         #endregion
 
-        #region Recuperar acceso API
+        #region Recuperar acceso API — Fase 6B-2
+
+        // Respuesta genérica para evitar averiguar si existe un correo.
+        private const string RespuestaRecuperacion =
+            "Si el correo pertenece a una cuenta activa, recibirá un enlace de recuperación.";
 
         [HttpPost("RecuperarAccesoAPI")]
         [EnableRateLimiting("auth-recovery")]
-        public async Task<IActionResult>
-            RecuperarAccesoAPI(
-                RecuperarAccesoRequestModel model)
+        public async Task<IActionResult> RecuperarAccesoAPI(
+            RecuperarAccesoRequestModel model)
         {
-            // Seguridad: no modificar la contraseña si no es posible enviar correo.
-            // El rediseño con enlaces de un solo uso se implementará en fase 6B-2.
+            // Sin SMTP, no generar tokens ni tocar la contraseña actual.
             if (string.IsNullOrWhiteSpace(_databasekey["Correos:Correo"]) ||
                 string.IsNullOrWhiteSpace(_databasekey["Correos:AppPassword"]))
             {
+                _logger?.LogWarning(
+                    "Recuperación: faltan Correos:Correo o Correos:AppPassword en la configuración de la API.");
                 return StatusCode(StatusCodes.Status503ServiceUnavailable,
-                    "El servicio de recuperación por correo no está configurado.");
+                    "El correo de recuperación no está configurado.");
             }
 
-            using var context = new SqlConnection(
-                _databasekey[
-                    "ConnectionStringsApi:DefaultConnection"]);
-
-            var parameters = new DynamicParameters();
-
-            parameters.Add(
-                "@CorreoElectronico",
-                model.CorreoElectronico);
-
-            var response =
-                context.QueryFirstOrDefault
-                <DatoUsuarioResponseModel>(
-                    "spValidarCorreo",
-                    parameters);
-
-            if (response == null)
+            var urlBase = _databasekey["Recuperacion:UrlBaseWeb"];
+            if (!Uri.TryCreate(urlBase, UriKind.Absolute, out var origen) ||
+                origen.Scheme != Uri.UriSchemeHttps ||
+                !string.IsNullOrEmpty(origen.Query) ||
+                !string.IsNullOrEmpty(origen.Fragment))
             {
-                return NotFound(
-                    "La información no se pudo validar correctamente");
+                _logger?.LogWarning(
+                    "Recuperación: Recuperacion:UrlBaseWeb debe ser un origen HTTPS válido.");
+                return StatusCode(StatusCodes.Status503ServiceUnavailable,
+                    "La dirección de recuperación no está configurada.");
             }
 
-            // Generar nueva contraseña temporal
-            var temporal =
-                _utiles.GenerarContrasena();
-
-            var temporalHash =
-                BCrypt.Net.BCrypt.HashPassword(
-                    temporal);
-
-            parameters = new DynamicParameters();
-
-            parameters.Add(
-                "@IdUsuario",
-                response.IdUsuario);
-
-            parameters.Add(
-                "@ContrasennaHash",
-                temporalHash);
-
-            parameters.Add(
-                "@DebeCambiarContrasenna",
-                true);
-
-            var actualizacion = context.Execute(
-                "spActualizarContrasenna",
-                parameters);
-
-            if (actualizacion > 0)
+            var nuevo = TokenRecuperacionSeguro.Crear();
+            try
             {
-                // Enviar correo con la contraseña temporal
-                string ruta = Path.Combine(
-                    AppContext.BaseDirectory,
-                    "Templates",
-                    "RecuperarAcceso.html");
+                using var context = new SqlConnection(
+                    _databasekey["ConnectionStringsApi:DefaultConnection"]);
 
-                string plantilla =
-                    System.IO.File.ReadAllText(ruta);
+                var destinatario =
+                    await context.QuerySingleOrDefaultAsync<DestinatarioRecuperacionModel>(
+                        "dbo.spRecuperacionSolicitar",
+                        new
+                        {
+                            CorreoElectronico = model.CorreoElectronico,
+                            TokenHash = nuevo.Hash,
+                            ExpiraUtc = DateTime.UtcNow.AddMinutes(15)
+                        },
+                        commandType: CommandType.StoredProcedure);
 
-                plantilla = plantilla.Replace(
-                    "{{NOMBRE}}",
-                    response.Nombre);
+                if (destinatario is not null)
+                {
+                    try
+                    {
+                        var enlace = new Uri(
+                            new Uri(origen.GetLeftPart(UriPartial.Authority) + "/"),
+                            "Home/RestablecerContrasenna?token=" +
+                            Uri.EscapeDataString(nuevo.Token)).AbsoluteUri;
 
-                plantilla = plantilla.Replace(
-                    "{{TEMPORAL}}",
-                    temporal);
+                        var ruta = Path.Combine(AppContext.BaseDirectory,
+                            "Templates", "RecuperarAcceso.html");
+                        var plantilla = await System.IO.File.ReadAllTextAsync(ruta);
+                        plantilla = plantilla.Replace("{{NOMBRE}}",
+                                WebUtility.HtmlEncode(destinatario.Nombre))
+                            .Replace("{{ENLACE}}", WebUtility.HtmlEncode(enlace));
 
-                await _utiles.EnviarCorreoAsync(
-                    response.CorreoElectronico,
-                    "Recuperación de acceso",
-                    plantilla);
+                        await _utiles.EnviarCorreoAsync(
+                            destinatario.CorreoElectronico,
+                            "Restablecimiento de contraseña SUWÓ GYM",
+                            plantilla);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Revocar el enlace que no se pudo entregar.
+                        // No registrar correo, enlace ni token.
+                        _logger?.LogWarning(
+                            "Recuperación: fallo al enviar correo. Tipo de error: {TipoError}.",
+                            ex.GetType().Name);
+                        try
+                        {
+                            await context.ExecuteAsync(
+                                "dbo.spRecuperacionRevocar",
+                                new { TokenHash = nuevo.Hash },
+                                commandType: CommandType.StoredProcedure);
+                        }
+                        catch (Exception)
+                        {
+                            _logger?.LogWarning("No se pudo revocar el enlace no entregado.");
+                        }
+                    }
+                }
 
-                return Ok(response);
+                return Accepted(new { Mensaje = RespuestaRecuperacion });
             }
+            catch (SqlException ex)
+            {
+                // Diagnóstico local sin registrar correo, enlace, token ni contraseña.
+                _logger?.LogError(
+                    "Recuperación: error SQL {Numero}, procedimiento {Procedimiento}.",
+                    ex.Number, ex.Procedure ?? "(ninguno)");
+                return StatusCode(StatusCodes.Status503ServiceUnavailable,
+                    "El servicio de recuperación no está disponible.");
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogError(
+                    "Recuperación: error de infraestructura {TipoError}.",
+                    ex.GetType().Name);
+                return StatusCode(StatusCodes.Status503ServiceUnavailable,
+                    "El servicio de recuperación no está disponible.");
+            }
+        }
 
-            return BadRequest(
-                "No se ha recuperado su acceso, por favor intente nuevamente.");
+        [HttpPost("ValidarEnlaceRecuperacionAPI")]
+        [EnableRateLimiting("auth-reset")]
+        public async Task<IActionResult> ValidarEnlaceRecuperacionAPI(
+            RecuperacionTokenRequestModel model)
+        {
+            if (!TokenRecuperacionSeguro.TryObtenerHash(model.Token, out var hash))
+                return NotFound();
+
+            try
+            {
+                using var context = new SqlConnection(
+                    _databasekey["ConnectionStringsApi:DefaultConnection"]);
+                var valido = await context.QuerySingleAsync<bool>(
+                    "dbo.spRecuperacionValidar",
+                    new { TokenHash = hash },
+                    commandType: CommandType.StoredProcedure);
+
+                return valido ? Ok() : NotFound();
+            }
+            catch (Exception)
+            {
+                _logger?.LogError("Falló la validación de enlace de recuperación.");
+                return StatusCode(StatusCodes.Status503ServiceUnavailable);
+            }
+        }
+
+        [HttpPost("RestablecerContrasennaAPI")]
+        [EnableRateLimiting("auth-reset")]
+        public async Task<IActionResult> RestablecerContrasennaAPI(
+            RestablecerContrasennaRequestModel model)
+        {
+            if (!TokenRecuperacionSeguro.TryObtenerHash(model.Token, out var hash) ||
+                Encoding.UTF8.GetByteCount(model.NuevaContrasenna) > 72)
+                return BadRequest("El enlace o la contraseña no es válido.");
+
+            try
+            {
+                var passwordHash = BCrypt.Net.BCrypt.HashPassword(model.NuevaContrasenna);
+                using var context = new SqlConnection(
+                    _databasekey["ConnectionStringsApi:DefaultConnection"]);
+
+                var actualizado = await context.QuerySingleAsync<bool>(
+                    "dbo.spRecuperacionConsumir",
+                    new { TokenHash = hash, ContrasennaHash = passwordHash },
+                    commandType: CommandType.StoredProcedure);
+
+                if (!actualizado)
+                    return BadRequest("El enlace no es válido o ya expiró.");
+
+                return Ok(new { Mensaje = "Contraseña actualizada correctamente." });
+            }
+            catch (Exception)
+            {
+                _logger?.LogError("Falló el consumo del enlace de recuperación.");
+                return StatusCode(StatusCodes.Status503ServiceUnavailable);
+            }
         }
 
         #endregion

@@ -1,176 +1,28 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Recuperación de acceso</title>
-
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            font-family: "Poppins", sans-serif;
-        }
-
-        .email-wrapper {
-            width: 100%;
-            background-color: #f8f9fa;
-            padding: 30px 0;
-        }
-
-        .email-container {
-            width: 480px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-        }
-
-        .header {
-            background-color: #ffffff;
-            padding: 24px 32px;
-            text-align: center;
-        }
-
-        .header-title {
-            color: #FB6D25;
-            margin: 0;
-            margin-top: 2rem;
-        }
-
-        .header-subtitle {
-            color: #007bff;
-            margin: 0;
-            margin-top: 8px;
-            font-size: 20px;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .text {
-            color: #444444;
-            font-size: 15px;
-            line-height: 1.5;
-        }
-
-        .text-note {
-            color: #888888;
-            font-size: 13px;
-            line-height: 1.5;
-            margin-top: 24px;
-        }
-
-        .password-table {
-            width: 100%;
-            margin: 20px 0;
-        }
-
-        .password-box {
-            background-color: #f8f9fa;
-            border-radius: 6px;
-            padding: 16px;
-        }
-
-        .password-text {
-            font-size: 22px;
-            font-weight: bold;
-            color: #293039;
-            letter-spacing: 1px;
-        }
-
-        .footer {
-            background-color: #f0f0f0;
-            padding: 16px 32px;
-            text-align: center;
-        }
-
-        .footer-text {
-            color: #999999;
-            font-size: 12px;
-            margin: 0;
-        }
-    </style>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Restablecer contraseña - SUWÓ GYM</title>
 </head>
-
-<body>
-
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" class="email-wrapper">
-        <tr>
-            <td align="center">
-
-                <table role="presentation" cellpadding="0" cellspacing="0" class="email-container">
-
-                    <!-- Encabezado -->
-                    <tr>
-                        <td class="header">
-                            <h1 class="header-title">
-                                SUWÓ
-                            </h1>
-                            <h2 class="header-subtitle">
-                                Recuperación de Acceso
-                            </h2>
-                        </td>
-                    </tr>
-
-                    <!-- Cuerpo -->
-                    <tr>
-                        <td class="content">
-
-                            <p class="text">
-                                Hola, <strong>{{NOMBRE}}</strong>. Hemos recibido una
-                                solicitud para restablecer el acceso a
-                                su cuenta. Su contraseña temporal es:
-                            </p>
-
-                            <table role="presentation" cellpadding="0" cellspacing="0" class="password-table">
-                                <tr>
-                                    <td align="center" class="password-box">
-
-                                        <span class="password-text">
-                                            {{TEMPORAL}}
-                                        </span>
-
-                                    </td>
-                                </tr>
-                            </table>
-
-                            <p class="text">
-                                Le recomendamos iniciar sesión con esta
-                                contraseña temporal y cambiarla de
-                                inmediato desde su perfil.
-                            </p>
-
-                            <p class="text-note">
-                                Si usted no solicitó este cambio, por
-                                favor contacte al administrador del
-                                sistema lo antes posible.
-                            </p>
-
-                        </td>
-                    </tr>
-
-                    <!-- Pie -->
-                    <tr>
-                        <td class="footer">
-
-                            <p class="footer-text">
-                                Este es un mensaje automático, por favor
-                                no responda a este correo.
-                            </p>
-
-                        </td>
-                    </tr>
-
-                </table>
-
-            </td>
-        </tr>
+<body style="margin:0;background:#f5f7fb;font-family:Arial,sans-serif;color:#20344c">
+    <table role="presentation" style="width:100%;border-collapse:collapse">
+        <tr><td align="center" style="padding:36px 15px">
+            <table role="presentation" style="width:100%;max-width:520px;border-collapse:collapse;background:#fff;border:1px solid #e2eaf2;border-radius:14px">
+                <tr><td style="padding:30px">
+                    <h1 style="margin:0 0 20px;color:#ec6632;font-size:26px">SUWÓ GYM</h1>
+                    <h2 style="margin:0 0 16px;font-size:20px">Restablecimiento de contraseña</h2>
+                    <p style="line-height:1.6">Hola, <strong>{{NOMBRE}}</strong>.</p>
+                    <p style="line-height:1.6">Recibimos una solicitud para cambiar tu contraseña. Para continuar, utiliza el siguiente botón:</p>
+                    <p style="margin:32px 0">
+                        <a href="{{ENLACE}}" style="background:#eb6132;color:#fff;padding:15px 23px;border-radius:9px;text-decoration:none;font-weight:bold">Crear nueva contraseña</a>
+                    </p>
+                    <p style="line-height:1.6">Este enlace vence en <strong>15 minutos</strong> y solo puede utilizarse una vez.</p>
+                    <p style="line-height:1.6;color:#65768a;font-size:13px">Si no solicitaste este cambio, ignora este mensaje. Tu contraseña actual no se ha modificado.</p>
+                    <p style="line-height:1.6;color:#65768a;font-size:13px">Por seguridad, no compartas el enlace con nadie.</p>
+                </td></tr>
+            </table>
+        </td></tr>
     </table>
-
 </body>
 </html>

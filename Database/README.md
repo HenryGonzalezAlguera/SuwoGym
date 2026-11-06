@@ -44,6 +44,19 @@ horarios o membresías. Consulta la
 es `IDENTITY`; el procedimiento asigna el siguiente identificador de forma
 transaccional con bloqueo exclusivo.
 
+## Recuperación con enlaces seguros (fase 6B-2)
+
+El script incremental [`07_Recuperacion_Enlaces_Seguros.sql`](07_Recuperacion_Enlaces_Seguros.sql)
+crea una tabla de tokens SHA-256 y cuatro procedimientos para emisión,
+validación, consumo atómico y revocación de enlaces de 15 minutos.
+
+**Ejecución manual en SSMS**, solo después de respaldar la BD local
+`SuwoGym`. No ejecuta ni modifica `01`, `spActualizarContrasenna`,
+`Usuario` o contraseñas actuales. Es necesario para que funcione la
+nueva API de recuperación; compilar el proyecto no lo ejecuta.
+
+Ver [procedimiento de instalación y pruebas](../docs/FASE6B2_RECUPERACION_ENLACES.md).
+
 ## Preparación segura
 
 1. Usa una instancia SQL Server de prueba, nunca una base de datos productiva con información real.

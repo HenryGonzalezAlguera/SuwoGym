@@ -118,6 +118,25 @@ La recuperación de contraseñas por enlace seguro y la revocación de JWT
 quedan pendientes de la fase siguiente. **No utilizar recuperación actual
 con cuentas reales hasta rediseñar el envío y consumo de tokens.**
 
+### Fase 6B-2 — Recuperación por enlace seguro
+
+La recuperación pública deja de generar contraseñas temporales. Se usan
+tokens aleatorios de 256 bits, cuyo hash SHA-256 se almacena en SQL Server,
+con **15 minutos** de vigencia y **un solo uso**. La contraseña original
+se mantiene hasta completar la transacción de restablecimiento.
+
+La nueva vista `Home/RestablecerContrasenna` requiere una contraseña
+nueva y confirmación. El email incluye un enlace HTTPS configurado y
+la API no revela si una cuenta está registrada.
+
+**Requiere ejecutar manualmente** `Database/07_Recuperacion_Enlaces_Seguros.sql`
+en una base de desarrollo previamente respaldada. La rama no aplica
+migraciones automáticamente y no modifica usuarios preexistentes.
+
+Consulta [la guía de implementación y pruebas de fase 6B-2](docs/FASE6B2_RECUPERACION_ENLACES.md).
+**No utilizar recuperación con cuentas reales** hasta validar SQL, SMTP,
+expiración, consumo único y revocación de tokens JWT.
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la

@@ -1,0 +1,57 @@
+@model RestablecerContrasennaViewModel
+@{
+    Layout = "_LayoutExterno";
+    ViewData["Title"] = "Crear nueva contraseña";
+}
+
+<h2 class="card-title mt-1 mb-3" style="color:#20344c;">
+    Crear <span class="naranjaClaro">nueva contraseña</span>
+</h2>
+<p class="text-secondary mb-4">
+    El enlace de recuperación es válido durante 15 minutos y puede utilizarse una sola vez.
+</p>
+
+@if (!string.IsNullOrWhiteSpace(Model.MensajeError))
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.MensajeError
+    </div>
+}
+
+@if (Model.TokenValido)
+{
+    <form asp-controller="Home" asp-action="RestablecerContrasenna"
+          method="post" asp-antiforgery="true"
+          class="text-start" autocomplete="off">
+        <input asp-for="Token" type="hidden" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="NuevaContrasenna" class="form-label">Nueva contraseña</label>
+            <input asp-for="NuevaContrasenna" type="password"
+                   autocomplete="new-password" class="form-control"
+                   minlength="12" maxlength="72" required />
+            <span asp-validation-for="NuevaContrasenna" class="text-danger small"></span>
+            <div class="form-text">Mínimo 12 caracteres. No reutilices contraseñas anteriores.</div>
+        </div>
+        <div class="mb-4">
+            <label asp-for="ConfirmarContrasenna" class="form-label">Confirmar contraseña</label>
+            <input asp-for="ConfirmarContrasenna" type="password"
+                   autocomplete="new-password" class="form-control" required />
+            <span asp-validation-for="ConfirmarContrasenna" class="text-danger small"></span>
+        </div>
+        <button class="btn btn-primary w-100" type="submit">
+            Guardar contraseña
+        </button>
+    </form>
+}
+else
+{
+    <p class="text-secondary">Puedes solicitar un nuevo enlace de recuperación.</p>
+}
+
+<div class="mt-4">
+    <a asp-controller="Home" asp-action="RecuperarAcceso">Solicitar otro enlace</a>
+    <span class="mx-2 text-secondary">·</span>
+    <a asp-controller="Home" asp-action="Index">Volver al inicio de sesión</a>
+</div>
