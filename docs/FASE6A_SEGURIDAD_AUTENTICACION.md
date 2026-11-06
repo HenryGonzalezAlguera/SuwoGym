@@ -16,7 +16,7 @@ Endurecer los JWT, la sesión HTTP de la WEB y los formularios de acceso sin cam
 ### Cambios de WEB
 
 - Las cookies de sesión y antifalsificación se envían solo por HTTPS (`CookieSecurePolicy.Always`), con `HttpOnly` y `SameSite=Lax`.
-- `POST /Home/Index` y `POST /Home/RecuperarAcceso` ahora llevan `[ValidateAntiForgeryToken]` y generan explícitamente el campo antifalsificación desde Razor.
+- `POST /Home/Index` y `POST /Home/RecuperarAcceso` ahora llevan `[ValidateAntiForgeryToken]` y generan un único campo antifalsificación usando el FormTagHelper con `asp-antiforgery="true"`.
 - Los scripts jQuery actuales envían formularios HTML normales, conservando los campos y las rutas existentes.
 
 ## Requisitos para probarlo en Visual Studio
