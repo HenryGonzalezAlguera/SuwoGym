@@ -82,6 +82,17 @@ flujos funcionales.
 Consulta la [guía de la Fase 4](docs/FASE4_DISENO_ENTRENADOR.md) y su
 checklist de revisión manual desde Visual Studio.
 
+### Fase 5 — Diseño del Administrador
+
+Las **22 vistas Razor de Administrador** tienen una capa de presentación propia
+`wwwroot/css/suwo-admin.css` con encabezados, indicadores de Dashboard, tarjetas,
+tablas, formularios y estados vacíos. Se activa únicamente para la sesión con
+rol Administrador, sin alterar controladores, API, formularios o procedimientos SQL.
+
+Consulta [la guía de la Fase 5](docs/FASE5_DISENO_ADMINISTRADOR.md) para el
+checklist de pruebas funcionales, visuales y responsive. La validación manual
+de esta fase queda pendiente hasta su comprobación en Visual Studio.
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
