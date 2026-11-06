@@ -1,5 +1,7 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using SuwoGym_API.Models;
 using Microsoft.AspNetCore.RateLimiting;
 using SuwoGym_Web.Controllers;
 using Xunit;
@@ -45,5 +47,28 @@ public class SeguridadFase6B1Tests
             .GetMethod(nombreAccion);
         Assert.NotNull(accion);
         Assert.NotNull(accion!.GetCustomAttribute<EnableRateLimitingAttribute>());
+    }
+
+    [Fact]
+    public async Task RecuperacionSinSmtpSeRechazaAntesDeModificarContrasena()
+    {
+        var configuracion = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Correos:Correo"] = "",
+                ["Correos:AppPassword"] = ""
+            })
+            .Build();
+        var controlador = new SuwoGym_API.Controllers.HomeController(
+            configuracion, null!);
+
+        var resultado = await controlador.RecuperarAccesoAPI(
+            new RecuperarAccesoRequestModel
+            {
+                CorreoElectronico = "prueba@example.invalid"
+            });
+
+        var error = Assert.IsType<ObjectResult>(resultado);
+        Assert.Equal(503, error.StatusCode);
     }
 }
