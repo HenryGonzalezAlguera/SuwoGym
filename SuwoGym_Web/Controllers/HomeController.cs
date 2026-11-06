@@ -261,6 +261,13 @@ namespace SuwoGym_Web.Controllers
                     "Home");
             }
 
+            if (response.StatusCode == HttpStatusCode.ServiceUnavailable)
+            {
+                ViewBag.Mensaje =
+                    "La recuperación por correo no está configurada. Consulte con el administrador del sistema.";
+                return View();
+            }
+
             if (response.StatusCode == HttpStatusCode.TooManyRequests)
             {
                 ViewBag.Mensaje =
