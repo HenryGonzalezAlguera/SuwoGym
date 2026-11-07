@@ -29,15 +29,15 @@ function ConsultaAzure([string[]]$Argumentos) {
   if ($LASTEXITCODE -ne 0) { throw 'No se pudo comprobar el recurso. Revisar permisos, nombre y suscripción.' }
   return $salida
 }
-$null = ConsultaAzure @('group','show','-n',$ResourceGroup,'--query','name','-o','tsv')
-$web = ConsultaAzure @('webapp','show','-g',$ResourceGroup,'-n',$WebApp,'--query','serverFarmId','-o','tsv')
-$api = ConsultaAzure @('webapp','show','-g',$ResourceGroup,'-n',$ApiApp,'--query','serverFarmId','-o','tsv')
+$null = ConsultaAzure -Argumentos @('group','show','-n',$ResourceGroup,'--query','name','-o','tsv')
+$web = ConsultaAzure -Argumentos @('webapp','show','-g',$ResourceGroup,'-n',$WebApp,'--query','serverFarmId','-o','tsv')
+$api = ConsultaAzure -Argumentos @('webapp','show','-g',$ResourceGroup,'-n',$ApiApp,'--query','serverFarmId','-o','tsv')
 if ($web -ne $api) {
   throw 'WEB y API deben compartir un plan App Service en la primera prueba.'
 }
-$plan = ConsultaAzure @('appservice','plan','show','--ids',$web,'--query','sku.name','-o','tsv')
-$null = ConsultaAzure @('sql','server','show','-g',$ResourceGroup,'-n',$SqlServer,'--query','name','-o','tsv')
-$sql = ConsultaAzure @('sql','db','show','-g',$ResourceGroup,'-s',$SqlServer,'-n',$SqlDatabase,'--query','status','-o','tsv')
+$plan = ConsultaAzure -Argumentos @('appservice','plan','show','--ids',$web,'--query','sku.name','-o','tsv')
+$null = ConsultaAzure -Argumentos @('sql','server','show','-g',$ResourceGroup,'-n',$SqlServer,'--query','name','-o','tsv')
+$sql = ConsultaAzure -Argumentos @('sql','db','show','-g',$ResourceGroup,'-s',$SqlServer,'-n',$SqlDatabase,'--query','status','-o','tsv')
 Write-Host 'PRECHECK OK: recursos Staging identificados, sin cambios.'
 Write-Host "Plan App Service: $plan; SQL: $sql"
 Write-Host 'Pendiente revisar en Portal: secretos, certificados, firewall y aprobación de presupuesto.'
