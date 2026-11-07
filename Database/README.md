@@ -69,6 +69,18 @@ de iniciar la API de fase 6C.** No modifica contraseñas existentes ni
 requiere volver a ejecutar scripts anteriores.
 Guía y checklist: [fase 6C](../docs/FASE6C_REVOCACION_JWT.md).
 
+## Pruebas reales aisladas — Fase 7B
+
+`09_7B_Marcar_Base_Ficticia.sql` es un script de
+**marcado de base exclusiva de pruebas**, no una migración de SUWÓ GYM.
+**No ejecutarlo en `SuwoGym`**. Únicamente habilita el ejecutor
+de pruebas sobre una base llamada `SuwoGym_Test_7B` que contenga
+el esquema completo (incluidas las migraciones 07 y 08) **sin datos
+de usuarios reales**. No reutilizar el script 02 porque crea usuarios
+iniciales.
+
+Instrucciones completas: [fase 7B](../docs/FASE7B_SQL_REAL.md).
+
 ## Preparación segura
 
 1. Usa una instancia SQL Server de prueba, nunca una base de datos productiva con información real.

@@ -45,6 +45,9 @@ jobs:
       - name: Compilar API y WEB
         run: dotnet build SuwoGym.slnx --configuration Release --no-restore
 
+      - name: Compilar ejecutor de integración SQL 7B (SIN ejecutar SQL)
+        run: dotnet build tools/SuwoGym.SqlIntegration/SuwoGym.SqlIntegration.csproj --configuration Release
+
       - name: Probar autenticación, autorizaciones y HTTP real (sin SQL Server)
         run: dotnet test SuwoGym.Tests/SuwoGym.Tests.csproj --configuration Release --no-build --no-restore --logger "trx;LogFileName=SuwoGym.Tests.trx" --results-directory ./test-results --verbosity normal
 
