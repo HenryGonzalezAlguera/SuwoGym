@@ -176,6 +176,21 @@ cuentas ficticias, sin enviar correos y sin tocar la base `SuwoGym`.
 la herramienta. Instrucciones de aislamiento y pruebas en
 [FASE7B_SQL_REAL.md](docs/FASE7B_SQL_REAL.md).
 
+### Fase 8A — Preparación segura de preproducción
+
+La API y WEB incluyen `/health/live` y `/health/ready`.
+En Staging/Production se verifica la configuración requerida
+(JWT, SMTP, SQL cifrado, HTTPS, `AllowedHosts` y persistencia de
+claves Data Protection). Desarrollo local conserva `localhost`.
+
+GitHub Actions genera binarios Release para API y WEB como artefacto
+`suwo-staging-binaries` sin secretos y **sin realizar un despliegue**.
+No se modifican procedimientos SQL ni se habilita acceso remoto.
+
+Leer la [guía de fase 8A](docs/FASE8A_PREPRODUCCION.md) para los
+prerrequisitos y las limitaciones de sesión en memoria, TLS,
+proxy inverso y publicación.
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
