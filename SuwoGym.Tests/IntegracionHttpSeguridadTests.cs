@@ -22,6 +22,13 @@ namespace SuwoGym.Tests;
 /// La BD se sustituye SOLO en estas pruebas por un servicio de versiones falso.
 /// Ningún endpoint de negocio ni procedimiento SQL se ejecuta.
 /// </summary>
+// El cambio temporal de variable de entorno se limita a esta colección de tests.
+[CollectionDefinition("SuwoGym-HTTP-API", DisableParallelization = true)]
+public sealed class ApiHttpCollection
+{
+}
+
+[Collection("SuwoGym-HTTP-API")]
 public sealed class IntegracionHttpSeguridadTests
 {
     private const int IdUsuario = 1701;
@@ -178,6 +185,30 @@ public sealed class IntegracionHttpSeguridadTests
     private sealed class ApiParaPruebas
         : WebApplicationFactory<SuwoGym_API.ApiTestHostMarker>
     {
+        private readonly string? _secretAnterior =
+            Environment.GetEnvironmentVariable("Jwt__SecretKey");
+
+        public ApiParaPruebas()
+        {
+            // La API lee Jwt:SecretKey antes de configurar DI/TestServer.
+            // Solo se establece la clave ficticia dentro de este proceso xUnit.
+            Environment.SetEnvironmentVariable("Jwt__SecretKey", ClavePruebas);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            try
+            {
+                base.Dispose(disposing);
+            }
+            finally
+            {
+                if (disposing)
+                    Environment.SetEnvironmentVariable(
+                        "Jwt__SecretKey", _secretAnterior);
+            }
+        }
+
         public VersionFalsa Estado { get; } = new()
         {
             IdRol = 2, Estado = true, VersionJwt = Version
