@@ -174,5 +174,3 @@ app.MapControllers();
 
 app.Run();
 
-// Habilita pruebas HTTP de integración con WebApplicationFactory.
-public partial class Program { }
