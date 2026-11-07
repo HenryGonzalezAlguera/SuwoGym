@@ -1,3 +1,11 @@
+> **ACTUALIZACIÓN 8C — NOVIEMBRE 2026:** El usuario tiene un plan
+> **Linux F1** existente (`asp-stockflow-free` en `rg-stockflow-demo`,
+> región Central US). La guía Windows/B1 siguiente queda como propuesta
+> histórica y **no debe seguirse** para la publicación gratuita.
+> Utilizar [FASE8C_AZURE_LINUX_F1.md](FASE8C_AZURE_LINUX_F1.md)
+> antes de crear recursos. En particular, usar `/home/suwo-keys`,
+> no una ruta `D:\home\...`, y el grupo y plan ya existentes.
+
 # Fase 8B — Azure Staging: despliegue manual
 
 ## Alcance
