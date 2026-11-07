@@ -62,7 +62,7 @@ public sealed class IntegracionHttpSeguridadTests
 
     [Theory]
     [InlineData(1, "/api/Entrenador/ClientesAsignadosAPI")]
-    [InlineData(2, "/api/Administrador/ListaEmpleadosAPI")]
+    [InlineData(2, "/api/Admin/ListaEmpleadosAPI")]
     [InlineData(3, "/api/Admin/ListaEmpleadosAPI")]
     public async Task JwtValidoNoAutorizaModuloDeOtroRol(
         int rol, string rutaNoPermitida)
@@ -73,8 +73,6 @@ public sealed class IntegracionHttpSeguridadTests
 
         using var respuesta = await client.GetAsync(rutaNoPermitida);
 
-        // Para la ruta Admin hay un controlador de verdad; para los demás
-        // casos también usamos rutas existentes al construir las teorías.
         Assert.Equal(HttpStatusCode.Forbidden, respuesta.StatusCode);
     }
 
