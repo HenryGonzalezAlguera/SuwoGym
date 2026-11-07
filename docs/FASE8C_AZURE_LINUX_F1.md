@@ -78,16 +78,16 @@ En la WEB Linux nueva:
 
 ### Variables WEB, ejemplo con nombres elegidos
 
-\`\`\`text
+```text
 ASPNETCORE_ENVIRONMENT=Staging
 AllowedHosts=suwogym-stg-web-hga.azurewebsites.net
 ConnectionStringsWeb__urlApi=https://suwogym-stg-api-hga.azurewebsites.net
 Deployment__DataProtectionKeysPath=/home/suwo-keys
-\`\`\`
+```
 
 ### Variables API
 
-\`\`\`text
+```text
 ASPNETCORE_ENVIRONMENT=Staging
 AllowedHosts=suwogym-stg-api-hga.azurewebsites.net
 Jwt__Issuer=SuwoGym.API
@@ -97,7 +97,7 @@ ConnectionStringsApi__DefaultConnection=[cadena Azure SQL Staging TLS verificado
 Correos__Correo=[cuenta SMTP ficticia]
 Correos__AppPassword=[credencial SMTP privada]
 Recuperacion__UrlBaseWeb=https://suwogym-stg-web-hga.azurewebsites.net
-\`\`\`
+```
 
 Los nombres de arriba son ejemplos; si el nombre asignado difiere,
 adaptar los valores. No copiar \`secrets.json\` ni credenciales locales.
