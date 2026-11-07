@@ -209,6 +209,24 @@ checks, un SQL de catálogo mínimo con verificación estricta de base
 y verificación CI de los controles del workflow. Guía completa:
 [FASE8B_AZURE_STAGING.md](docs/FASE8B_AZURE_STAGING.md).
 
+### Fase 8C — Demostración en Linux F1 EXISTENTE (StockFlow)
+
+Azure Portal confirmó que el plan **asp-stockflow-free** es Linux,
+**F1**, región Central US, resource group **rg-stockflow-demo**
+y 2 apps actuales. Se prepara la reutilización del plan para
+`suwogym-stg-web-...` y `suwogym-stg-api-...`, sin contratar B1.
+El límite de F1 es de hasta 10 apps por plan, con cuotas reducidas
+de CPU, RAM y almacenamiento. **No es apto para producción continua**.
+
+El workflow manual de Azure ahora verifica el grupo y plan exactos,
+Linux/F1 y los nombres de destino, sin modificar StockFlow. En WEB Linux,
+la ruta Data Protection será `/home/suwo-keys` (no la de Windows).
+**No se han creado servicios ni publicado la aplicación.**
+
+Guía actualizada: [Fase 8C Linux F1](docs/FASE8C_AZURE_LINUX_F1.md).
+La guía 8B Windows B1 queda como alternativa anterior, no aplicable
+al plan que ya existe.
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
