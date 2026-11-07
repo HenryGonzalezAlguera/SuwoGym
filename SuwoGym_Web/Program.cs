@@ -1,4 +1,19 @@
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using SuwoGym_Web.Deployment;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// La persistencia evita pérdida de cookies al reiniciar la instancia.
+// En despliegue se requiere un volumen privado externo a wwwroot.
+if (!builder.Environment.IsDevelopment())
+{
+    ConfiguracionPreproduccionWeb.Validar(builder.Configuration);
+    builder.Services.AddDataProtection()
+        .SetApplicationName("SuwoGym.Web")
+        .PersistKeysToFileSystem(new DirectoryInfo(
+            builder.Configuration["Deployment:DataProtectionKeysPath"]!));
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -24,6 +39,10 @@ builder.Services.AddSession(options =>
 // Agregar HttpClientFactory
 builder.Services.AddHttpClient();
 
+// No expone diagnóstico ni conecta a cuentas de usuarios.
+builder.Services.AddHealthChecks()
+    .AddCheck<ApiReadinessCheck>("api");
+
 // Agregar HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 
@@ -43,6 +62,12 @@ app.UseSession();
 app.UseMiddleware<SuwoGym_Web.Middleware.ValidarSesionJwtMiddleware>();
 
 app.UseAuthorization();
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false
+});
+app.MapHealthChecks("/health/ready");
 
 app.MapStaticAssets();
 
