@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
@@ -31,6 +32,11 @@ if (string.IsNullOrWhiteSpace(jwtIssuer) ||
         "Faltan Jwt:Issuer o Jwt:Audience. " +
         "Revise la configuración de autenticación de la API.");
 }
+
+// En Staging y Production, impedir iniciar con localhost, TLS débil
+// o credenciales ausentes. Development mantiene su configuración actual.
+if (!builder.Environment.IsDevelopment())
+    ConfiguracionPreproduccionApi.Validar(builder.Configuration);
 
 builder.Services.AddControllers();
 
@@ -155,6 +161,10 @@ builder.Services.AddRateLimiter(options =>
 
 builder.Services.AddAuthorization();
 
+// Liveness no toca SQL; readiness comprueba SQL + objetos críticos.
+builder.Services.AddHealthChecks()
+    .AddCheck<SqlReadinessCheck>("sql");
+
 var app =
     builder.Build();
 
@@ -171,6 +181,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false
+});
+app.MapHealthChecks("/health/ready");
 
 app.Run();
 
