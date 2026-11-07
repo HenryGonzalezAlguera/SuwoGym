@@ -119,6 +119,11 @@ El ejecutor también exige:
 Si falta cualquier requisito, **se detiene antes de insertar usuarios
 o crear reservas y pagos**.
 
+El ejecutor toma un bloqueo exclusivo mediante `sys.sp_getapplock` durante
+toda la sesión. Así, si se inicia una segunda ejecución a la vez,
+queda bloqueada antes de insertar filas; no se comparten IDs de catálogo.
+
+
 ## Paso 4 — Revisar los resultados
 
 Se esperan seis grupos con `[OK]`, una línea final de limpieza y:
