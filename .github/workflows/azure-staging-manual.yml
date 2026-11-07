@@ -1,0 +1,119 @@
+# SUWÓ GYM 8B: despliegue sólo manual, desde main, a recursos de Staging.
+# Nunca crea infraestructura, base de datos, secretos o usuarios.
+name: SUWÓ GYM | Azure staging manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Escribir DEPLOY_STAGING para publicar en Azure Staging"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: suwogym-azure-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Probar y publicar Staging
+    if: github.ref == 'refs/heads/main' && inputs.confirm == 'DEPLOY_STAGING'
+    runs-on: ubuntu-latest
+    environment: staging
+    timeout-minutes: 30
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZURE_WEBAPP_API: ${{ vars.AZURE_WEBAPP_API }}
+      AZURE_WEBAPP_WEB: ${{ vars.AZURE_WEBAPP_WEB }}
+    steps:
+      - name: Bloquear destinos sin identificador Staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in "$AZURE_RESOURCE_GROUP" "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
+            if [[ -z "$name" || ! "$name" =~ ^[a-zA-Z0-9-]+$ || "$name" != *stg* ]]; then
+              echo "BLOQUEADO: grupo y aplicaciones deben identificarse como Staging (stg)."
+              exit 1
+            fi
+          done
+          if [[ "$AZURE_WEBAPP_API" == "$AZURE_WEBAPP_WEB" ]]; then
+            echo "BLOQUEADO: la WEB y API deben tener nombres distintos."
+            exit 1
+          fi
+
+      - name: Descargar código de main
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Preparar .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Compilar y probar
+        run: |
+          dotnet restore SuwoGym.slnx
+          dotnet build SuwoGym.slnx -c Release --no-restore
+          dotnet test SuwoGym.Tests/SuwoGym.Tests.csproj -c Release --no-build --no-restore --verbosity minimal
+
+      - name: Generar paquetes de API y WEB
+        shell: bash
+        run: |
+          set -euo pipefail
+          dotnet publish SuwoGym_API/SuwoGym_API.csproj -c Release --no-restore -o "$RUNNER_TEMP/api"
+          dotnet publish SuwoGym_Web/SuwoGym_Web.csproj -c Release --no-restore -o "$RUNNER_TEMP/web"
+
+      - name: Autenticar Azure por OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Validar que los App Services de staging existen
+        shell: bash
+        run: |
+          set -euo pipefail
+          az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_WEBAPP_API" --query name -o tsv > /dev/null
+          az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_WEBAPP_WEB" --query name -o tsv > /dev/null
+
+      - name: Publicar API
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_API }}
+          package: ${{ runner.temp }}/api
+
+      - name: Publicar WEB
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_WEB }}
+          package: ${{ runner.temp }}/web
+
+      - name: Comprobar /health/live y /health/ready
+        shell: bash
+        run: |
+          set -euo pipefail
+          for app in "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
+            for endpoint in live ready; do
+              valido=0
+              for intento in $(seq 1 12); do
+                if curl -fsS --max-time 15 "https://$app.azurewebsites.net/health/$endpoint" | grep -Fxq Healthy; then
+                  valido=1
+                  break
+                fi
+                sleep 5
+              done
+              if [[ "$valido" -ne 1 ]]; then
+                echo "No está Healthy: $app /health/$endpoint"
+                exit 1
+              fi
+            done
+          done
+          echo "Las dos aplicaciones responden Healthy."
