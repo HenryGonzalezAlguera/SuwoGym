@@ -44,6 +44,9 @@ builder.Services.AddScoped<
     IUtilesService,
     UtilesService>();
 
+// La versión se consulta en SQL para cada token, sin cachear permisos antiguos.
+builder.Services.AddScoped<ISeguridadJwtVersionService, SeguridadJwtVersionService>();
+
 builder.Services
     .AddAuthentication(
         JwtBearerDefaults.AuthenticationScheme)
@@ -73,6 +76,40 @@ builder.Services
                 ClockSkew =
                     TimeSpan.Zero
             };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = async context =>
+            {
+                var identity = context.Principal;
+                if (!int.TryParse(identity?.FindFirst("IdUsuario")?.Value, out var id)
+                    || !int.TryParse(identity?.FindFirst("IdRol")?.Value, out var rol)
+                    || !Guid.TryParse(identity?.FindFirst("VersionJwt")?.Value, out var version)
+                    || identity?.IsInRole(rol.ToString()) != true)
+                {
+                    context.Fail("JWT sin datos de sesión válidos.");
+                    return;
+                }
+
+                try
+                {
+                    var seguridad = context.HttpContext.RequestServices
+                        .GetRequiredService<ISeguridadJwtVersionService>();
+                    var actual = await seguridad.ConsultarAsync(
+                        id, context.HttpContext.RequestAborted);
+                    if (actual?.PermiteToken(version, rol) != true)
+                    {
+                        context.Fail("La sesión dejó de ser válida.");
+                    }
+                }
+                catch (Exception)
+                {
+                    // Fallar cerrado ante pérdida de conexión, migración ausente,
+                    // timeout o cualquier error de SQL. No mostrar excepciones al cliente.
+                    context.Fail("No se pudo validar la sesión.");
+                }
+            }
+        };
     });
 
 // Control de abuso en endpoints públicos: partición por IP del cliente.

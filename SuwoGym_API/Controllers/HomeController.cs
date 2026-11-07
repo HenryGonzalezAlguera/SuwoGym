@@ -18,7 +18,8 @@ namespace SuwoGym_API.Controllers
     public class HomeController(
         IConfiguration _databasekey,
         IUtilesService _utiles,
-        ILogger<HomeController>? _logger = null) : ControllerBase
+        ILogger<HomeController>? _logger = null,
+        ISeguridadJwtVersionService? _seguridadJwt = null) : ControllerBase
     {
 
         #region Registro API
@@ -106,7 +107,7 @@ namespace SuwoGym_API.Controllers
 
         [HttpPost("IniciarSesionAPI")]
         [EnableRateLimiting("auth-login")]
-        public IActionResult IniciarSesionAPI(
+        public async Task<IActionResult> IniciarSesionAPI(
             UsuarioLoginModel model)
         {
             try
@@ -125,8 +126,7 @@ namespace SuwoGym_API.Controllers
 
             
                 var response =
-                    context.QueryFirstOrDefault
-                    <DatoUsuarioResponseModel>(
+                    await context.QueryFirstOrDefaultAsync<DatoUsuarioResponseModel>(
                         "spIniciarSesionUsuario",
                         parameters,
                         commandType:
@@ -149,10 +149,24 @@ namespace SuwoGym_API.Controllers
                         "El correo o la contraseña son incorrectos.");
                 }
 
+                // El JWT adquiere la versión persistida, no un valor generado
+                // exclusivamente en memoria. Si SQL falla, no se inicia sesión.
+                var seguridad = await (_seguridadJwt
+                    ?? HttpContext.RequestServices
+                        .GetRequiredService<ISeguridadJwtVersionService>())
+                    .ConsultarAsync(response.IdUsuario);
+                if (seguridad is null || !seguridad.Estado ||
+                    seguridad.IdRol != response.IdRol ||
+                    seguridad.VersionJwt == Guid.Empty)
+                {
+                    return Unauthorized("No se pudo validar la sesión.");
+                }
+
                 response.Token =
                     _utiles.GenerarToken(
                         response.IdUsuario,
-                        response.IdRol);
+                        response.IdRol,
+                        seguridad.VersionJwt);
 
                 return Ok(response);
             }

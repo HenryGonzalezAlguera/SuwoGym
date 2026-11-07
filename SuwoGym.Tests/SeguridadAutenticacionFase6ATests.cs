@@ -19,6 +19,8 @@ public class SeguridadAutenticacionFase6ATests
     private const string Audience = "SuwoGym.Web";
     // Clave ficticia usada solo en pruebas. Nunca usarla en Development/producción.
     private const string TestKey = "TEST-ONLY-key-for-SuwoGym-Fase6A-2026-randomized-not-production";
+    private static readonly Guid TestVersionJwt =
+        Guid.Parse("22de23c6-3fdc-4d52-9b18-c5b249def833");
 
     private static UtilesService Servicio()
     {
@@ -54,12 +56,14 @@ public class SeguridadAutenticacionFase6ATests
     [Fact]
     public void TokenValidoContieneIdentidadRolEmisorYAudiencia()
     {
-        var token = Servicio().GenerarToken(7, 2);
+        var token = Servicio().GenerarToken(7, 2, TestVersionJwt);
         var handler = new JwtSecurityTokenHandler();
         var jwt = handler.ReadJwtToken(token);
 
         Assert.Equal(Issuer, jwt.Issuer);
         Assert.Contains(Audience, jwt.Audiences);
+        Assert.Equal(TestVersionJwt.ToString("D"),
+            jwt.Claims.FirstOrDefault(c => c.Type == "VersionJwt")?.Value);
 
         var identidad = handler.ValidateToken(token, Parametros(), out _);
         Assert.Equal("7", identidad.FindFirst("IdUsuario")?.Value);
@@ -69,7 +73,7 @@ public class SeguridadAutenticacionFase6ATests
     [Fact]
     public void TokenSeRechazaCuandoElEmisorNoCoincide()
     {
-        var token = Servicio().GenerarToken(7, 2);
+        var token = Servicio().GenerarToken(7, 2, TestVersionJwt);
         Assert.Throws<SecurityTokenInvalidIssuerException>(() =>
             new JwtSecurityTokenHandler().ValidateToken(
                 token, Parametros(issuer: "OtraAPI"), out _));
@@ -78,7 +82,7 @@ public class SeguridadAutenticacionFase6ATests
     [Fact]
     public void TokenSeRechazaCuandoLaAudienciaNoCoincide()
     {
-        var token = Servicio().GenerarToken(7, 2);
+        var token = Servicio().GenerarToken(7, 2, TestVersionJwt);
         Assert.Throws<SecurityTokenInvalidAudienceException>(() =>
             new JwtSecurityTokenHandler().ValidateToken(
                 token, Parametros(audience: "OtraWEB"), out _));
@@ -87,7 +91,7 @@ public class SeguridadAutenticacionFase6ATests
     [Fact]
     public void TokenSeRechazaConClaveDeFirmaDiferente()
     {
-        var token = Servicio().GenerarToken(7, 2);
+        var token = Servicio().GenerarToken(7, 2, TestVersionJwt);
         var parametros = Parametros();
         parametros.IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes("TEST-ONLY-other-key-for-SuwoGym-Fase6A-not-production-123"));

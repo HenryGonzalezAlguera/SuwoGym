@@ -47,9 +47,8 @@ namespace SuwoGym_Web.Controllers
             else if (response.StatusCode ==
                      HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             throw new Exception(
@@ -106,9 +105,8 @@ namespace SuwoGym_Web.Controllers
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode ==
                      HttpStatusCode.BadRequest)
@@ -128,9 +126,8 @@ namespace SuwoGym_Web.Controllers
             else if (response.StatusCode ==
                      HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             throw new Exception(

@@ -50,7 +50,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -104,7 +105,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -166,7 +168,8 @@ namespace SuwoGym_Web.Controllers
                 }
                 else if (responseRoles.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    return RedirectToAction("Logout", "Home");
+                    HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
                 }
                 else if (responseRoles.StatusCode == HttpStatusCode.Forbidden)
                 {
@@ -184,7 +187,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -231,7 +235,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -262,7 +267,8 @@ namespace SuwoGym_Web.Controllers
 
             if (responseEmpleado.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (responseEmpleado.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -289,7 +295,8 @@ namespace SuwoGym_Web.Controllers
 
             if (responseRoles.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (responseRoles.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -371,7 +378,10 @@ namespace SuwoGym_Web.Controllers
                 }
 
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    return RedirectToAction("Logout", "Home");
+                    {
+                        HttpContext.Session.Clear();
+                        return RedirectToAction("Index", "Home");
+                    }
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     return RedirectToAction("Principal", "Home");
 
@@ -429,7 +439,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -481,7 +492,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -535,7 +547,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -583,7 +596,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -630,7 +644,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -684,7 +699,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -731,7 +747,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -764,9 +781,8 @@ namespace SuwoGym_Web.Controllers
             if (responseCliente.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (responseCliente.StatusCode ==
@@ -847,9 +863,8 @@ namespace SuwoGym_Web.Controllers
             if (responsePlanes.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (responsePlanes.StatusCode ==
@@ -941,7 +956,8 @@ namespace SuwoGym_Web.Controllers
             }
             else if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction("Logout", "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
@@ -1035,9 +1051,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -1118,9 +1133,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -1165,9 +1179,8 @@ namespace SuwoGym_Web.Controllers
             if (responseCliente.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (responseCliente.StatusCode ==
@@ -1231,9 +1244,8 @@ namespace SuwoGym_Web.Controllers
             if (responseEntrenadores.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (responseEntrenadores.StatusCode ==
@@ -1374,9 +1386,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -1447,9 +1458,8 @@ namespace SuwoGym_Web.Controllers
             else if (response.StatusCode ==
                      HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode ==
                      HttpStatusCode.Forbidden)
@@ -1510,9 +1520,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -1580,9 +1589,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -1652,9 +1660,8 @@ namespace SuwoGym_Web.Controllers
             else if (response.StatusCode ==
                      HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode ==
                      HttpStatusCode.Forbidden)
@@ -1696,7 +1703,10 @@ namespace SuwoGym_Web.Controllers
                     return View(new List<ClaseListaModel>());
 
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    return RedirectToAction("Logout", "Home");
+                    {
+                        HttpContext.Session.Clear();
+                        return RedirectToAction("Index", "Home");
+                    }
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     return RedirectToAction("Principal", "Home");
 
@@ -1741,7 +1751,10 @@ namespace SuwoGym_Web.Controllers
                 }
 
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    return RedirectToAction("Logout", "Home");
+                    {
+                        HttpContext.Session.Clear();
+                        return RedirectToAction("Index", "Home");
+                    }
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     return RedirectToAction("Principal", "Home");
 
@@ -1818,9 +1831,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -1934,9 +1946,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -2030,9 +2041,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -2153,9 +2163,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -2236,9 +2245,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -2297,9 +2305,8 @@ namespace SuwoGym_Web.Controllers
             else if (response.StatusCode ==
                      HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (response.StatusCode ==
                      HttpStatusCode.Forbidden)
@@ -2463,9 +2470,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -2514,9 +2520,8 @@ namespace SuwoGym_Web.Controllers
             if (responseCliente.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (responseCliente.StatusCode ==
@@ -2644,9 +2649,8 @@ namespace SuwoGym_Web.Controllers
             else if (responsePagos.StatusCode ==
                      HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
             else if (responsePagos.StatusCode ==
                      HttpStatusCode.Forbidden)
@@ -2783,9 +2787,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -2857,9 +2860,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==
@@ -2942,9 +2944,8 @@ namespace SuwoGym_Web.Controllers
             if (response.StatusCode ==
                 HttpStatusCode.Unauthorized)
             {
-                return RedirectToAction(
-                    "Logout",
-                    "Home");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Index", "Home");
             }
 
             if (response.StatusCode ==

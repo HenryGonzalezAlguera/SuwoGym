@@ -39,6 +39,9 @@ app.UseRouting();
 // Usar sesiones
 app.UseSession();
 
+// Validar en la API la versión de sesión vigente antes de cada ruta privada.
+app.UseMiddleware<SuwoGym_Web.Middleware.ValidarSesionJwtMiddleware>();
+
 app.UseAuthorization();
 
 app.MapStaticAssets();

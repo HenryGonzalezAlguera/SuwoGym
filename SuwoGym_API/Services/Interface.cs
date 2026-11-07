@@ -11,7 +11,8 @@
 
         string GenerarToken(
             int idUsuario,
-            int idRol);
+            int idRol,
+            Guid versionJwt);
 
         int ObtenerIdUsuarioToken();
     }

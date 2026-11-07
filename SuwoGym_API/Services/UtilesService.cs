@@ -77,8 +77,12 @@ namespace SuwoGym_API.Services
 
         public string GenerarToken(
             int idUsuario,
-            int idRol)
+            int idRol,
+            Guid versionJwt)
         {
+            if (versionJwt == Guid.Empty)
+                throw new ArgumentException("La versión JWT es obligatoria.", nameof(versionJwt));
+
             var tokenHandler =
                 new JwtSecurityTokenHandler();
 
@@ -96,6 +100,10 @@ namespace SuwoGym_API.Services
                     new Claim(
                         "IdRol",
                         idRol.ToString()),
+
+                    new Claim(
+                        "VersionJwt",
+                        versionJwt.ToString("D")),
 
                     new Claim(
                         ClaimTypes.Role,

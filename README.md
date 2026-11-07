@@ -137,6 +137,19 @@ Consulta [la guía de implementación y pruebas de fase 6B-2](docs/FASE6B2_RECUP
 **No utilizar recuperación con cuentas reales** hasta validar SQL, SMTP,
 expiración, consumo único y revocación de tokens JWT.
 
+### Fase 6C — Revocación inmediata de JWT y sesiones
+
+Los JWT contienen una versión de seguridad consultada en SQL Server en
+cada petición autenticada. Al cambiar contraseña, rol o estado, se
+actualiza `Usuario.VersionJwt` y los tokens anteriores dejan de
+autorizar acciones; la WEB limpia la sesión cuando la API responde 401.
+
+**Requiere ejecutar MANUALMENTE** `Database/08_Revocacion_JWT_Sesiones.sql`
+en la base de desarrollo respaldada antes de ejecutar esta versión.
+Los JWT existentes dejarán de funcionar y se deberá iniciar sesión.
+
+[Guía de implementación y pruebas de la fase 6C](docs/FASE6C_REVOCACION_JWT.md).
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
