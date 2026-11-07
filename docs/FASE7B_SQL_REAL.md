@@ -34,6 +34,34 @@ Si se cancela abruptamente, puede quedar basura de pruebas en la base
 aislada: el ejecutor muestra el error y los correos terminan en
 `@example.invalid` con prefijo `t7b-`.
 
+### Si aparece error 911: la base no existe
+
+No ejecutar de nuevo el script 09. Comprobar con una consulta de
+**solo lectura** en SSMS:
+
+```sql
+SELECT @@SERVERNAME AS Servidor, DB_NAME() AS BaseActual;
+SELECT name FROM sys.databases WHERE name = N'SuwoGym_Test_7B';
+```
+
+Si no devuelve filas, primero crear la base con ese nombre y
+provisionarla con el **esquema únicamente**. La versión anterior del
+script 09 tenía varios lotes `GO`; si el `USE` fallaba, SQL Server
+podía continuar sobre la base seleccionada anteriormente. Si llegaste
+a ejecutar esa versión, consulta en la base original con:
+
+```sql
+USE [SuwoGym];
+GO
+SELECT name, CONVERT(nvarchar(30), value) AS Valor
+FROM sys.extended_properties
+WHERE class = 0 AND name = N'SuwoGym7BTestOnly';
+```
+
+Si existe esta propiedad en `SuwoGym`, informar del resultado antes de
+borrarla; **no tocar cuentas o roles sin inspeccionar**. La versión
+corregida no necesita esa propiedad en la base original.
+
 ## Paso 1 — Crear la base de desarrollo AISLADA (SSMS)
 
 1. Confirmar que la base de origen `SuwoGym` está respaldada.
@@ -68,11 +96,19 @@ base de **solo esquema**, sin continuar con el marcado.
 
 ## Paso 2 — Marcar la base de pruebas
 
-En SSMS, abrir y ejecutar **únicamente** sobre la base de pruebas
-`Database/09_7B_Marcar_Base_Ficticia.sql`.
+En SSMS, selecciona primero `SuwoGym_Test_7B` desde el selector
+de base de datos de la **ventana de consulta**. Verifica con
+`SELECT DB_NAME() AS BaseActual;` que la selección sea correcta.
 
-Confirma el nombre de base y la ausencia de usuarios ajenos a las
-pruebas, agrega roles 1, 2, 3 si faltan y crea la propiedad de base:
+Abre la versión **actualizada** de
+`Database/09_7B_Marcar_Base_Ficticia.sql` desde esta rama.
+Se corrigió el script para que no use `USE` ni `GO`: toda la
+validación y el marcado se ejecutan en un solo lote. Ante cualquier
+error, `THROW` detiene el lote sin continuar con inserciones sobre
+la base anterior. Rechaza además cualquier usuario, pago, reserva
+o membresía previa (debe ser una base de solo esquema).
+
+El script agrega roles 1, 2, 3 si faltan y crea la propiedad de base:
 
 - Nombre: `SuwoGym7BTestOnly`
 - Valor: `YES`
