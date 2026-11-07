@@ -14,6 +14,11 @@ namespace SuwoGym_API.Controllers
         IConfiguration _databasekey,
         IUtilesService _utiles) : ControllerBase
     {
+        // La validación real de VersionJwt, Estado e IdRol ocurre
+        // antes, en JwtBearerEvents.OnTokenValidated de Program.cs.
+        [HttpGet("ValidarSesionAPI")]
+        public IActionResult ValidarSesionAPI() => NoContent();
+
         #region Consultar usuario
 
         [HttpGet("ConsultarUsuarioAPI")]
