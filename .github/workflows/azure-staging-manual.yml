@@ -31,21 +31,20 @@ jobs:
       AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
       AZURE_WEBAPP_API: ${{ vars.AZURE_WEBAPP_API }}
       AZURE_WEBAPP_WEB: ${{ vars.AZURE_WEBAPP_WEB }}
+      AZURE_APP_SERVICE_PLAN: ${{ vars.AZURE_APP_SERVICE_PLAN }}
     steps:
-      - name: Bloquear destinos sin identificador Staging
+      - name: Verificar recursos concretos Linux F1
         shell: bash
         run: |
           set -euo pipefail
-          for name in "$AZURE_RESOURCE_GROUP" "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
-            if [[ -z "$name" || ! "$name" =~ ^[a-zA-Z0-9-]+$ || "$name" != *stg* ]]; then
-              echo "BLOQUEADO: grupo y aplicaciones deben identificarse como Staging (stg)."
-              exit 1
-            fi
+          # El grupo/plan contienen aplicaciones StockFlow: no tocar esos servicios.
+          [[ "$AZURE_RESOURCE_GROUP" == "rg-stockflow-demo" ]] || { echo "Grupo no permitido."; exit 1; }
+          [[ "$AZURE_APP_SERVICE_PLAN" == "asp-stockflow-free" ]] || { echo "Plan no permitido."; exit 1; }
+          for app in "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
+            [[ "$app" =~ ^suwogym-stg-[a-z0-9-]+$ ]] || { echo "Solo apps suwogym-stg."; exit 1; }
+            [[ "$app" != *stockflow* ]] || { echo "Destino incorrecto."; exit 1; }
           done
-          if [[ "$AZURE_WEBAPP_API" == "$AZURE_WEBAPP_WEB" ]]; then
-            echo "BLOQUEADO: la WEB y API deben tener nombres distintos."
-            exit 1
-          fi
+          [[ "$AZURE_WEBAPP_API" != "$AZURE_WEBAPP_WEB" ]] || { echo "Destinos repetidos."; exit 1; }
 
       - name: Descargar código de main
         uses: actions/checkout@v4
@@ -77,12 +76,20 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Validar que los App Services de staging existen
+      - name: Validar Linux F1, región y plan compartido antes de desplegar
         shell: bash
         run: |
           set -euo pipefail
-          az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_WEBAPP_API" --query name -o tsv > /dev/null
-          az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_WEBAPP_WEB" --query name -o tsv > /dev/null
+          plan_id=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query id -o tsv)
+          tier=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query sku.name -o tsv)
+          linux=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query reserved -o tsv)
+          location=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query location -o tsv)
+          [[ "$tier" == "F1" && "$linux" == "true" ]] || { echo "Plan no es Linux F1."; exit 1; }
+          [[ "$location" == "Central US" || "$location" == "centralus" ]] || { echo "Región inesperada."; exit 1; }
+          for app in "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
+            app_plan=$(az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$app" --query serverFarmId -o tsv)
+            [[ "${app_plan,,}" == "${plan_id,,}" ]] || { echo "App fuera del plan permitido."; exit 1; }
+          done
 
       - name: Publicar API
         uses: azure/webapps-deploy@v3
