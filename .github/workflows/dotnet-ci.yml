@@ -45,5 +45,14 @@ jobs:
       - name: Compilar API y WEB
         run: dotnet build SuwoGym.slnx --configuration Release --no-restore
 
-      - name: Probar permisos de sesión y rol (sin SQL Server)
-        run: dotnet test SuwoGym.Tests/SuwoGym.Tests.csproj --configuration Release --no-restore --verbosity normal
+      - name: Probar autenticación, autorizaciones y HTTP real (sin SQL Server)
+        run: dotnet test SuwoGym.Tests/SuwoGym.Tests.csproj --configuration Release --no-build --no-restore --logger "trx;LogFileName=SuwoGym.Tests.trx" --results-directory ./test-results --verbosity normal
+
+      - name: Conservar resultados de pruebas en el PR
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: suwo-tests-trx
+          path: test-results/*.trx
+          if-no-files-found: ignore
+          retention-days: 14

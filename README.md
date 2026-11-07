@@ -150,6 +150,18 @@ Los JWT existentes dejarán de funcionar y se deberá iniciar sesión.
 
 [Guía de implementación y pruebas de la fase 6C](docs/FASE6C_REVOCACION_JWT.md).
 
+### Fase 7A — Pruebas HTTP automatizadas
+
+La suite de xUnit ahora levanta la API en memoria con `TestServer`
+para comprobar estados **204/401/403** con JWT vigentes, firmas erróneas,
+revocaciones y restricciones por rol. La versión JWT se simula únicamente
+en los tests, evitando conectar CI a SQL Server. GitHub Actions guarda
+los resultados de ejecución como un reporte TRX descargable.
+
+**No requiere scripts SQL nuevos**. Consulta
+[la guía de fase 7A](docs/FASE7A_PRUEBAS_HTTP.md) y la matriz pendiente
+de pruebas end-to-end con SQL real (fase 7B).
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
