@@ -378,8 +378,10 @@ namespace SuwoGym_Web.Controllers
                 }
 
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    HttpContext.Session.Clear();
-                return RedirectToAction("Index", "Home");
+                    {
+                        HttpContext.Session.Clear();
+                        return RedirectToAction("Index", "Home");
+                    }
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     return RedirectToAction("Principal", "Home");
 
@@ -1701,8 +1703,10 @@ namespace SuwoGym_Web.Controllers
                     return View(new List<ClaseListaModel>());
 
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    HttpContext.Session.Clear();
-                return RedirectToAction("Index", "Home");
+                    {
+                        HttpContext.Session.Clear();
+                        return RedirectToAction("Index", "Home");
+                    }
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     return RedirectToAction("Principal", "Home");
 
@@ -1747,8 +1751,10 @@ namespace SuwoGym_Web.Controllers
                 }
 
                 if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    HttpContext.Session.Clear();
-                return RedirectToAction("Index", "Home");
+                    {
+                        HttpContext.Session.Clear();
+                        return RedirectToAction("Index", "Home");
+                    }
                 if (response.StatusCode == HttpStatusCode.Forbidden)
                     return RedirectToAction("Principal", "Home");
 
