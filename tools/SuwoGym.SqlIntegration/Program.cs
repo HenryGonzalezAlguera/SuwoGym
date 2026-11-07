@@ -48,6 +48,20 @@ internal static class Program
             await conexion.OpenAsync();
             await VerificarAislamientoAsync(conexion);
 
+            // Protege IDs de catálogo y limpieza ante dos runners simultáneos.
+            // El bloqueo pertenece a esta conexión y se libera al cerrarla.
+            var bloqueo = await conexion.ExecuteScalarAsync<int>(@"
+DECLARE @resultado int;
+EXEC @resultado = sys.sp_getapplock
+    @Resource = N'SuwoGym7B_Integracion_Exclusiva',
+    @LockMode = N'Exclusive',
+    @LockOwner = N'Session',
+    @LockTimeout = 0;
+SELECT @resultado;");
+            if (bloqueo < 0)
+                throw new InvalidOperationException(
+                    "Hay otra ejecución de pruebas SQL en esta base.");
+
             Console.WriteLine("Base de PRUEBAS aislada verificada. Sin SQL en producción.");
             var suite = new PruebasSql(conexion, cadena);
             return await suite.EjecutarAsync();
