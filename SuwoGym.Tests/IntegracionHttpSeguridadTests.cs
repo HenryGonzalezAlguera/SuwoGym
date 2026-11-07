@@ -40,6 +40,18 @@ public sealed class IntegracionHttpSeguridadTests
         Guid.Parse("ff31e464-c5d8-4370-8ee3-3bfb5c3e21d4");
 
     [Fact]
+    public async Task LivenessApiNoExigeJwtNiConsultaSql()
+    {
+        using var api = new ApiParaPruebas();
+        using var client = CrearCliente(api);
+        api.Estado.FallarConsulta = true;
+
+        using var respuesta = await client.GetAsync("/health/live");
+
+        Assert.Equal(HttpStatusCode.OK, respuesta.StatusCode);
+    }
+
+    [Fact]
     public async Task RutaPrivadaSinJwtDevuelve401()
     {
         using var api = new ApiParaPruebas();
