@@ -162,6 +162,20 @@ los resultados de ejecución como un reporte TRX descargable.
 [la guía de fase 7A](docs/FASE7A_PRUEBAS_HTTP.md) y la matriz pendiente
 de pruebas end-to-end con SQL real (fase 7B).
 
+### Fase 7B — Integración SQL real en base ficticia aislada
+
+Además de las 85 pruebas xUnit, se incluye un ejecutor **manual y
+opt-in** en `tools/SuwoGym.SqlIntegration` que usa los procedimientos
+almacenados reales para comprobar reservas simultáneas, cancelaciones,
+pagos con IVA, recuperación de un solo uso, expiración y revocación JWT.
+El programa solo permite `SuwoGym_Test_7B`, marcada expresamente
+mediante `Database/09_7B_Marcar_Base_Ficticia.sql`. Crea y limpia
+cuentas ficticias, sin enviar correos y sin tocar la base `SuwoGym`.
+
+**No ejecuta operaciones SQL en GitHub Actions**; CI únicamente compila
+la herramienta. Instrucciones de aislamiento y pruebas en
+[FASE7B_SQL_REAL.md](docs/FASE7B_SQL_REAL.md).
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
