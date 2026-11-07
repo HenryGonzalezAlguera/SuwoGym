@@ -57,6 +57,18 @@ nueva API de recuperación; compilar el proyecto no lo ejecuta.
 
 Ver [procedimiento de instalación y pruebas](../docs/FASE6B2_RECUPERACION_ENLACES.md).
 
+## Revocación de JWT — Fase 6C
+
+La migración incremental manual [`08_Revocacion_JWT_Sesiones.sql`](08_Revocacion_JWT_Sesiones.sql)
+añade `Usuario.VersionJwt`, un trigger de revocación ante cambios
+de contraseña, rol o estado, y el procedimiento de consulta
+`spSeguridadConsultarVersionJwt`.
+
+**Ejecutar en SSMS sobre una base de desarrollo respaldada, antes
+de iniciar la API de fase 6C.** No modifica contraseñas existentes ni
+requiere volver a ejecutar scripts anteriores.
+Guía y checklist: [fase 6C](../docs/FASE6C_REVOCACION_JWT.md).
+
 ## Preparación segura
 
 1. Usa una instancia SQL Server de prueba, nunca una base de datos productiva con información real.
