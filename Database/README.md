@@ -81,6 +81,18 @@ iniciales.
 
 Instrucciones completas: [fase 7B](../docs/FASE7B_SQL_REAL.md).
 
+## Azure Staging — Fase 8B
+
+[10_Staging_Catalogos_Minimos.sql](10_Staging_Catalogos_Minimos.sql)
+solo se ejecuta en una **nueva** Azure SQL Database llamada
+**SuwoGym_Staging**, tras importar un DACPAC de **solo esquema**.
+No utiliza USE ni GO, impide conectar a otra base y solo crea roles.
+No copia usuarios ni pagos.
+
+**No ejecutar 01/02/07/08 locales directamente sobre Azure SQL**.
+Revisar compatibilidad y plan DACPAC antes de desplegar y usar
+únicamente datos ficticios. Guía: [Fase 8B](../docs/FASE8B_AZURE_STAGING.md).
+
 ## Preparación segura
 
 1. Usa una instancia SQL Server de prueba, nunca una base de datos productiva con información real.

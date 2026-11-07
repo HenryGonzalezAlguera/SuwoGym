@@ -191,6 +191,24 @@ Leer la [guía de fase 8A](docs/FASE8A_PREPRODUCCION.md) para los
 prerrequisitos y las limitaciones de sesión en memoria, TLS,
 proxy inverso y publicación.
 
+
+### Fase 8B — Azure Staging mediante GitHub Actions (manual)
+
+Se añadió un workflow **exclusivamente manual** para publicar API y WEB
+.NET 10 en dos App Services Windows independientes y una base
+**SuwoGym_Staging** nueva, sin datos reales. Requiere recursos Azure
+ya creados, variables y OIDC configurados en el environment staging
+y confirmación escrita DEPLOY_STAGING desde main.
+
+El workflow compila, ejecuta las pruebas, publica y comprueba los cuatro
+endpoints de salud. **No crea recursos, no modifica SQL local,
+no se ejecuta por push y no hay despliegue remoto aún.**
+
+Se incluyen scripts PowerShell de preflight de solo lectura y health
+checks, un SQL de catálogo mínimo con verificación estricta de base
+y verificación CI de los controles del workflow. Guía completa:
+[FASE8B_AZURE_STAGING.md](docs/FASE8B_AZURE_STAGING.md).
+
 ## Registro y primera cuenta local
 
 Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la

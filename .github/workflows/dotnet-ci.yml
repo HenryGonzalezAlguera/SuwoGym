@@ -39,6 +39,9 @@ jobs:
           print("Configuración pública: campos sensibles vacíos")
           PY
 
+      - name: Verificar controles del workflow Azure manual
+        run: python3 tools/azure/check_workflow_guard.py
+
       - name: Restaurar dependencias
         run: dotnet restore SuwoGym.slnx
 

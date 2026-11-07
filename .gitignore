@@ -361,3 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Azure staging: nunca subir copias de bases ni credenciales de infraestructura
+*.dacpac
+*.bacpac
+*.sqlpackage.log
+.azure/
+*.azure.env
+azure-staging.local.*
