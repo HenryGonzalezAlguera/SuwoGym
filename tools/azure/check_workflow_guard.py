@@ -18,6 +18,11 @@ checks = {
     "No ejecuta SQL": "sqlpackage" not in script.lower(),
     "Comprobación de salud": "/health/$endpoint" in script,
     "Doble destino separado": "AZURE_WEBAPP_WEB" in script and "AZURE_WEBAPP_API" in script,
+    "Grupo existente limitado": '"rg-stockflow-demo"' in script,
+    "Plan Linux F1 concreto": '"asp-stockflow-free"' in script and '[[ "$tier" == "F1" && "$linux" == "true" ]]' in script,
+    "Sólo rutas SUWÓ": 'suwogym-stg-' in script and '"$app" != *stockflow*' in script,
+    "Verifica plan de ambas apps": 'serverFarmId' in script,
+    "Variable del plan compartido": 'vars.AZURE_APP_SERVICE_PLAN' in script,
 }
 for nombre, correcto in checks.items():
     if not correcto:
