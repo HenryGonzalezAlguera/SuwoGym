@@ -176,7 +176,7 @@ public sealed class IntegracionHttpSeguridadTests
     }
 
     private sealed class ApiParaPruebas
-        : WebApplicationFactory<global::Program>
+        : WebApplicationFactory<SuwoGym_API.ApiTestHostMarker>
     {
         public VersionFalsa Estado { get; } = new()
         {
