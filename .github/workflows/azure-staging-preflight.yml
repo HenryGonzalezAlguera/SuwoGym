@@ -74,7 +74,13 @@ jobs:
           echo "Huella ID plan esperado (SHA256-12): $(printf '%s' "${plan_id,,}" | sha256sum | cut -c1-12)"
 
           for app in "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
-            app_plan=$(az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$app" --query serverFarmId -o tsv)
+            # El CLI puede omitir serverFarmId en su salida; ARM expone properties.serverFarmId.
+            app_id=$(az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$app" --query id -o tsv)
+            [[ -n "$app_id" && "$app_id" != "None" ]] || { echo "No se obtuvo el ID de $app"; exit 1; }
+            app_plan=$(az rest --method get \
+              --url "https://management.azure.com${app_id}?api-version=2023-12-01" \
+              --query properties.serverFarmId --output tsv)
+            [[ -n "$app_plan" && "$app_plan" != "None" && "$app_plan" != "null" ]] || { echo "Azure ARM no devolvió el plan de $app"; exit 1; }
             host=$(az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$app" --query defaultHostName -o tsv)
             echo "App $app: nombre del plan asociado=${app_plan##*/}"
             echo "Huella ID plan asociado (SHA256-12): $(printf '%s' "${app_plan,,}" | sha256sum | cut -c1-12)"
