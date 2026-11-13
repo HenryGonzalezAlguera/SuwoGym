@@ -1,0 +1,73 @@
+# Verificación manual de GitHub OIDC y recursos Azure. NO publica código ni cambia infraestructura.
+name: SUWÓ GYM | Azure staging preflight (solo lectura)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Escribir CHECK_STAGING para verificar Azure sin desplegar"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: suwogym-azure-preflight
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Validar OIDC y recursos existentes
+    if: github.ref == 'refs/heads/main' && inputs.confirm == 'CHECK_STAGING'
+    runs-on: ubuntu-latest
+    environment: staging
+    timeout-minutes: 10
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZURE_APP_SERVICE_PLAN: ${{ vars.AZURE_APP_SERVICE_PLAN }}
+      AZURE_WEBAPP_API: ${{ vars.AZURE_WEBAPP_API }}
+      AZURE_WEBAPP_WEB: ${{ vars.AZURE_WEBAPP_WEB }}
+    steps:
+      - name: Confirmar destinos exactos autorizados
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$AZURE_RESOURCE_GROUP" == "rg-stockflow-demo" ]] || { echo "Grupo inesperado"; exit 1; }
+          [[ "$AZURE_APP_SERVICE_PLAN" == "asp-stockflow-free" ]] || { echo "Plan inesperado"; exit 1; }
+          [[ "$AZURE_WEBAPP_API" == "suwogym-stg-api-hga" ]] || { echo "API inesperada"; exit 1; }
+          [[ "$AZURE_WEBAPP_WEB" == "suwogym-stg-web-hga" ]] || { echo "WEB inesperada"; exit 1; }
+
+      - name: Comprobar acceso GitHub a Azure mediante OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Consultar plan F1 y ambas aplicaciones (sin modificaciones)
+        shell: bash
+        run: |
+          set -euo pipefail
+          plan_id=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query id -o tsv)
+          tier=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query sku.name -o tsv)
+          linux=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query reserved -o tsv)
+          location=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query location -o tsv)
+
+          [[ -n "$plan_id" && "$tier" == "F1" && "$linux" == "true" ]] || { echo "Plan no es Linux F1"; exit 1; }
+          [[ "$location" == "Central US" || "$location" == "centralus" ]] || { echo "Región inesperada"; exit 1; }
+          echo "Plan compartido verificado: Linux F1, $location"
+
+          for app in "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
+            app_plan=$(az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$app" --query serverFarmId -o tsv)
+            host=$(az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$app" --query defaultHostName -o tsv)
+            [[ "${app_plan,,}" == "${plan_id,,}" ]] || { echo "$app no pertenece al plan esperado"; exit 1; }
+            [[ -n "$host" && "$host" != "None" && "$host" == *.azurewebsites.net ]] || { echo "Dominio inesperado en $app"; exit 1; }
+            echo "$app → https://$host"
+          done
+
+          echo "PREFLIGHT_OK: OIDC, permisos de lectura, F1, apps y DNS verificados."
+          echo "Sin despliegues, sin modificaciones de Azure y sin acceso a secretos de aplicación."
