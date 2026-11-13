@@ -34,7 +34,7 @@ for nombre, correcto in checks.items():
 # La comprobación previa nunca debe sustituir un despliegue manual ni publicar recursos.
 preflight = (ruta.parent / "azure-staging-preflight.yml").read_text(encoding="utf-8")
 prechecks = {
-    "Preflight solo manual": "\\n  workflow_dispatch:" in preflight and "\\n  push:" not in preflight,
+    "Preflight solo manual": "  workflow_dispatch:" in preflight and "  push:" not in preflight,
     "Preflight main y confirmación": "github.ref == 'refs/heads/main' && inputs.confirm == 'CHECK_STAGING'" in preflight,
     "Preflight OIDC y staging": "uses: azure/login@v2" in preflight and "environment: staging" in preflight,
     "Preflight restringe API y WEB": '[[ "$AZURE_WEBAPP_API" == "suwogym-stg-api-hga" ]]' in preflight and '[[ "$AZURE_WEBAPP_WEB" == "suwogym-stg-web-hga" ]]' in preflight,
