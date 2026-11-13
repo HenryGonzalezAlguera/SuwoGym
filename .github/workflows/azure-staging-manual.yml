@@ -45,6 +45,9 @@ jobs:
             [[ "$app" != *stockflow* ]] || { echo "Destino incorrecto."; exit 1; }
           done
           [[ "$AZURE_WEBAPP_API" != "$AZURE_WEBAPP_WEB" ]] || { echo "Destinos repetidos."; exit 1; }
+          # Barrera adicional: solo se pueden publicar las dos apps verificadas en Azure.
+          [[ "$AZURE_WEBAPP_API" == "suwogym-stg-api-hga" ]] || { echo "API distinta de la autorizada."; exit 1; }
+          [[ "$AZURE_WEBAPP_WEB" == "suwogym-stg-web-hga" ]] || { echo "WEB distinta de la autorizada."; exit 1; }
 
       - name: Descargar código de main
         uses: actions/checkout@v4
