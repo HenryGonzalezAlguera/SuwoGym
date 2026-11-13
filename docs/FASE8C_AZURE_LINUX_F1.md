@@ -174,12 +174,12 @@ checks, login y módulos de prueba.
 El workflow exige `environment: staging`, por lo que la credencial federada de GitHub debe usar **Environment `staging`**, no Branch `main`:
 
 - Issuer: `https://token.actions.githubusercontent.com`
-- Subject: `repo:HenryGonzalezAlguera/SuwoGym:environment:staging`
+- Subject (GitHub OIDC **inmutable**, repositorio creado el 25-08-2026): `repo:HenryGonzalezAlguera@134661566/SuwoGym@1345610007:environment:staging`
 - Audience: `api://AzureADTokenExchange`
 
 1. GitHub → `SuwoGym` → **Settings → Environments**: crear/abrir `staging`, restringir **Deployment branches and tags** a `main`; configurar aprobaciones si están disponibles.
 2. Azure Portal → **Microsoft Entra ID → App registrations → New registration**: crear una identidad dedicada a SUWÓ GYM Staging (solo este inquilino); guardar Application (client) ID y Directory (tenant) ID.
-3. En la aplicación Entra, abrir **Certificates & secrets → Federated credentials → Add credential → GitHub Actions deploying Azure resources**. Introducir organización `HenryGonzalezAlguera`, repositorio `SuwoGym`, tipo de entidad **Environment** y nombre `staging`. Verificar subject exacto anterior. **No crear client secret**.
+3. En la aplicación Entra, abrir **Certificates & secrets → Federated credentials → Add credential → GitHub Actions deploying Azure resources**. Introducir **Organización** `HenryGonzalezAlguera`, **Organización ID** `134661566`, **Repositorio** `SuwoGym`, **Repositorio ID** `1345610007`, tipo de entidad **Environment** y nombre del entorno `staging`. Verificar que Subject coincide exactamente con el valor inmutable anterior. **No crear client secret**. GitHub usa IDs en el `sub` de repositorios creados desde el 15-07-2026 (https://docs.github.com/en/actions/reference/security/oidc).
 4. Azure **Access control (IAM)**: asignar a la aplicación Entra el rol **Website Contributor** *únicamente* sobre `suwogym-stg-api-hga` y `suwogym-stg-web-hga`. Dar **Reader** únicamente sobre el recurso del plan `asp-stockflow-free`, necesario para que el workflow pueda validar su SKU/región. **No asignar Contributor sobre `rg-stockflow-demo` o la suscripción**: contiene StockFlow.
 5. GitHub → **Settings → Environments → staging**: agregar variables `AZURE_RESOURCE_GROUP=rg-stockflow-demo`, `AZURE_APP_SERVICE_PLAN=asp-stockflow-free`, `AZURE_WEBAPP_API=suwogym-stg-api-hga`, `AZURE_WEBAPP_WEB=suwogym-stg-web-hga`.
 6. En el mismo entorno, agregar los secretos `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` con los ID de Entra y la suscripción del proyecto (son identificadores, no contraseñas).
