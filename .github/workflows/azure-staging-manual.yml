@@ -107,20 +107,44 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+
           for app in "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
+
+            # Obtener el dominio real asignado por Azure.
+            host=$(az webapp show \
+              --resource-group "$AZURE_RESOURCE_GROUP" \
+              --name "$app" \
+              --query defaultHostName \
+              --output tsv)
+
+            if [[ -z "$host" || "$host" == "None" ]]; then
+              echo "ERROR: No se encontró el dominio de $app"
+              exit 1
+            fi
+
+            echo "Verificando $app"
+
             for endpoint in live ready; do
               valido=0
+
               for intento in $(seq 1 12); do
-                if curl -fsS --max-time 15 "https://$app.azurewebsites.net/health/$endpoint" | grep -Fxq Healthy; then
+                if curl -fsS --max-time 15 \
+                  "https://${host}/health/${endpoint}" \
+                  | grep -Fxq Healthy; then
+
                   valido=1
                   break
                 fi
+
                 sleep 5
               done
+
               if [[ "$valido" -ne 1 ]]; then
-                echo "No está Healthy: $app /health/$endpoint"
+                echo "ERROR: $app /health/$endpoint no está Healthy"
                 exit 1
               fi
             done
           done
+
           echo "Las dos aplicaciones responden Healthy."
+
