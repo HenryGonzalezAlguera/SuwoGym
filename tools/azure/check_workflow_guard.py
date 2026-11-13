@@ -19,7 +19,7 @@ checks = {
     "Comprobación de salud": "/health/$endpoint" in script,
     "Doble destino separado": "AZURE_WEBAPP_WEB" in script and "AZURE_WEBAPP_API" in script,
     "Grupo existente limitado": '"rg-stockflow-demo"' in script,
-    "Plan Linux F1 concreto": '"asp-stockflow-free"' in script and '[[ "$tier" == "F1" && "$linux" == "true" ]]' in script,
+    "Plan Linux F1 concreto": '"asp-stockflow-free"' in script and '[[ -n "$plan_id" && "$tier" == "F1" && "${linux,,}" == "true" ]]' in script,
     "Sólo rutas SUWÓ": 'suwogym-stg-' in script and '"$app" != *stockflow*' in script,
     "Destinos exactos SUWÓ": '[[ "$AZURE_WEBAPP_API" == "suwogym-stg-api-hga" ]]' in script and '[[ "$AZURE_WEBAPP_WEB" == "suwogym-stg-web-hga" ]]' in script,
     "Resuelve dominios regionales dinámicos": "defaultHostName" in script and '"https://${host}/health/${endpoint}"' in script,
@@ -38,6 +38,7 @@ prechecks = {
     "Preflight main y confirmación": "github.ref == 'refs/heads/main' && inputs.confirm == 'CHECK_STAGING'" in preflight,
     "Preflight OIDC y staging": "uses: azure/login@v2" in preflight and "environment: staging" in preflight,
     "Preflight restringe API y WEB": '[[ "$AZURE_WEBAPP_API" == "suwogym-stg-api-hga" ]]' in preflight and '[[ "$AZURE_WEBAPP_WEB" == "suwogym-stg-web-hga" ]]' in preflight,
+    "Preflight normaliza booleano Linux F1": '[[ -n "$plan_id" && "$tier" == "F1" && "${linux,,}" == "true" ]]' in preflight,
     "Preflight solo lectura": all(forbidden not in preflight for forbidden in (
         "azure/webapps-deploy", "az webapp deploy", "az webapp create", "az webapp delete",
         "az appservice plan update", "az role assignment create", "sqlpackage",
