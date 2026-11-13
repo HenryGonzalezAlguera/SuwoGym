@@ -68,9 +68,16 @@ jobs:
           [[ "$location" == "Central US" || "$location" == "centralus" ]] || { echo "Región inesperada"; exit 1; }
           echo "Plan compartido verificado: Linux F1, $location"
 
+          # Diagnóstico sin imprimir IDs de suscripción/recurso completos en logs públicos.
+          active_subscription=$(az account show --query id -o tsv)
+          echo "Huella suscripción Azure (SHA256-12): $(printf '%s' "$active_subscription" | sha256sum | cut -c1-12)"
+          echo "Huella ID plan esperado (SHA256-12): $(printf '%s' "${plan_id,,}" | sha256sum | cut -c1-12)"
+
           for app in "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
             app_plan=$(az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$app" --query serverFarmId -o tsv)
             host=$(az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$app" --query defaultHostName -o tsv)
+            echo "App $app: nombre del plan asociado=${app_plan##*/}"
+            echo "Huella ID plan asociado (SHA256-12): $(printf '%s' "${app_plan,,}" | sha256sum | cut -c1-12)"
             [[ "${app_plan,,}" == "${plan_id,,}" ]] || { echo "$app no pertenece al plan esperado"; exit 1; }
             [[ -n "$host" && "$host" != "None" && "$host" == *.azurewebsites.net ]] || { echo "Dominio inesperado en $app"; exit 1; }
             echo "$app → https://$host"
