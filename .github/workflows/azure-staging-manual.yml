@@ -87,7 +87,9 @@ jobs:
           tier=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query sku.name -o tsv)
           linux=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query reserved -o tsv)
           location=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query location -o tsv)
-          [[ "$tier" == "F1" && "$linux" == "true" ]] || { echo "Plan no es Linux F1."; exit 1; }
+          # Azure CLI puede representar el booleano reservado como True/False o true/false.
+          echo "Plan detectado: SKU=${tier}, LinuxReserved=${linux}, Región=${location}"
+          [[ -n "$plan_id" && "$tier" == "F1" && "${linux,,}" == "true" ]] || { echo "Plan no es Linux F1 (SKU o LinuxReserved incorrectos)."; exit 1; }
           [[ "$location" == "Central US" || "$location" == "centralus" ]] || { echo "Región inesperada."; exit 1; }
           for app in "$AZURE_WEBAPP_API" "$AZURE_WEBAPP_WEB"; do
             app_plan=$(az webapp show -g "$AZURE_RESOURCE_GROUP" -n "$app" --query serverFarmId -o tsv)
