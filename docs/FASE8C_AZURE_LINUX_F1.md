@@ -1,5 +1,19 @@
 # Fase 8C — Publicación de demostración en Azure Linux F1 compartido
 
+## Estado comprobado el 13 de noviembre de 2026
+
+- **API**: `suwogym-stg-api-hga` — `https://suwogym-stg-api-hga-hsdmctgddbbxgpf4.centralus-01.azurewebsites.net`.
+- **WEB**: `suwogym-stg-web-hga` — `https://suwogym-stg-web-hga-emfxdjcfccabdfh2.centralus-01.azurewebsites.net`.
+- Ambas apps usan Linux, .NET 10 y el plan **existente** `asp-stockflow-free` (F1) en `rg-stockflow-demo`.
+- SQL: `SuwoGym_Staging` en `stockflow-sql-hga.database.windows.net`, con `Modern_Spanish_CI_AS`, 15 tablas, 74 procedimientos, 19 FK y 1 trigger.
+- Catálogos comprobados en Staging: 3 roles, 3 planes y 1 clase; cero usuarios al verificar el esquema inicial.
+- Acceso SQL `suwogym_app` probado desde SSMS con EXECUTE; conexión desde App Service aún no probada.
+- Variables de entorno registradas en ambas apps, pero valores y conectividad aún pendientes de prueba.
+- WEB: `/home/suwo-keys` conservó un archivo de prueba tras el reinicio; archivo temporal eliminado.
+- **Pendiente**: identidad federada GitHub → Azure, permisos mínimos, pruebas y publicación manual.
+
+**No confundir el dominio por defecto real con `nombre.azurewebsites.net`: Azure asignó un sufijo regional a estas dos apps.**
+
 ## Estado verificado en Azure Portal (7 noviembre 2026)
 
 El plan existente de StockFlow puede alojar también las dos aplicaciones de
@@ -80,8 +94,8 @@ En la WEB Linux nueva:
 
 ```text
 ASPNETCORE_ENVIRONMENT=Staging
-AllowedHosts=suwogym-stg-web-hga.azurewebsites.net
-ConnectionStringsWeb__urlApi=https://suwogym-stg-api-hga.azurewebsites.net
+AllowedHosts=suwogym-stg-web-hga-emfxdjcfccabdfh2.centralus-01.azurewebsites.net
+ConnectionStringsWeb__urlApi=https://suwogym-stg-api-hga-hsdmctgddbbxgpf4.centralus-01.azurewebsites.net
 Deployment__DataProtectionKeysPath=/home/suwo-keys
 ```
 
@@ -89,14 +103,14 @@ Deployment__DataProtectionKeysPath=/home/suwo-keys
 
 ```text
 ASPNETCORE_ENVIRONMENT=Staging
-AllowedHosts=suwogym-stg-api-hga.azurewebsites.net
+AllowedHosts=suwogym-stg-api-hga-hsdmctgddbbxgpf4.centralus-01.azurewebsites.net
 Jwt__Issuer=SuwoGym.API
 Jwt__Audience=SuwoGym.Web
 Jwt__SecretKey=[NUEVA clave aleatoria, en settings privados]
 ConnectionStringsApi__DefaultConnection=[cadena Azure SQL Staging TLS verificado]
-Correos__Correo=[cuenta SMTP ficticia]
+Correos__Correo=[correo remitente de pruebas, privado]
 Correos__AppPassword=[credencial SMTP privada]
-Recuperacion__UrlBaseWeb=https://suwogym-stg-web-hga.azurewebsites.net
+Recuperacion__UrlBaseWeb=https://suwogym-stg-web-hga-emfxdjcfccabdfh2.centralus-01.azurewebsites.net
 ```
 
 Los nombres de arriba son ejemplos; si el nombre asignado difiere,
@@ -154,6 +168,25 @@ asignar solo permiso Reader a dicho recurso.
 No ejecutar el workflow hasta tener SQL Staging y los ajustes
 ambientales seguros. Primero revisar manualmente los cuatro health
 checks, login y módulos de prueba.
+
+### Configuración OIDC necesaria antes del primer Run workflow
+
+El workflow exige `environment: staging`, por lo que la credencial federada de GitHub debe usar **Environment `staging`**, no Branch `main`:
+
+- Issuer: `https://token.actions.githubusercontent.com`
+- Subject: `repo:HenryGonzalezAlguera/SuwoGym:environment:staging`
+- Audience: `api://AzureADTokenExchange`
+
+1. GitHub → `SuwoGym` → **Settings → Environments**: crear/abrir `staging`, restringir **Deployment branches and tags** a `main`; configurar aprobaciones si están disponibles.
+2. Azure Portal → **Microsoft Entra ID → App registrations → New registration**: crear una identidad dedicada a SUWÓ GYM Staging (solo este inquilino); guardar Application (client) ID y Directory (tenant) ID.
+3. En la aplicación Entra, abrir **Certificates & secrets → Federated credentials → Add credential → GitHub Actions deploying Azure resources**. Introducir organización `HenryGonzalezAlguera`, repositorio `SuwoGym`, tipo de entidad **Environment** y nombre `staging`. Verificar subject exacto anterior. **No crear client secret**.
+4. Azure **Access control (IAM)**: asignar a la aplicación Entra el rol **Website Contributor** *únicamente* sobre `suwogym-stg-api-hga` y `suwogym-stg-web-hga`. Dar **Reader** únicamente sobre el recurso del plan `asp-stockflow-free`, necesario para que el workflow pueda validar su SKU/región. **No asignar Contributor sobre `rg-stockflow-demo` o la suscripción**: contiene StockFlow.
+5. GitHub → **Settings → Environments → staging**: agregar variables `AZURE_RESOURCE_GROUP=rg-stockflow-demo`, `AZURE_APP_SERVICE_PLAN=asp-stockflow-free`, `AZURE_WEBAPP_API=suwogym-stg-api-hga`, `AZURE_WEBAPP_WEB=suwogym-stg-web-hga`.
+6. En el mismo entorno, agregar los secretos `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` con los ID de Entra y la suscripción del proyecto (son identificadores, no contraseñas).
+7. Revisar las variables de App Service sin mostrar sus valores. La API necesita `ConnectionStringsApi__DefaultConnection` con `Encrypt=True;TrustServerCertificate=False`, JWT y correo. La WEB necesita `AllowedHosts`, `ConnectionStringsWeb__urlApi` y `Deployment__DataProtectionKeysPath=/home/suwo-keys`.
+8. **No ejecutar** Actions → `SUWÓ GYM | Azure staging manual` → Run workflow hasta verificar identidades, roles y configuración; el workflow efectúa despliegues reales y las comprobaciones de salud deben probar SQL/WEB.
+
+Referencia: https://learn.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=openid
 
 ## 5. Crédito y cautelas
 
