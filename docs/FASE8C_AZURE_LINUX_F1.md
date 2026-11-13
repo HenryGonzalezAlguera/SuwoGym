@@ -169,6 +169,21 @@ No ejecutar el workflow hasta tener SQL Staging y los ajustes
 ambientales seguros. Primero revisar manualmente los cuatro health
 checks, login y módulos de prueba.
 
+### Prueba manual de acceso sin publicar
+
+Después de configurar las cuatro variables de entorno, los secretos OIDC y los tres
+roles mínimos de Azure (Website Contributor en API y WEB; Reader en el plan F1):
+
+1. GitHub → **Actions** → **SUWÓ GYM | Azure staging preflight (solo lectura)**.
+2. Seleccionar **Run workflow**, rama **main**, escribir `CHECK_STAGING`.
+3. Ejecutar y abrir el trabajo **Validar OIDC y recursos existentes**.
+4. Confirmar el mensaje `PREFLIGHT_OK` y los dominios de las dos apps.
+
+Esta prueba ejecuta únicamente consultas `az ... show` tras autenticarse por
+OIDC. **No despliega**, no cambia Azure y no imprime secretos. Si falla, revisar
+el paso de GitHub → Azure indicado en los registros antes de activar el
+workflow de publicación `DEPLOY_STAGING`.
+
 ### Configuración OIDC necesaria antes del primer Run workflow
 
 El workflow exige `environment: staging`, por lo que la credencial federada de GitHub debe usar **Environment `staging`**, no Branch `main`:
