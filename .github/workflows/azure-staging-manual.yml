@@ -85,7 +85,12 @@ jobs:
           set -euo pipefail
           plan_id=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query id -o tsv)
           tier=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query sku.name -o tsv)
-          linux=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query reserved -o tsv)
+          # `az appservice plan show --query reserved` puede devolver null/vacío.
+          # ARM expone el indicador real de Linux en `properties.reserved`.
+          linux=$(az rest --method get \
+            --url "https://management.azure.com${plan_id}?api-version=2023-12-01" \
+            --query properties.reserved --output tsv)
+          [[ -n "$linux" && "$linux" != "None" ]] || { echo "Azure ARM no devolvió properties.reserved para el plan; se bloquea el despliegue."; exit 1; }
           location=$(az appservice plan show -g "$AZURE_RESOURCE_GROUP" -n "$AZURE_APP_SERVICE_PLAN" --query location -o tsv)
           # Azure CLI puede representar el booleano reservado como True/False o true/false.
           echo "Plan detectado: SKU=${tier}, LinuxReserved=${linux}, Región=${location}"
