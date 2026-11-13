@@ -30,3 +30,21 @@ for nombre, correcto in checks.items():
     if not correcto:
         raise SystemExit("FALLO: " + nombre)
     print("[OK] " + nombre)
+
+# La comprobación previa nunca debe sustituir un despliegue manual ni publicar recursos.
+preflight = (ruta.parent / "azure-staging-preflight.yml").read_text(encoding="utf-8")
+prechecks = {
+    "Preflight solo manual": "\\n  workflow_dispatch:" in preflight and "\\n  push:" not in preflight,
+    "Preflight main y confirmación": "github.ref == 'refs/heads/main' && inputs.confirm == 'CHECK_STAGING'" in preflight,
+    "Preflight OIDC y staging": "uses: azure/login@v2" in preflight and "environment: staging" in preflight,
+    "Preflight restringe API y WEB": '[[ "$AZURE_WEBAPP_API" == "suwogym-stg-api-hga" ]]' in preflight and '[[ "$AZURE_WEBAPP_WEB" == "suwogym-stg-web-hga" ]]' in preflight,
+    "Preflight solo lectura": all(forbidden not in preflight for forbidden in (
+        "azure/webapps-deploy", "az webapp deploy", "az webapp create", "az webapp delete",
+        "az appservice plan update", "az role assignment create", "sqlpackage",
+        "az webapp config appsettings list",
+    )),
+}
+for nombre, correcto in prechecks.items():
+    if not correcto:
+        raise SystemExit("FALLO: " + nombre)
+    print("[OK] " + nombre)
