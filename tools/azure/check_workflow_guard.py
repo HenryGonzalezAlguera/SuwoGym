@@ -24,7 +24,7 @@ checks = {
     "Sólo rutas SUWÓ": 'suwogym-stg-' in script and '"$app" != *stockflow*' in script,
     "Destinos exactos SUWÓ": '[[ "$AZURE_WEBAPP_API" == "suwogym-stg-api-hga" ]]' in script and '[[ "$AZURE_WEBAPP_WEB" == "suwogym-stg-web-hga" ]]' in script,
     "Resuelve dominios regionales dinámicos": "defaultHostName" in script and '"https://${host}/health/${endpoint}"' in script,
-    "Verifica plan de ambas apps": 'serverFarmId' in script,
+    "Verifica plan de ambas apps en ARM": '--query properties.serverFarmId --output tsv' in script and '[[ -n "$app_plan"' in script,
     "Variable del plan compartido": 'vars.AZURE_APP_SERVICE_PLAN' in script,
 }
 for nombre, correcto in checks.items():
@@ -41,6 +41,7 @@ prechecks = {
     "Preflight restringe API y WEB": '[[ "$AZURE_WEBAPP_API" == "suwogym-stg-api-hga" ]]' in preflight and '[[ "$AZURE_WEBAPP_WEB" == "suwogym-stg-web-hga" ]]' in preflight,
     "Preflight normaliza booleano Linux F1": '[[ -n "$plan_id" && "$tier" == "F1" && "${linux,,}" == "true" ]]' in preflight,
     "Preflight consulta Linux en ARM": "az rest --method get" in preflight and "--query properties.reserved --output tsv" in preflight,
+    "Preflight consulta plan apps en ARM y rechaza vacío": "--query properties.serverFarmId --output tsv" in preflight and '[[ -n "$app_plan"' in preflight,
     "Preflight solo lectura": all(forbidden not in preflight for forbidden in (
         "azure/webapps-deploy", "az webapp deploy", "az webapp create", "az webapp delete",
         "az appservice plan update", "az role assignment create", "sqlpackage",
