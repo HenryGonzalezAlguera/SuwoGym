@@ -1,325 +1,121 @@
 # SUWÓ GYM | Gym Management System
 
 ![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
-![C#](https://img.shields.io/badge/C%23-ASP.NET%20Core-239120?logo=sharp&logoColor=white)
-![SQL Server](https://img.shields.io/badge/Database-SQL%20Server-CC2927)
-[![Build](https://github.com/HenryGonzalezAlguera/SuwoGym/actions/workflows/dotnet-ci.yml/badge.svg?branch=main)](https://github.com/HenryGonzalezAlguera/SuwoGym/actions/workflows/dotnet-ci.yml)
+![C#](https://img.shields.io/badge/C%23-ASP.NET_Core-239120?logo=sharp&logoColor=white)
+![Azure](https://img.shields.io/badge/Azure-App_Service_%2B_SQL-0078D4)
+[![Build & tests](https://github.com/HenryGonzalezAlguera/SuwoGym/actions/workflows/dotnet-ci.yml/badge.svg?branch=main)](https://github.com/HenryGonzalezAlguera/SuwoGym/actions/workflows/dotnet-ci.yml)
 
-**SUWÓ GYM** es un proyecto académico de gestión de gimnasios desarrollado con una aplicación **ASP.NET Core MVC**, una **API REST** y **SQL Server**. Incluye módulos diferenciados por tipo de usuario para administración, entrenamiento y membresías.
+**SUWÓ GYM** es una plataforma web de gestión de gimnasios desarrollada con **C# / .NET 10, ASP.NET Core MVC, API REST, Dapper y SQL Server**. Incluye módulos de administración, entrenamiento y membresías, con autenticación y autorización por roles.
 
-> **English summary:** A .NET 10 gym-management portfolio project featuring separate ASP.NET Core MVC and REST API applications, Dapper/SQL Server persistence, JWT authentication, and role-specific modules for administrators, trainers, and members. This repository is a **source-code portfolio project**, not a publicly deployed service.
+![Logo de SUWÓ GYM](SuwoGym_Web/wwwroot/images/logoSuwo_logotype.png)
 
-## Componentes del sistema
+> **English summary:** Full-stack gym management portfolio project featuring .NET 10, ASP.NET Core MVC, REST API, Dapper, Azure SQL, JWT authentication and role-based modules. A **public Azure staging demo** is available. Registration, login, health checks and database connectivity have been verified. Administration, training, reservations and payment workflows still require end-to-end staging validation. Not a production service.
 
-| Área | Funcionalidad identificada en el código |
+## Demostración en Azure
+
+**[Abrir aplicación WEB — SUWÓ GYM](https://suwogym-stg-web-hga-emfxdjcfccabdfh2.centralus-01.azurewebsites.net/)**
+
+| Servicio | URL |
 | --- | --- |
-| Administrador | Panel de indicadores, empleados, clientes, planes, membresías, programación de clases y pagos |
-| Entrenador | Clientes asignados, rutinas, ejercicios, horarios y registro de asistencia |
-| Miembro | Perfil, rutinas, historial de asistencia, pagos, clases y reservas |
-| Autenticación | Login, registro y recuperación de acceso; hash BCrypt y tokens JWT |
-| Infraestructura | API + MVC, servicios HTTP, Dapper, procedimientos almacenados y SQL Server |
+| Aplicación WEB | [Ingresar a SUWÓ GYM](https://suwogym-stg-web-hga-emfxdjcfccabdfh2.centralus-01.azurewebsites.net/) |
+| Salud de la API | [API /health/ready](https://suwogym-stg-api-hga-hsdmctgddbbxgpf4.centralus-01.azurewebsites.net/health/ready) |
+| Salud de la WEB | [WEB /health/ready](https://suwogym-stg-web-hga-emfxdjcfccabdfh2.centralus-01.azurewebsites.net/health/ready) |
 
-Las funcionalidades se identificaron en controladores y vistas. **No se afirma que todos los recorridos estén probados extremo a extremo**; la validación de bases de datos, roles y operaciones reales forma parte del trabajo siguiente.
+El entorno de demostración utiliza dos **Azure App Services independientes** (API y WEB), **Azure SQL Database `SuwoGym_Staging`** y el plan compartido gratuito **Linux F1 `asp-stockflow-free`**. Las aplicaciones de SUWÓ GYM están separadas de StockFlow; comparten únicamente recursos de hosting del plan.
+
+El nivel gratuito tiene límites de recursos y la base SQL puede pausarse por inactividad o cuota. **No se ofrece disponibilidad continua ni se considera una instalación de producción.** Para probar el registro, utiliza datos ficticios y un correo de prueba bajo tu control; no introduzcas datos sensibles ni realices pagos reales.
+
+## Funcionalidades
+
+| Área | Capacidades existentes en el código |
+| --- | --- |
+| **Miembro** | Registro, inicio de sesión, perfil, pagos, clases, reservas, historial de asistencia y rutinas |
+| **Administrador** | Dashboard, empleados, clientes, planes, membresías, catálogo de clases, horarios y pagos |
+| **Entrenador** | Clientes asignados, ejercicios, rutinas, horarios y asistencia |
+| **Seguridad** | JWT, BCrypt, sesiones web, control de acceso por rol, protección antifalsificación, límites de peticiones, recuperación de contraseña con enlaces de un solo uso y revocación de tokens |
+| **Integración** | API REST, Dapper, procedimientos almacenados, health checks, pruebas automatizadas y despliegue manual en Azure |
+
+**Nota de alcance:** estas son funcionalidades implementadas o representadas en el código. No implica que todos los recorridos hayan sido probados extremo a extremo en Azure.
 
 ## Arquitectura
 
 ```mermaid
 flowchart LR
-    U["Navegador"] --> W["SuwoGym_Web · ASP.NET Core MVC"]
-    W --> S["Sesión de la aplicación web"]
-    S --> H["HttpClient · Bearer JWT"]
-    H --> A["SuwoGym_API · ASP.NET Core"]
-    A --> P["Dapper + Procedimientos almacenados"]
-    P --> D[("SQL Server · SuwoGym")]
+    U["Navegador"] -->|"HTTPS"| W["SuwoGym_Web<br/>ASP.NET Core MVC"]
+    W -->|"HttpClient + JWT"| A["SuwoGym_API<br/>ASP.NET Core REST"]
+    A -->|"Dapper + Stored Procedures"| DB[("Azure SQL<br/>SuwoGym_Staging")]
+    GH["GitHub Actions<br/>OIDC + despliegue manual"] --> W
+    GH --> A
 ```
 
-- **`SuwoGym_Web/`**: interfaz Razor/MVC, vistas por rol y consumo HTTP de la API.
-- **`SuwoGym_API/`**: controladores REST, autenticación JWT y acceso a SQL Server.
-- **`Database/`**: esquema y datos iniciales en SQL. No contiene una base de datos real ni credenciales.
-- **`IEEE/`**: recursos académicos de modelado.
+- **`SuwoGym_Web/`**: interfaz Razor/MVC, sesiones y autorización por roles.
+- **`SuwoGym_API/`**: API REST, validación, JWT, reglas de negocio y consultas SQL.
+- **`Database/`**: esquema, procedimientos y scripts específicos para desarrollo y staging.
+- **`SuwoGym.Tests/`**: pruebas automatizadas xUnit y de contratos HTTP.
+- **`tools/SuwoGym.SqlIntegration/`**: pruebas SQL reales opt-in, exclusivamente sobre base ficticia aislada.
+- **`.github/workflows/`**: CI, preflight y publicación controlada.
 
-La API declara autorización por roles numéricos: `1` Administrador, `2` Entrenador, `3` Miembro. La web aplica `SessionAuthorize` con rol explícito en cada controlador (`[SessionAuthorize(1)]`, `(2)` o `(3)`), además de requerir sesión completa para `/Home/Principal`. La API sigue siendo la autoridad final sobre la firma y vencimiento del JWT. **Quedan pendientes** CSRF, recuperación de acceso, comprobaciones E2E y revocación de tokens.
+### Stack técnico
 
-## Tecnologías
+**C# / .NET 10 · ASP.NET Core MVC · Web API · Razor · JavaScript · Bootstrap · Dapper · SQL Server · Azure SQL · JWT · BCrypt · MailKit · GitHub Actions · Azure App Service.**
 
-| Capa | Herramientas |
+## Estado y evidencia verificada — noviembre de 2026
+
+| Prueba | Estado |
 | --- | --- |
-| Lenguaje / framework | C#, .NET 10, ASP.NET Core |
-| Interfaz | MVC / Razor, HTML, CSS, JavaScript y Bootstrap |
-| Datos | SQL Server, Dapper, procedimientos almacenados |
-| Identidad | JWT Bearer, BCrypt y sesiones web |
-| Correo | MailKit / SMTP, configurable fuera del repositorio |
-| CI | GitHub Actions: restauración y compilación de ambos proyectos |
+| Compilación y tests desde GitHub Actions | ✅ Aprobados |
+| Preflight de OIDC, Linux F1 y plan autorizado | ✅ Aprobado |
+| Despliegue manual de API y WEB | ✅ Workflow #4 completado correctamente |
+| API `/health/live` y `/health/ready` | ✅ Respuesta saludable verificada |
+| WEB `/health/live` y `/health/ready` | ✅ Respuesta saludable verificada |
+| Registro, login y panel del Miembro | ✅ Probados manualmente contra Azure |
+| Vistas de clases disponibles y mis reservas | ✅ Cargan; el staging no tenía horarios futuros |
+| Altas de entrenador/admin, reservas, pagos, asistencia en Azure | ⏳ Pendientes de prueba de extremo a extremo |
+| Capturas de pantalla publicadas en el repositorio | ⏳ Pendientes |
 
-## Diseño de interfaz (Fase Visual 1)
-
-SUWÓ GYM utiliza una capa de diseño propia sobre el tema existente: `suwo-polish.css`
-y `suwo-polish.js`. Mejoran de forma compartida el sidebar, topbar, tarjetas,
-botones, tablas, formularios y navegación activa de las vistas de Administrador,
-Entrenador y Miembro, conservando el logo y los estilos originales del equipo.
-También se pulieron el panel principal y los indicadores de asistencia.
-
-Consulta [la guía de la Fase Visual 1](docs/FASE_VISUAL_1.md) para verificar la
-presentación en Visual Studio, incluidos móvil y escritorio. La compilación de
-GitHub Actions no sustituye una inspección visual con datos reales de prueba.
-
-### Fase Visual 2 — Vistas de Miembro
-
-Las nueve vistas de Miembro ahora comparten estilos de presentación mediante
-`wwwroot/css/suwo-member.css`: encabezados legibles, tarjetas de detalle,
-tablas, indicadores, estado vacío y contadores de listas. La capa se aplica
-solo a las páginas del Miembro y mantiene los formularios de reserva y las
-rutas MVC existentes. Consulta la [guía de verificación manual](docs/FASE_VISUAL_2_MIEMBRO.md).
-
-### Fase 4 — Diseño de Entrenador
-
-Se aplicó una capa visual específica para el rol Entrenador sobre las **16
-vistas Razor existentes**: clientes, ejercicios, rutinas, cronograma y
-asistencias. La hoja `suwo-trainer.css` mejora encabezados, tablas, fichas,
-formularios, indicadores y estados vacíos, y conserva sin modificaciones los
-flujos funcionales.
-
-Consulta la [guía de la Fase 4](docs/FASE4_DISENO_ENTRENADOR.md) y su
-checklist de revisión manual desde Visual Studio.
-
-### Fase 5 — Diseño del Administrador
-
-Las **22 vistas Razor de Administrador** tienen una capa de presentación propia
-`wwwroot/css/suwo-admin.css` con encabezados, indicadores de Dashboard, tarjetas,
-tablas, formularios y estados vacíos. Se activa únicamente para la sesión con
-rol Administrador, sin alterar controladores, API, formularios o procedimientos SQL.
-
-Consulta [la guía de la Fase 5](docs/FASE5_DISENO_ADMINISTRADOR.md) para el
-checklist de pruebas funcionales, visuales y responsive. La validación manual
-de esta fase queda pendiente hasta su comprobación en Visual Studio.
-
-### Fase 6A — Seguridad de autenticación
-
-La API ahora emite y valida JWT con **emisor y audiencia explícitos** además de
-firma y expiración. La WEB establece cookies de sesión y antifalsificación
-seguras para HTTPS; los formularios de inicio de sesión y recuperación exigen
-tokens antifalsificación. Los tokens anteriores a esta actualización dejan de
-ser válidos y se debe volver a iniciar sesión.
-
-Consulta la [guía de la fase 6A](docs/FASE6A_SEGURIDAD_AUTENTICACION.md)
-para pruebas con los tres roles, límites de seguridad y trabajo pendiente
-(fase 6B: recuperación de acceso, auditoría de CSRF y revocación). No se cambia SQL.
-
-### Fase 6B-1 — Protección CSRF, límites de acceso y logout
-
-Los controladores MVC de Administrador, Entrenador, Miembro y Usuario
-exigen tokens antifalsificación en POST; el cierre de sesión usa
-POST protegido en vez de GET. La API limita los intentos de inicio de
-sesión (12/min) y recuperación (4/15 min) por IP, devolviendo HTTP 429
-cuando se supera el máximo. **No se requiere SQL adicional**.
-
-Consulta la [guía de fase 6B-1](docs/FASE6B1_CSRF_RATE_LIMIT_LOGOUT.md).
-La recuperación de contraseñas por enlace seguro y la revocación de JWT
-quedan pendientes de la fase siguiente. **No utilizar recuperación actual
-con cuentas reales hasta rediseñar el envío y consumo de tokens.**
-
-### Fase 6B-2 — Recuperación por enlace seguro
-
-La recuperación pública deja de generar contraseñas temporales. Se usan
-tokens aleatorios de 256 bits, cuyo hash SHA-256 se almacena en SQL Server,
-con **15 minutos** de vigencia y **un solo uso**. La contraseña original
-se mantiene hasta completar la transacción de restablecimiento.
-
-La nueva vista `Home/RestablecerContrasenna` requiere una contraseña
-nueva y confirmación. El email incluye un enlace HTTPS configurado y
-la API no revela si una cuenta está registrada.
-
-**Requiere ejecutar manualmente** `Database/07_Recuperacion_Enlaces_Seguros.sql`
-en una base de desarrollo previamente respaldada. La rama no aplica
-migraciones automáticamente y no modifica usuarios preexistentes.
-
-Consulta [la guía de implementación y pruebas de fase 6B-2](docs/FASE6B2_RECUPERACION_ENLACES.md).
-**No utilizar recuperación con cuentas reales** hasta validar SQL, SMTP,
-expiración, consumo único y revocación de tokens JWT.
-
-### Fase 6C — Revocación inmediata de JWT y sesiones
-
-Los JWT contienen una versión de seguridad consultada en SQL Server en
-cada petición autenticada. Al cambiar contraseña, rol o estado, se
-actualiza `Usuario.VersionJwt` y los tokens anteriores dejan de
-autorizar acciones; la WEB limpia la sesión cuando la API responde 401.
-
-**Requiere ejecutar MANUALMENTE** `Database/08_Revocacion_JWT_Sesiones.sql`
-en la base de desarrollo respaldada antes de ejecutar esta versión.
-Los JWT existentes dejarán de funcionar y se deberá iniciar sesión.
-
-[Guía de implementación y pruebas de la fase 6C](docs/FASE6C_REVOCACION_JWT.md).
-
-### Fase 7A — Pruebas HTTP automatizadas
-
-La suite de xUnit ahora levanta la API en memoria con `TestServer`
-para comprobar estados **204/401/403** con JWT vigentes, firmas erróneas,
-revocaciones y restricciones por rol. La versión JWT se simula únicamente
-en los tests, evitando conectar CI a SQL Server. GitHub Actions guarda
-los resultados de ejecución como un reporte TRX descargable.
-
-**No requiere scripts SQL nuevos**. Consulta
-[la guía de fase 7A](docs/FASE7A_PRUEBAS_HTTP.md) y la matriz pendiente
-de pruebas end-to-end con SQL real (fase 7B).
-
-### Fase 7B — Integración SQL real en base ficticia aislada
-
-Además de las 85 pruebas xUnit, se incluye un ejecutor **manual y
-opt-in** en `tools/SuwoGym.SqlIntegration` que usa los procedimientos
-almacenados reales para comprobar reservas simultáneas, cancelaciones,
-pagos con IVA, recuperación de un solo uso, expiración y revocación JWT.
-El programa solo permite `SuwoGym_Test_7B`, marcada expresamente
-mediante `Database/09_7B_Marcar_Base_Ficticia.sql`. Crea y limpia
-cuentas ficticias, sin enviar correos y sin tocar la base `SuwoGym`.
-
-**No ejecuta operaciones SQL en GitHub Actions**; CI únicamente compila
-la herramienta. Instrucciones de aislamiento y pruebas en
-[FASE7B_SQL_REAL.md](docs/FASE7B_SQL_REAL.md).
-
-### Fase 8A — Preparación segura de preproducción
-
-La API y WEB incluyen `/health/live` y `/health/ready`.
-En Staging/Production se verifica la configuración requerida
-(JWT, SMTP, SQL cifrado, HTTPS, `AllowedHosts` y persistencia de
-claves Data Protection). Desarrollo local conserva `localhost`.
-
-GitHub Actions genera binarios Release para API y WEB como artefacto
-`suwo-staging-binaries` sin secretos y **sin realizar un despliegue**.
-No se modifican procedimientos SQL ni se habilita acceso remoto.
-
-Leer la [guía de fase 8A](docs/FASE8A_PREPRODUCCION.md) para los
-prerrequisitos y las limitaciones de sesión en memoria, TLS,
-proxy inverso y publicación.
-
-
-### Fase 8B — Azure Staging mediante GitHub Actions (manual)
-
-Se añadió un workflow **exclusivamente manual** para publicar API y WEB
-.NET 10 en dos App Services Windows independientes y una base
-**SuwoGym_Staging** nueva, sin datos reales. Requiere recursos Azure
-ya creados, variables y OIDC configurados en el environment staging
-y confirmación escrita DEPLOY_STAGING desde main.
-
-El workflow compila, ejecuta las pruebas, publica y comprueba los cuatro
-endpoints de salud. **No crea recursos, no modifica SQL local,
-no se ejecuta por push y no hay despliegue remoto aún.**
-
-Se incluyen scripts PowerShell de preflight de solo lectura y health
-checks, un SQL de catálogo mínimo con verificación estricta de base
-y verificación CI de los controles del workflow. Guía completa:
-[FASE8B_AZURE_STAGING.md](docs/FASE8B_AZURE_STAGING.md).
-
-### Fase 8C — Demostración en Linux F1 EXISTENTE (StockFlow)
-
-Azure Portal confirmó que el plan **asp-stockflow-free** es Linux,
-**F1**, región Central US, resource group **rg-stockflow-demo**
-y 2 apps actuales. Se prepara la reutilización del plan para
-`suwogym-stg-web-...` y `suwogym-stg-api-...`, sin contratar B1.
-El límite de F1 es de hasta 10 apps por plan, con cuotas reducidas
-de CPU, RAM y almacenamiento. **No es apto para producción continua**.
-
-El workflow manual de Azure ahora verifica el grupo y plan exactos,
-Linux/F1 y los nombres de destino, sin modificar StockFlow. En WEB Linux,
-la ruta Data Protection será `/home/suwo-keys` (no la de Windows).
-**No se han creado servicios ni publicado la aplicación.**
-
-Guía actualizada: [Fase 8C Linux F1](docs/FASE8C_AZURE_LINUX_F1.md).
-La guía 8B Windows B1 queda como alternativa anterior, no aplicable
-al plan que ya existe.
-
-## Registro y primera cuenta local
-
-Si la tabla de usuarios está vacía o no puedes crear una cuenta, consulta la
-[guía de diagnóstico y reparación del registro](docs/REGISTRO_Y_CATALOGOS_LOCALES.md).
-Incluye SQL de **solo lectura**, un script idempotente para completar roles y
-planes **sin usuarios predefinidos**, verificación de API antigua ocupando el
-puerto 7129 y pruebas del formulario de registro.
-
-## Acceso inicial de Administrador (entorno de desarrollo)
-
-El registro público asigna rol Miembro por seguridad. Para probar el primer
-Administrador sobre una base de pruebas, consulta la
-[guía Fase 3](docs/FASE3_ADMIN_Y_DATOS_DE_PRUEBA.md). Se utiliza una cuenta
-ficticia independiente y un script SQL manual con validación de rol y rollback.
-No existen credenciales administrativas predeterminadas ni endpoint público
-para conceder privilegios.
-
-## Gestión de clases por Administrador (Fase 3B)
-
-Para programar horarios, primero se deben registrar actividades en el catálogo.
-La sección **Admin → Clases** permite listar y crear tipos de clase sin alterar
-los módulos de reservas. **Instala primero en tu instancia SQL Server**
-`Database/06_Registrar_Clases_Catalogo.sql` mediante SSMS, después de
-revisar el script. Sigue la
-[guía de Fase 3B](docs/FASE3B_CATALOGO_CLASES.md).
-
-## Acceso de Entrenador en desarrollo (Fase 3D)
-
-Las cuentas de empleados reciben una clave temporal automática por correo
-si SMTP está configurado. Para una base de desarrollo sin SMTP, un Administrador
-puede abrir **Empleados → Editar** y generar una **nueva contraseña temporal**
-para un Entrenador activo. La pantalla muestra la clave una única vez, sin
-guardarla en el repositorio; al iniciar sesión, el Entrenador debe cambiarla.
-La opción y el endpoint solo están habilitados en `Development`.
-Se utiliza `spActualizarContrasenna` existente; **no se instala SQL adicional**.
-Consulta la [guía de la Fase 3D](docs/FASE3D_ACCESO_ENTRENADOR.md).
+El despliegue es **manual**, utiliza OIDC y comprueba destinos autorizados, plan Linux F1 y endpoints de salud. No crea bases de datos ni ejecuta migraciones SQL automáticamente.
 
 ## Ejecución local
 
-**Requisitos:** SDK de .NET 10, SQL Server y una instancia local de base de datos configurada. Para usar Visual Studio, abre `SuwoGym.slnx`.
-
-1. Clonar el repositorio:
+**Requisitos:** .NET SDK 10, Visual Studio compatible o CLI de .NET, SQL Server de desarrollo, secretos configurados fuera de Git.
 
 ```powershell
 git clone https://github.com/HenryGonzalezAlguera/SuwoGym.git
 cd SuwoGym
-```
-
-2. Revisar [Database/README.md](Database/README.md). Los archivos públicos disponibles son `01_SuwoGym_Estructura.sql` y `02_SuwoGym_DatosIniciales.sql`. El primer Administrador local se habilita mediante el script manual `Database/05_Habilitar_Primer_Admin_Desarrollo.sql`. El catálogo de clases requiere `Database/06_Registrar_Clases_Catalogo.sql`. No ejecutes scripts destructivos sobre la base ya utilizada.
-
-3. **Configurar secretos locales antes de iniciar la API**. No hay clave JWT ni contraseña SMTP predeterminadas. Sigue los pasos en [SEGURIDAD_Y_CONFIGURACION.md](docs/SEGURIDAD_Y_CONFIGURACION.md) para revocar credenciales anteriores y crear un nuevo secreto de firma con `dotnet user-secrets`.
-
-4. Restaurar y compilar:
-
-```powershell
 dotnet restore .\SuwoGym.slnx
 dotnet build .\SuwoGym.slnx -c Release --no-restore
+dotnet test .\SuwoGym.Tests\SuwoGym.Tests.csproj -c Release
 ```
 
-5. Ejecutar API y WEB en terminales separadas, con el ambiente `Development` y la configuración local correcta:
+Configura la API, SQL, JWT, SMTP y URL base de la WEB según [Seguridad y configuración](docs/SEGURIDAD_Y_CONFIGURACION.md) y [Database/README.md](Database/README.md). No existen credenciales públicas predeterminadas.
 
 ```powershell
+# Terminal 1: API
 dotnet run --project .\SuwoGym_API\SuwoGym_API.csproj --launch-profile https
-```
 
-```powershell
+# Terminal 2: WEB
 dotnet run --project .\SuwoGym_Web\SuwoGym_Web.csproj --launch-profile https
 ```
 
-La configuración versionada de la WEB apunta a `https://localhost:7129` y su perfil HTTPS normalmente se abre en `https://localhost:7035`. Confirma puertos en `launchSettings.json` y confía en el certificado de desarrollo solo en tu equipo (`dotnet dev-certs https --trust`) si es necesario.
+**No ejecutes scripts destructivos, scripts con usuarios precargados ni migraciones locales sobre una base de datos existente o sobre Azure staging.** Revisa primero las instrucciones de cada ambiente. Los scripts en `Database/` no sustituyen una instalación automatizada segura.
 
-**Importante:** compilar correctamente **no garantiza** que los procedimientos SQL, los correos o los flujos de roles funcionen con una instalación nueva. Para la validación completa falta preparar una cuenta de demostración y una base local coherente.
+## Documentación y calidad
 
-## Seguridad de acceso MVC y pruebas
+- [CI .NET](.github/workflows/dotnet-ci.yml) · [Preflight Azure](.github/workflows/azure-staging-preflight.yml) · [Despliegue manual](.github/workflows/azure-staging-manual.yml)
+- [Preparación de staging](docs/FASE8A_PREPRODUCCION.md) · [Azure staging](docs/FASE8B_AZURE_STAGING.md) · [Linux F1](docs/FASE8C_AZURE_LINUX_F1.md)
+- [Seguridad JWT, CSRF y autenticación](docs/FASE6A_SEGURIDAD_AUTENTICACION.md) · [Recuperación segura](docs/FASE6B2_RECUPERACION_ENLACES.md) · [Revocación JWT](docs/FASE6C_REVOCACION_JWT.md)
+- [Pruebas HTTP](docs/FASE7A_PRUEBAS_HTTP.md) · [Pruebas SQL reales aisladas](docs/FASE7B_SQL_REAL.md)
+- [Creación de clases](docs/FASE3B_CATALOGO_CLASES.md) · [Administrador de desarrollo](docs/FASE3_ADMIN_Y_DATOS_DE_PRUEBA.md)
 
-La [fase 2](docs/FASE2_SESIONES_Y_ROLES.md) documenta las validaciones de sesión y la matriz de autorización por rol. Puedes ejecutar las pruebas sin SQL Server con `dotnet test SuwoGym.Tests/SuwoGym.Tests.csproj`.
+## Próximas mejoras
 
-## Evidencia y límites actuales
+1. Publicar capturas reales del inicio y las pantallas funcionales (sin datos personales).
+2. Preparar cuentas ficticias de Administrador y Entrenador en staging mediante un mecanismo controlado.
+3. Probar reservas, pagos simulados, rutinas y asistencias de extremo a extremo en Azure.
+4. Evaluar monitoreo, controles de seguridad y un plan de hosting adecuado antes de cualquier uso comercial.
 
-| Verificación | Situación |
-| --- | --- |
-| Código fuente API y MVC | Disponible |
-| Scripts SQL de estructura y datos iniciales | Disponibles |
-| Compilación automatizada | Definida en [CI](.github/workflows/dotnet-ci.yml) |
-| Pruebas automatizadas de sesión y permisos MVC | Disponibles en [SuwoGym.Tests](SuwoGym.Tests/) |
-| Pruebas funcionales con SQL Server | **Validaciones manuales en entorno local**: altas de clases/horarios, reservas, asistencia, acceso por roles y ejercicios; el usuario también indicó pruebas de rutinas y pagos. No equivalen a pruebas E2E automatizadas. |
-| Capturas reales del sistema | **Pendientes** |
-| Despliegue público | **No realizado** |
+## Autor
 
-## Siguientes mejoras
+**Henry González Alguera** — proyecto académico y de portafolio Full Stack .NET.
 
-Se priorizan pruebas de integración SQL, revisión de formularios CSRF, endurecimiento de recuperación de acceso, validación SQL desde cero, capturas reales y documentación de demo. Evitamos publicar datos personales, credenciales, contraseñas o tokens.
-
-## Autoría
-
-Proyecto de portafolio de [HenryGonzalezAlguera](https://github.com/HenryGonzalezAlguera), desarrollado en .NET y SQL Server con fines académicos y de demostración.
+[Perfil de GitHub](https://github.com/HenryGonzalezAlguera) · [Demo de SUWÓ GYM](https://suwogym-stg-web-hga-emfxdjcfccabdfh2.centralus-01.azurewebsites.net/)
