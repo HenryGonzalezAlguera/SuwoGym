@@ -99,6 +99,10 @@ dotnet run --project .\SuwoGym_Web\SuwoGym_Web.csproj --launch-profile https
 
 **No ejecutes scripts destructivos, scripts con usuarios precargados ni migraciones locales sobre una base de datos existente o sobre Azure staging.** Revisa primero las instrucciones de cada ambiente. Los scripts en `Database/` no sustituyen una instalación automatizada segura.
 
+## Material para LinkedIn y portafolio
+
+[Publicación bilingüe lista para copiar, enlaces, material real y lista de comprobación](docs/PUBLICACION_LINKEDIN.md) · [Capturas de pantalla pendientes y cómo obtenerlas](docs/screenshots/README.md).
+
 ## Documentación y calidad
 
 - [CI .NET](.github/workflows/dotnet-ci.yml) · [Preflight Azure](.github/workflows/azure-staging-preflight.yml) · [Despliegue manual](.github/workflows/azure-staging-manual.yml)
